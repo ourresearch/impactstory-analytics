@@ -1,0 +1,15 @@
+*.pyc
+*.egg-info/*
+.*.swp
+src*
+.DS_Store
+.Python
+doc/_build/*
+/nbproject
+.webassets-cache
+build
+dist
+venv
+.idea
+packed.css
+packed.js
