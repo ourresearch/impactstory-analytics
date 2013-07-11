@@ -13,3 +13,4 @@ venv
 .idea
 packed.css
 packed.js
+.env

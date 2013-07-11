@@ -1,6 +1,22 @@
 import os, logging, sys
 from flask import Flask
-from flask.ext.sqlalchemy import SQLAlchemy
+
+
+# set all the environmental variables defined in the .env list
+try:
+    path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', ".env"))
+    with open(path, "r") as f:
+        str = f.read()
+
+    for line in str.split("\n"):
+        try:
+            key, val = line.split("=")
+            os.environ[key] = val
+        except ValueError:
+            continue  # line wasn't a value assignment, move on
+except IOError:
+    pass  # we're on the server, not local; env vars are already set.
+
 
 # set up logging
 # see http://wiki.pylonshq.com/display/pylonscookbook/Alternative+logging+configuration
@@ -19,7 +35,6 @@ app = Flask(__name__)
 # http://flask.pocoo.org/mailinglist/archive/2011/2/27/re-automatic-removal-of-trailing-slashes/#043b1a0b6e841ab8e7d38bd7374cbb58
 app.url_map.strict_slashes = False
 
-db = SQLAlchemy(app)
 
 # set up configs
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
