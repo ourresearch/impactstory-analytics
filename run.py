@@ -14,4 +14,4 @@ for line in str.split("\n"):
         continue  # line wasn't a value assignment, move on
 
 
-app.run(debug=True)
+app.run(port=5002, debug=True)
