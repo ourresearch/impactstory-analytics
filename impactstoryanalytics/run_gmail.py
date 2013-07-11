@@ -5,16 +5,23 @@ import analytics
 import logging
 from impactstoryanalytics import gmail
 
-# initialize the ImpactStory project ..
-analytics.init('u94q3yg6t5ifx3hyi1rn')
 logger = logging.getLogger("analytics.get_gmail")
 
-logger.info("Getting inbox thread count for Heather")
-count = gmail.count_threads_in_inbox(
-    os.getenv("GMAIL_CLIENT_ID"),
-    os.getenv("GMAIL_CLIENT_SECRET"),
-    os.getenv("GMAIL_REFRESH_TOKEN_HEATHER"),
-    os.getenv("GMAIL_ADDRESS_HEATHER")
-)
 
-print count
+def check_inbox(name):
+    logger.info("Getting inbox thread count for " + name.capitalize())
+    count = gmail.count_threads_in_inbox(
+        os.getenv("GMAIL_CLIENT_ID"),
+        os.getenv("GMAIL_CLIENT_SECRET"),
+        os.getenv("GMAIL_REFRESH_TOKEN_" + name.upper()),
+        os.getenv("GMAIL_ADDRESS_" + name.upper())
+    )
+
+    logger.info("found " + str(count) + " threads threads in " + name + "'s inbox.")
+
+    analytics.track(user_id=name.capitalize(), event='Inbox check', properties={
+        "thread_count": count
+    })
+
+for name in ["Heather", "Jason"]:
+    check_inbox(name)

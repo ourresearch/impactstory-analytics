@@ -1,4 +1,4 @@
-import os, logging, sys
+import os, logging, sys, analytics
 from flask import Flask
 
 
@@ -36,8 +36,17 @@ app = Flask(__name__)
 app.url_map.strict_slashes = False
 
 
-# set up configs
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+# setup segment.io
+analytics.init(os.getenv("SEGMENTIO_KEY"))
+analytics.identify(user_id='Heather', traits={
+    "name": "Heather",
+    "email": "heather@impactstory.org",
+})
+analytics.identify(user_id='Jason', traits={
+    "name": "Jason",
+    "email": "jason@impactstory.org",
+})
+
 
 # set up views
 from impactstoryanalytics import views
