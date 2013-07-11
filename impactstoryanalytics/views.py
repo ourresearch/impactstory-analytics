@@ -32,22 +32,29 @@ def inbox_count():
 
 @app.route('/active-users')
 def active_users():
-	active_users_keenio_query = "https://api.keen.io/3.0/projects/51d858213843314922000002/queries/count_unique?api_key=69023dd079bdb913522954c0f9bb010766be7e87a543674f8ee5d3a66e9b127f5ee641546858bf2c260af4831cd2f7bba4e37c22efb4b21b57bab2a36b9e8e3eccd57db3c75114ba0f788013a08f404738535e9a7eb8a29a30592095e5347e446cf61d50d5508a624934584e17a436ba&event_collection=Viewed%20own%20profile&filters=%5B%7B%22property_name%22%3A%22days_since_account_created%22%2C%22operator%22%3A%22gte%22%2C%22property_value%22%3A1%7D%5D&timeframe=today&timezone=-25200&target_property=user.traits.email&interval=hourly"
+    active_users_keenio_query = "https://api.keen.io/3.0/projects/51d858213843314922000002/queries/count_unique?api_key=69023dd079bdb913522954c0f9bb010766be7e87a543674f8ee5d3a66e9b127f5ee641546858bf2c260af4831cd2f7bba4e37c22efb4b21b57bab2a36b9e8e3eccd57db3c75114ba0f788013a08f404738535e9a7eb8a29a30592095e5347e446cf61d50d5508a624934584e17a436ba&event_collection=Viewed%20own%20profile&filters=%5B%7B%22property_name%22%3A%22days_since_account_created%22%2C%22operator%22%3A%22gte%22%2C%22property_value%22%3A1%7D%5D&timeframe=today&timezone=-25200&target_property=user.traits.email&interval=hourly"
 
-	keenio_data = requests.get(active_users_keenio_query).json()["result"]
-	timepoints = [datapoint["timeframe"]["start"] for datapoint in keenio_data]
-	values = [datapoint["value"] for datapoint in keenio_data]
+    keenio_data = requests.get(active_users_keenio_query).json()["result"]
+    timepoints = [datapoint["timeframe"]["start"] for datapoint in keenio_data]
+    values = [datapoint["value"] for datapoint in keenio_data]
 
-	gecko_response = {
-	    "item": values,
-	    "settings": {
-	     "axisx": [timepoints[0], timepoints[len(values)-1]],
-	     "axisy": [min(values), max(values)],
-	     "colour": "ff9900"
-	    }
-	}
+    gecko_response = {
+        "item": values,
+        "settings": {
+         "axisx": [timepoints[0], timepoints[len(values)-1]],
+         "axisy": [min(values), max(values)],
+         "colour": "ff9900"
+        }
+    }
 
-	resp = make_response(json.dumps(gecko_response, indent=4), 200)
-	resp.mimetype = "application/json"
-	return resp
+    resp = make_response(json.dumps(gecko_response, indent=4), 200)
+    resp.mimetype = "application/json"
+    return resp
 
+@app.route("/inbox-threads")
+def inbox_threads():
+    keenio_q = "https://api.keen.io/3.0/projects/51df37f0897a2c7fcd000000/queries/average?api_key=b915f0ca9fcbe1cc4760640adf9f09fa1d330f74c763bfd1aa867d6148f528055a3f97afc6b111e8905ef78bfe7f97d1d2dd2b7ddbb0f9ed8e586fd69d79f12f2215d06298924631d8ccfa7a12845dde94921855ae223c69ad26789dca2ec5fd26296a80af72c3a014df5554948bac8e&event_collection=Inbox%20check&timeframe=this_48_hours&timezone=-25200&target_property=thread_count&group_by=userId&interval=hourly"
+    keenio_data = requests.get(keenio_q).json()["result"]
+
+    resp = make_response(str(keenio_data))
+    return resp
