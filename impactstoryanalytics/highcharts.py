@@ -4,8 +4,8 @@ boilerplate = {
         'plotBackgroundColor': 'none',
         'backgroundColor': 'none',
     },
-    'title': {'text': 'null'},
-    'subtitle': {'text': 'null'},
+    'title': {'text': None},
+    'subtitle': {'text': None},
     'credits': {
         'enabled': False
     },
