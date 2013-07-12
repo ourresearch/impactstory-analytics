@@ -3,6 +3,7 @@ import os
 import json
 import logging
 import iso8601
+from datetime import timedelta
 from impactstoryanalytics import app, gmail, highcharts
 
 from flask import request, abort, make_response, g, redirect, url_for
@@ -62,29 +63,47 @@ def active_users():
 
 @app.route("/inbox-threads")
 def inbox_threads():
-    keenio_q = "https://api.keen.io/3.0/projects/51df37f0897a2c7fcd000000/queries/average?api_key=b915f0ca9fcbe1cc4760640adf9f09fa1d330f74c763bfd1aa867d6148f528055a3f97afc6b111e8905ef78bfe7f97d1d2dd2b7ddbb0f9ed8e586fd69d79f12f2215d06298924631d8ccfa7a12845dde94921855ae223c69ad26789dca2ec5fd26296a80af72c3a014df5554948bac8e&event_collection=Inbox%20check&timeframe=this_48_hours&timezone=-25200&target_property=thread_count&group_by=userId&interval=hourly"
+    keenio_q = "https://api.keen.io/3.0/projects/51df37f0897a2c7fcd000000/queries/average?api_key=b915f0ca9fcbe1cc4760640adf9f09fa1d330f74c763bfd1aa867d6148f528055a3f97afc6b111e8905ef78bfe7f97d1d2dd2b7ddbb0f9ed8e586fd69d79f12f2215d06298924631d8ccfa7a12845dde94921855ae223c69ad26789dca2ec5fd26296a80af72c3a014df5554948bac8e&event_collection=Inbox%20check&timeframe=this_48_hours&timezone=UTC&target_property=thread_count&group_by=userId&interval=hourly"
     keenio_data = requests.get(keenio_q).json()["result"]
     lines = {
         "Heather": [],
         "Jason": []
     }
-    time_labels = []
+    date_format = "Date.UTC(%Y, %m, %d, %H, %M)"  # js date
+    for this_bin in keenio_data:
+        bin_start_time_minus_seven = iso8601.parse_date(this_bin["timeframe"]["start"])
+        for val in this_bin["value"]:
+            point_def = [
+                bin_start_time.strftime(date_format),
+                val["result"]
+            ]
 
-    for timeslice in keenio_data:
-        for val in timeslice["value"]:
-
-            lines[val["userId"]].append(val["result"])
+            lines[val["userId"]].append(point_def)
 
 
     chart = highcharts.boilerplate
     chart["legend"] = {"enabled": False}
-    chart["xAxis"] = {"categories": ["48", "24", "now"]}
     chart["series"] = [
         {"data": lines["Jason"], "color": "#EF8A62"},
         {"data": lines["Heather"], "color": "#67A9CF"},
 
     ]
 
-    resp = make_response(json.dumps(chart, indent=4), 200)
+    json_dirty = json.dumps(chart, indent=4)
+    resp_lines = json_dirty.split("\n")
+    resp_lines_clean = []
+    for line in resp_lines:
+        if "Date.UTC" in line:
+            clean_line = line.replace('"', '')
+        else:
+            clean_line = line
+
+        resp_lines_clean.append(clean_line)
+
+    json_clean = "\n".join(resp_lines_clean)
+
+
+
+    resp = make_response(json_clean, 200)
     resp.mimetype = "application/json"
     return resp
