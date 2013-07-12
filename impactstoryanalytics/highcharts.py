@@ -11,7 +11,7 @@ boilerplate = {
         'title':{
             'text': None
         },
-        'gridLineColor': 'rgb(255, 255, 255, .1)'
+        'gridLineColor': 'rgba(255, 255, 255, .1)'
     },
     'credits': {
         'enabled': False

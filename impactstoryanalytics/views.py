@@ -68,9 +68,11 @@ def inbox_threads():
         "Heather": [],
         "Jason": []
     }
+    time_labels = []
 
     for timeslice in keenio_data:
         for val in timeslice["value"]:
+
             lines[val["userId"]].append(val["result"])
 
 
