@@ -80,12 +80,13 @@ def inbox_threads():
             minute=bin_start_time.minute
         )
         for val in this_bin["value"]:
-            point_def = [
-                js_date,
-                val["result"]
-            ]
+            if val["result"] is not None:
+                point_def = [
+                    js_date,
+                    val["result"]
+                ]
 
-            lines[val["userId"]].append(point_def)
+                lines[val["userId"]].append(point_def)
 
 
     chart = highcharts.boilerplate
