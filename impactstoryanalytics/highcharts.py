@@ -13,6 +13,9 @@ boilerplate = {
         },
         'gridLineColor': 'rgba(255, 255, 255, .1)'
     },
+    "xAxis": {
+      "lineColor": "rgba(0,0,0,0)"
+    },
     'credits': {
         'enabled': False
     },
