@@ -77,8 +77,8 @@ def inbox_threads():
     chart = highcharts.boilerplate
     chart["legend"] = {"enabled": False}
     chart["series"] = [
-        {"data": lines["Jason"]},
-        {"data": lines["Heather"]},
+        {"data": lines["Jason"], "color": "#EF8A62"},
+        {"data": lines["Heather"], "color": "#67A9CF"},
 
     ]
 
