@@ -68,12 +68,20 @@ def inbox_threads():
         "Heather": [],
         "Jason": []
     }
-    date_format = "Date.UTC(%Y, %m, %d, %H, %M)"  # js date
+
+
     for this_bin in keenio_data:
         bin_start_time = iso8601.parse_date(this_bin["timeframe"]["start"])
+        js_date = "Date.UTC({year}, {month}, {day}, {hour}, {minute})".format(
+            year=bin_start_time.year,
+            month=bin_start_time.month - 1,  # js wants jan to be 0. nice one.
+            day=bin_start_time.day,
+            hour=bin_start_time.hour,
+            minute=bin_start_time.minute
+        )
         for val in this_bin["value"]:
             point_def = [
-                bin_start_time.strftime(date_format),
+                js_date,
                 val["result"]
             ]
 
