@@ -8,6 +8,7 @@ boilerplate = {
     'title': {'text': None},
     'subtitle': {'text': None},
     'yAxis': {
+        'min': 0,
         'title':{
             'text': None
         },
