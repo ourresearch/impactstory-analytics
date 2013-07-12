@@ -86,7 +86,7 @@ def inbox_threads():
                     val["result"]
                 ]
 
-            lines[val["userId"]].append(point_def)
+                lines[val["userId"]].append(point_def)
 
 
     chart = highcharts.boilerplate
