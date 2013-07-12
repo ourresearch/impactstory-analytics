@@ -3,7 +3,6 @@ import os
 import json
 import logging
 import iso8601
-from datetime import timedelta
 from impactstoryanalytics import app, gmail, highcharts
 
 from flask import request, abort, make_response, g, redirect, url_for
@@ -71,7 +70,7 @@ def inbox_threads():
     }
     date_format = "Date.UTC(%Y, %m, %d, %H, %M)"  # js date
     for this_bin in keenio_data:
-        bin_start_time_minus_seven = iso8601.parse_date(this_bin["timeframe"]["start"])
+        bin_start_time = iso8601.parse_date(this_bin["timeframe"]["start"])
         for val in this_bin["value"]:
             point_def = [
                 bin_start_time.strftime(date_format),
