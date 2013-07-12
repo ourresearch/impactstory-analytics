@@ -1,5 +1,8 @@
-import requests, os, json, logging
-from impactstoryanalytics import app, gmail
+import requests
+import os
+import json
+import logging
+from impactstoryanalytics import app, gmail, highcharts
 
 from flask import request, abort, make_response, g, redirect, url_for
 from flask import render_template
@@ -57,4 +60,13 @@ def inbox_threads():
     keenio_data = requests.get(keenio_q).json()["result"]
 
     resp = make_response(str(keenio_data))
+
+    chart = highcharts.boilerplate
+    chart["series"] = [
+        {"data": [1, 1, 2, 3, 5]}
+    ]
+    chart["xAxis"] = {'categories': ["mon", "tue", "wed", "thur", "fri"]}
+
+    resp = make_response(json.dumps(chart, indent=4), 200)
+    resp.mimetype = "application/json"
     return resp
