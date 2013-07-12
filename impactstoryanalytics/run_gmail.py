@@ -25,3 +25,6 @@ def check_inbox(name):
 
 for name in ["Heather", "Jason"]:
     check_inbox(name)
+
+
+analytics.flush(async=False)  # make sure all the data gets sent to segment.io
