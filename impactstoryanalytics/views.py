@@ -82,10 +82,15 @@ def inbox_threads():
 
     chart = highcharts.boilerplate
     chart["legend"] = {"enabled": False}
-    chart["xAxis"] = {"type": "datetime"}
+    chart["xAxis"] = {
+        "type": "datetime",
+        "dateTimeLabelFormats": {
+            "day": "%a"
+        }
+    }
     chart["series"] = [
-        {"data": lines["Jason"], "color": "#EF8A62"},
-        {"data": lines["Heather"], "color": "#67A9CF"},
+        {"data": lines["Jason"], "color": "#EF8A62", "name": "Jason"},
+        {"data": lines["Heather"], "color": "#67A9CF", "name": "Heather"}
 
     ]
 
