@@ -3,7 +3,7 @@ import os
 import json
 import logging
 import iso8601
-from impactstoryanalytics import app, gmail, highcharts
+from impactstoryanalytics import app, gmail, highcharts, rescuetime
 
 from flask import request, abort, make_response, g, redirect, url_for
 from flask import render_template
@@ -119,26 +119,13 @@ def is_code_category(category):
 
 
 @app.route("/rescuetime/<first_name>")
-def rescuetime(first_name):
-    params = {
-        "key": os.getenv("RESCUETIME_KEY_JASON"),
-        "format": "json",
-        "perspective": "interval",
-        "resolution_time": "day",
-        "restrict_kind": "category",
-        "restrict_begin": "2013-07-01"
-    }
-    url = "https://www.rescuetime.com/anapi/data"
+def rescuetime_endpoint(first_name):
+    data = rescuetime.get_data(first_name)
 
-
-    # data = requests.get(url, params=params)
-    # return make_response(data.text)
-
-    data = requests.get(url, params=params).json()["rows"]
     days = {}
     for row in data:
         datestring = row[0]
-        time_spent = round((row[1] / 3600), 2)  # in hours
+        time_spent = float(row[1]) / 3600  # in hours
         category = row[3]
 
         # add this day if we don't have it yet
@@ -147,7 +134,7 @@ def rescuetime(first_name):
                 "total": 0,
                 "email": 0,
                 "code": 0,
-                "name": iso8601.parse_date(datestring).strftime("%a")
+                "name": iso8601.parse_date(datestring).strftime("%a%e")
             }
 
         # add to the time counts for this day
@@ -169,7 +156,6 @@ def rescuetime(first_name):
 
 
 
-
     chart = highcharts.streamgraph()
     chart["xAxis"] = {
         "categories": [day["name"] for day in dayslist]
@@ -186,9 +172,6 @@ def rescuetime(first_name):
             "color": color
         }
         chart["series"].append(this_series)
-
-
-
 
     resp = make_response(highcharts.as_js(chart), 200)
     resp.mimetype = "application/x-javascript"
