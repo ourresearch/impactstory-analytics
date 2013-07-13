@@ -1,11 +1,12 @@
 import json
+import collections
 
 def base():
     return {
         'chart': {
             'renderTo': 'container',
-            'plotBackgroundColor': 'none',
-            'backgroundColor': 'none',
+            'plotBackgroundColor': None,
+            'backgroundColor': None,
             'spacingTop': 5,
             'legend': {
                 'enabled': False
@@ -77,8 +78,27 @@ def streamgraph():
 
 def extend_base_configs(local_configs):
     configs = base()
-    configs.update(local_configs)
+
+    update_recursive(configs, local_configs)
+
     return configs
+
+
+def update_recursive(d, u):
+    """
+    from http://stackoverflow.com/a/3233356/226013
+
+    :param d: the orig dict; it'll be updated
+    :param u: the new dict; will overwrite keys from d
+    :return: the updated dict
+    """
+    for k, v in u.iteritems():
+        if isinstance(v, collections.Mapping):
+            r = update_recursive(d.get(k, {}), v)
+            d[k] = r
+        else:
+            d[k] = u[k]
+    return d
 
 
 def as_js(dict):
