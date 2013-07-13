@@ -135,7 +135,18 @@ def rescuetime_endpoint(first_name):
 
 
 
+@app.route("/uservoice-tickets")
+def uservoice_tickets():
+    from impactstoryanalytics import uservoice_check
+    (num_all_tickets, num_last_response_was_a_user) = uservoice_check.get_ticket_counts()
 
+    gecko_response = {"item":[
+        {"text":"","value":num_all_tickets},
+        {"text":"","value":num_last_response_was_a_user}]}
+
+    resp = make_response(json.dumps(gecko_response, indent=4), 200)
+    resp.mimetype = "application/json"
+    return resp
 
 
 

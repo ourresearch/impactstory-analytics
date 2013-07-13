@@ -37,7 +37,7 @@ app.url_map.strict_slashes = False
 
 
 # setup segment.io
-analytics.init(os.getenv("SEGMENTIO_KEY"))
+analytics.init(os.getenv("SEGMENTIO_KEY"), log_level=logging.DEBUG, flush_at=1)
 analytics.identify(user_id='Heather', traits={
     "name": "Heather",
     "email": "heather@impactstory.org",
