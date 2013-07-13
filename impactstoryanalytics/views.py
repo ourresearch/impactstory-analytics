@@ -90,6 +90,7 @@ def inbox_threads():
 
 
     chart = highcharts.boilerplate
+    chart["type"] = "line"
     chart["xAxis"] = {
         "type": "datetime",
         "dateTimeLabelFormats": {
@@ -193,16 +194,17 @@ def rescuetime(first_name):
 
     chart = highcharts.boilerplate
     chart["chart"]["type"] = "column"
+    chart["plotOptions"] = {"column": {"stacking": "normal"}}
     chart["xAxis"] = {
         "categories": [day["name"] for day in dayslist]
     }
-    colors = {
-        "other": "#666666",
-        "code": "#1A9641",
-        "email": "#D7191C"
-    }
+    colors = [
+        ("other", "#666666"),
+        ("code", "#1A9641"),
+        ("email", "#D7191C")
+    ]
     chart["series"] = []
-    for series_name, color in colors.iteritems():
+    for series_name, color in colors:
         this_series = {
             "data": [day[series_name] for day in dayslist],
             "name": series_name,
