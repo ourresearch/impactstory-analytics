@@ -3,7 +3,10 @@ boilerplate = {
         'renderTo': 'container',
         'plotBackgroundColor': 'none',
         'backgroundColor': 'none',
-        'spacingTop': 5
+        'spacingTop': 5,
+        'legend': {
+            'enabled': False
+        }
     },
     'title': {'text': None},
     'subtitle': {'text': None},

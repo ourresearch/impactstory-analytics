@@ -90,7 +90,6 @@ def inbox_threads():
 
 
     chart = highcharts.boilerplate
-    chart["legend"] = {"enabled": False}
     chart["xAxis"] = {
         "type": "datetime",
         "dateTimeLabelFormats": {
@@ -103,7 +102,12 @@ def inbox_threads():
 
     ]
 
-    json_dirty = json.dumps(chart, indent=4)
+    resp = make_response(js_for_highcharts(chart), 200)
+    resp.mimetype = "application/json"
+    return resp
+
+def js_for_highcharts(dict):
+    json_dirty = json.dumps(dict, indent=4)
     resp_lines = json_dirty.split("\n")
     resp_lines_clean = []
     for line in resp_lines:
@@ -115,9 +119,108 @@ def inbox_threads():
         resp_lines_clean.append(clean_line)
 
     json_clean = "\n".join(resp_lines_clean)
+    return json_clean
 
 
 
-    resp = make_response(json_clean, 200)
-    resp.mimetype = "application/json"
+def is_code_category(category):
+    code_categories = [
+        "general software development",
+        "design & planning",
+        "editing & ides",
+        "quality assurance",
+        "systems operations",
+        "data modelling and analysis"
+    ]
+
+    if category.lower() in code_categories:
+        return True
+    else:
+        return False
+
+
+@app.route("/rescuetime/<first_name>")
+def rescuetime(first_name):
+    params = {
+        "key": os.getenv("RESCUETIME_KEY_JASON"),
+        "format": "json",
+        "perspective": "interval",
+        "resolution_time": "day",
+        "restrict_kind": "category",
+        "restrict_begin": "2013-07-01"
+    }
+    url = "https://www.rescuetime.com/anapi/data"
+
+
+    # data = requests.get(url, params=params)
+    # return make_response(data.text)
+
+    data = requests.get(url, params=params).json()["rows"]
+    days = {}
+    for row in data:
+        datestring = row[0]
+        time_spent = row[1]  # in seconds
+        category = row[3]
+
+        # add this day if we don't have it yet
+        if datestring not in days:
+            days[datestring] = {
+                "total": 0,
+                "email": 0,
+                "code": 0,
+                "name": iso8601.parse_date(datestring).strftime("%a")
+            }
+
+        # add to the time counts for this day
+        days[datestring]["total"] += time_spent
+        if category == "Email":
+            days[datestring]["email"] += time_spent
+        elif is_code_category(category):
+            days[datestring]["code"] += time_spent
+
+
+    # now that all the data is in, calculate the "other" category
+    for k, v in days.iteritems():
+        v["other"] = v["total"] - (v["email"] + v["code"])
+
+
+
+
+    chart = highcharts.boilerplate
+    chart["type"] = "column"
+    chart["xAxis"] = {
+        "categories": [days[k]["name"] for k in days]
+    }
+    colors = {
+        "other": "#666666",
+        "code": "#1A9641",
+        "email": "#D7191C"
+    }
+    chart["series"] = []
+    for series_name, color in colors.iteritems():
+        this_series = {
+            "data": [days[k][series_name] for k in days],
+            "name": series_name,
+            "color": color
+        }
+        chart["series"].append(this_series)
+
+
+
+
+    resp = make_response(js_for_highcharts(chart), 200)
+    resp.mimetype = "application/x-javascript"
+
     return resp
+
+
+
+
+
+
+
+
+
+
+
+
