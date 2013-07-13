@@ -194,8 +194,17 @@ def rescuetime(first_name):
 
 
     chart = highcharts.boilerplate
-    chart["chart"]["type"] = "column"
-    chart["plotOptions"] = {"column": {"stacking": "normal"}}
+    chart["chart"]["type"] = "areaspline"
+    chart["plotOptions"]["column"] = {"stacking": "normal"}
+    chart["plotOptions"]["series"] = {
+        "pointPadding": 0,
+        "groupPadding": 0,
+        "shadow": False,
+        }
+    chart["plotOptions"]["areaspline"] = {
+        "stacking": "normal",
+        "marker": {"enabled": False}
+    }
     chart["xAxis"] = {
         "categories": [day["name"] for day in dayslist]
     }
