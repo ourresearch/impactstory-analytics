@@ -187,7 +187,7 @@ def rescuetime(first_name):
 
 
     chart = highcharts.boilerplate
-    chart["type"] = "column"
+    chart["chart"]["type"] = "column"
     chart["xAxis"] = {
         "categories": [days[k]["name"] for k in days]
     }
