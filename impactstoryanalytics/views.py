@@ -109,7 +109,8 @@ def rescuetime_endpoint(first_name):
     chart["xAxis"] = {
         "categories": [day["name"] for day in dayslist]
     }
-    chart["yAxis"]["max"] = 14
+    chart["yAxis"]["max"] = 15
+    chart["yAxis"]["endOnTick"] = False
     colors = [
         ("other", "#666666"),
         ("code", "#1A9641"),
