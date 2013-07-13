@@ -138,7 +138,7 @@ def rescuetime(first_name):
     days = {}
     for row in data:
         datestring = row[0]
-        time_spent = row[1]  # in seconds
+        time_spent = round((row[1] / 3600), 2)  # in hours
         category = row[3]
 
         # add this day if we don't have it yet

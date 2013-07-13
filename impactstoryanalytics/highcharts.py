@@ -8,9 +8,9 @@ def base():
             'plotBackgroundColor': None,
             'backgroundColor': None,
             'spacingTop': 5,
-            'legend': {
-                'enabled': False
-            }
+        },
+        'legend': {
+            'enabled': False
         },
         'title': {'text': None},
         'subtitle': {'text': None},
@@ -67,7 +67,9 @@ def streamgraph():
             },
             "areaspline": {
                 "stacking": "normal",
-                "marker": {"enabled": False}
+                "marker": {"enabled": False},
+                "lineWidth": 0,
+                "pointPlacement": "on"
             }
         },
         "series": []
