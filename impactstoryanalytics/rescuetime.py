@@ -1,5 +1,6 @@
 import requests
 import os
+import iso8601
 from datetime import date, timedelta
 
 def get_data(user):
@@ -21,3 +22,59 @@ def get_data(user):
 
     data = requests.get(url, params=params).json()["rows"]
     return data
+
+
+
+
+def is_code_category(category):
+    code_categories = [
+        "general software development",
+        "design & planning",
+        "editing & ides",
+        "quality assurance",
+        "systems operations",
+        "data modelling and analysis"
+    ]
+
+    if category.lower() in code_categories:
+        return True
+    else:
+        return False
+
+
+
+def list_activity_by_day(data):
+
+    days = {}
+    for row in data:
+        datestring = row[0]
+        time_spent = float(row[1]) / 3600  # in hours
+        category = row[3]
+
+        # add this day if we don't have it yet
+        if datestring not in days:
+            days[datestring] = {
+                "total": 0,
+                "email": 0,
+                "code": 0,
+                "name": iso8601.parse_date(datestring).strftime("%a%e")
+            }
+
+        # add to the time counts for this day
+        days[datestring]["total"] += time_spent
+        if category == "Email":
+            days[datestring]["email"] += time_spent
+        elif is_code_category(category):
+            days[datestring]["code"] += time_spent
+
+
+    # now that all the data is in, calculate the "other" category
+    for k, v in days.iteritems():
+        v["other"] = v["total"] - (v["email"] + v["code"])
+
+    # easier to work with a list
+    dayslist = []
+    for k in sorted(days.keys()):
+        dayslist.append(days[k])
+
+    return dayslist
