@@ -116,7 +116,7 @@ def rescuetime_endpoint(first_name):
     ]
     for series_name, color in colors:
         this_series = {
-            "data": [day[series_name] for day in dayslist],
+            "data": [round(day[series_name], 1) for day in dayslist],
             "name": series_name,
             "color": color
         }
