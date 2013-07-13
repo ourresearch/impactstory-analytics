@@ -40,6 +40,8 @@ def check_uservoice():
         all=num_all_tickets, 
         user=num_last_response_was_a_user))
 
+    analytics.identify(user_id="uservoice")
+
     analytics.track(user_id="uservoice", event='Ticket check', properties={
         "num_all_tickets": num_all_tickets, 
         "num_last_response_was_a_user": num_last_response_was_a_user
