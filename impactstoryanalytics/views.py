@@ -89,39 +89,16 @@ def inbox_threads():
 
                 lines[val["userId"]].append(point_def)
 
-
-    chart = highcharts.boilerplate
-    chart["type"] = "line"
-    chart["xAxis"] = {
-        "type": "datetime",
-        "dateTimeLabelFormats": {
-            "day": "%a"
-        }
-    }
+    chart = highcharts.timeseries_line()
     chart["series"] = [
         {"data": lines["Jason"], "color": "#EF8A62", "name": "Jason"},
         {"data": lines["Heather"], "color": "#67A9CF", "name": "Heather"}
-
     ]
 
-    resp = make_response(js_for_highcharts(chart), 200)
+    resp = make_response(highcharts.as_js(chart), 200)
     resp.mimetype = "application/json"
     return resp
 
-def js_for_highcharts(dict):
-    json_dirty = json.dumps(dict, indent=4)
-    resp_lines = json_dirty.split("\n")
-    resp_lines_clean = []
-    for line in resp_lines:
-        if "Date.UTC" in line:
-            clean_line = line.replace('"', '')
-        else:
-            clean_line = line
-
-        resp_lines_clean.append(clean_line)
-
-    json_clean = "\n".join(resp_lines_clean)
-    return json_clean
 
 
 
@@ -193,18 +170,7 @@ def rescuetime(first_name):
 
 
 
-    chart = highcharts.boilerplate
-    chart["chart"]["type"] = "areaspline"
-    chart["plotOptions"]["column"] = {"stacking": "normal"}
-    chart["plotOptions"]["series"] = {
-        "pointPadding": 0,
-        "groupPadding": 0,
-        "shadow": False,
-        }
-    chart["plotOptions"]["areaspline"] = {
-        "stacking": "normal",
-        "marker": {"enabled": False}
-    }
+    chart = highcharts.streamgraph()
     chart["xAxis"] = {
         "categories": [day["name"] for day in dayslist]
     }
@@ -213,7 +179,6 @@ def rescuetime(first_name):
         ("code", "#1A9641"),
         ("email", "#D7191C")
     ]
-    chart["series"] = []
     for series_name, color in colors:
         this_series = {
             "data": [day[series_name] for day in dayslist],
@@ -225,7 +190,7 @@ def rescuetime(first_name):
 
 
 
-    resp = make_response(js_for_highcharts(chart), 200)
+    resp = make_response(highcharts.as_js(chart), 200)
     resp.mimetype = "application/x-javascript"
 
     return resp
