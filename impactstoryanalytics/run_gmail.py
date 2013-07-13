@@ -5,7 +5,7 @@ import analytics
 import logging
 from impactstoryanalytics import gmail
 
-logger = logging.getLogger("analytics.get_gmail")
+logger = logging.getLogger("analytics.run_gmail")
 
 
 def check_inbox(name):
