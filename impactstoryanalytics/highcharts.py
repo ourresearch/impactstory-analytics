@@ -16,6 +16,7 @@ def base():
         'subtitle': {'text': None},
         'yAxis': {
             'min': 0,
+            'endOnTick': False,
             'title':{
                 'text': None
             },
@@ -46,6 +47,11 @@ def timeseries_line():
             "type": "datetime",
             "dateTimeLabelFormats": {
                 "day": "%a"
+            }
+        },
+        "plotOptions":{
+            "line": {
+                "connectNulls": True
             }
         },
         "series": []
