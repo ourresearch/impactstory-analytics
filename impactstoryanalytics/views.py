@@ -183,13 +183,18 @@ def rescuetime(first_name):
     for k, v in days.iteritems():
         v["other"] = v["total"] - (v["email"] + v["code"])
 
+    # easier to work with a list
+    dayslist = []
+    for k in sorted(days.keys()):
+        dayslist.append(days[k])
+
 
 
 
     chart = highcharts.boilerplate
     chart["chart"]["type"] = "column"
     chart["xAxis"] = {
-        "categories": [days[k]["name"] for k in days]
+        "categories": [day["name"] for day in dayslist]
     }
     colors = {
         "other": "#666666",
@@ -199,7 +204,7 @@ def rescuetime(first_name):
     chart["series"] = []
     for series_name, color in colors.iteritems():
         this_series = {
-            "data": [days[k][series_name] for k in days],
+            "data": [day[series_name] for day in dayslist],
             "name": series_name,
             "color": color
         }
