@@ -130,13 +130,8 @@ def rescuetime_endpoint(first_name):
 
 
 
-
-
-
-
-
-@app.route("/uservoice-tickets")
-def uservoice_tickets():
+@app.route("/uservoice-tickets-nograph")
+def uservoice_tickets_nograph():
     from impactstoryanalytics import uservoice_check
     (num_all_tickets, num_last_response_was_a_user) = uservoice_check.get_ticket_counts()
 
@@ -148,5 +143,47 @@ def uservoice_tickets():
     resp.mimetype = "application/json"
     return resp
 
+
+@app.route("/uservoice-tickets")
+def uservoice_tickets():
+
+    keenio_q_total_tickets = "https://api.keen.io/3.0/projects/51df37f0897a2c7fcd000000/queries/average?api_key=b915f0ca9fcbe1cc4760640adf9f09fa1d330f74c763bfd1aa867d6148f528055a3f97afc6b111e8905ef78bfe7f97d1d2dd2b7ddbb0f9ed8e586fd69d79f12f2215d06298924631d8ccfa7a12845dde94921855ae223c69ad26789dca2ec5fd26296a80af72c3a014df5554948bac8e&event_collection=Ticket%20check&timeframe=today&timezone=-28800&target_property=num_all_tickets&interval=hourly"
+    keenio_q_last_response_was_a_user = "https://api.keen.io/3.0/projects/51df37f0897a2c7fcd000000/queries/average?api_key=b915f0ca9fcbe1cc4760640adf9f09fa1d330f74c763bfd1aa867d6148f528055a3f97afc6b111e8905ef78bfe7f97d1d2dd2b7ddbb0f9ed8e586fd69d79f12f2215d06298924631d8ccfa7a12845dde94921855ae223c69ad26789dca2ec5fd26296a80af72c3a014df5554948bac8e&event_collection=Ticket%20check&timeframe=today&timezone=-28800&target_property=num_last_response_was_a_user&interval=hourly"
+
+    data = {}
+    data["total_tickets"] = requests.get(keenio_q_total_tickets).json()["result"]
+    data["last_response_was_a_user"] = requests.get(keenio_q_last_response_was_a_user).json()["result"]
+
+    lines = {
+        "total_tickets": [],
+        "last_response_was_a_user": []
+    }
+
+    for this_line in data:
+        linedata = data[this_line]
+        for this_bin in linedata:
+            bin_start_time = iso8601.parse_date(this_bin["timeframe"]["start"])
+            js_date = "Date.UTC({year}, {month}, {day}, {hour}, {minute})".format(
+                year=bin_start_time.year,
+                month=bin_start_time.month - 1,  # js wants jan to be 0. nice one.
+                day=bin_start_time.day,
+                hour=bin_start_time.hour,
+                minute=bin_start_time.minute
+            )
+
+            if this_bin["value"] is not None:
+                point_def = [js_date, this_bin["value"]]
+                lines[this_line].append(point_def)
+
+
+    chart = highcharts.timeseries_line()
+    chart["series"] = [
+        {"data": lines["total_tickets"], "color": "#EF8A62", "name": "total tickets"},
+        {"data": lines["last_response_was_a_user"], "color": "#67A9CF", "name": "last_response_was_a_user"}
+    ]
+
+    resp = make_response(highcharts.as_js(chart), 200)
+    resp.mimetype = "application/json"
+    return resp
 
 
