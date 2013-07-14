@@ -31,15 +31,38 @@ def get_ticket_counts():
         last_message = [message for message in ticket["messages"] if message["updated_at"]==last_thread_update]
         last_response_was_an_admin.append(last_message[0]["is_admin_response"])
 
-    num_all_tickets = len(last_response_was_an_admin)
-    num_last_response_was_an_admin = sum(last_response_was_an_admin)
-    num_last_response_was_a_user = num_all_tickets - num_last_response_was_an_admin
+    ticket_dict = {
+        "num_all_tickets": len(last_response_was_an_admin),
+        "num_last_response_was_an_admin": sum(last_response_was_an_admin)
+        }
+
+    ticket_dict["num_last_response_was_a_user"] = ticket_dict["num_all_tickets"] - ticket_dict["num_last_response_was_an_admin"]
 
     logger.info("Found uservoice tickets: {all} total, {user} where a user answered last".format(
-        all=num_all_tickets, 
-        user=num_last_response_was_a_user))
+        all=ticket_dict["num_all_tickets"], 
+        user=ticket_dict["num_last_response_was_a_user"]))
 
-    #[suggestion["status"] for suggestion in owner.get("/api/v1/suggestions?per_page=1000")["suggestions"]]
+    return ticket_dict
 
-    return(num_all_tickets, num_last_response_was_a_user, num_last_response_was_an_admin)
+
+def get_suggestion_counts():
+    logger.info("Getting uservoice suggestion count")
+
+    owner = get_uservoice_owner()
+    suggestions_active = owner.get("/api/v1/suggestions?filter=active&per_page=1000")["suggestions"]
+    suggestions_inbox = owner.get("/api/v1/suggestions?filter=inbox&per_page=1000")["suggestions"]
+    suggestions = suggestions_active + suggestions_inbox
+
+    suggestion_dict = {}
+    for suggestion in suggestions:
+        status = "inbox"
+        if suggestion["status"]:
+            status = suggestion["status"]["name"]
+        suggestion_dict[status] = 1 + suggestion_dict.get(status, 0)
+
+    logger.info("Found uservoice suggestions: {total} total".format(
+        total=len(suggestions)))
+
+    return(suggestion_dict)
+
 

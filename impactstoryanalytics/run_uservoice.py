@@ -11,21 +11,18 @@ logger = logging.getLogger("analytics.run_uservoice")
 
 
 def run_uservoice():
-    (num_all_tickets, num_user, num_admin) = uservoice_check.get_ticket_counts()
-
-    logger.info("Found uservoice tickets: {all} total, {user} where a user answered last".format(
-        all=num_all_tickets, 
-        user=num_user))
 
     analytics.identify(user_id="uservoice")
 
-    analytics.track(user_id="uservoice", event='Ticket check', properties={
-        "num_all_tickets": num_all_tickets, 
-        "num_last_response_was_a_user": num_user,
-        "num_last_response_was_an_admin": num_admin
-    })
+    ticket_dict = uservoice_check.get_ticket_counts()
+    print ticket_dict
+    analytics.track(user_id="uservoice", event='UserVoice Ticket check', properties=ticket_dict)
 
-    return(num_all_tickets, num_user, num_admin)
+    suggestion_dict = uservoice_check.get_suggestion_counts()
+    print suggestion_dict
+    analytics.track(user_id="uservoice", event='UserVoice Suggestion check', properties=suggestion_dict)
+
+    return(ticket_dict, suggestion_dict)
 
 run_uservoice()
 

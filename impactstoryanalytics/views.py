@@ -129,26 +129,11 @@ def rescuetime_endpoint(first_name):
     return resp
 
 
-
-@app.route("/uservoice-tickets-nograph")
-def uservoice_tickets_nograph():
-    from impactstoryanalytics import uservoice_check
-    (num_all_tickets, num_last_response_was_a_user) = uservoice_check.get_ticket_counts()
-
-    gecko_response = {"item":[
-        {"text":"","value":num_all_tickets},
-        {"text":"","value":num_last_response_was_a_user}]}
-
-    resp = make_response(json.dumps(gecko_response, indent=4), 200)
-    resp.mimetype = "application/json"
-    return resp
-
-
 @app.route("/uservoice-tickets")
 def uservoice_tickets():
 
-    keenio_q_last_response_was_an_admin = "https://api.keen.io/3.0/projects/51df37f0897a2c7fcd000000/queries/average?api_key=b915f0ca9fcbe1cc4760640adf9f09fa1d330f74c763bfd1aa867d6148f528055a3f97afc6b111e8905ef78bfe7f97d1d2dd2b7ddbb0f9ed8e586fd69d79f12f2215d06298924631d8ccfa7a12845dde94921855ae223c69ad26789dca2ec5fd26296a80af72c3a014df5554948bac8e&event_collection=Ticket%20check&timeframe=today&timezone=-28800&target_property=num_last_response_was_an_admin&interval=hourly"
-    keenio_q_last_response_was_a_user = "https://api.keen.io/3.0/projects/51df37f0897a2c7fcd000000/queries/average?api_key=b915f0ca9fcbe1cc4760640adf9f09fa1d330f74c763bfd1aa867d6148f528055a3f97afc6b111e8905ef78bfe7f97d1d2dd2b7ddbb0f9ed8e586fd69d79f12f2215d06298924631d8ccfa7a12845dde94921855ae223c69ad26789dca2ec5fd26296a80af72c3a014df5554948bac8e&event_collection=Ticket%20check&timeframe=today&timezone=-28800&target_property=num_last_response_was_a_user&interval=hourly"
+    keenio_q_last_response_was_an_admin = "https://api.keen.io/3.0/projects/51df37f0897a2c7fcd000000/queries/average?api_key=b915f0ca9fcbe1cc4760640adf9f09fa1d330f74c763bfd1aa867d6148f528055a3f97afc6b111e8905ef78bfe7f97d1d2dd2b7ddbb0f9ed8e586fd69d79f12f2215d06298924631d8ccfa7a12845dde94921855ae223c69ad26789dca2ec5fd26296a80af72c3a014df5554948bac8e&event_collection=UserVoice%20Ticket%20check&timeframe=today&timezone=-28800&target_property=num_last_response_was_an_admin&interval=hourly"
+    keenio_q_last_response_was_a_user = "https://api.keen.io/3.0/projects/51df37f0897a2c7fcd000000/queries/average?api_key=b915f0ca9fcbe1cc4760640adf9f09fa1d330f74c763bfd1aa867d6148f528055a3f97afc6b111e8905ef78bfe7f97d1d2dd2b7ddbb0f9ed8e586fd69d79f12f2215d06298924631d8ccfa7a12845dde94921855ae223c69ad26789dca2ec5fd26296a80af72c3a014df5554948bac8e&event_collection=UserVoice%20Ticket%20check&timeframe=today&timezone=-28800&target_property=num_last_response_was_a_user&interval=hourly"
 
     data = {}
     data["last_response_was_a_user"] = requests.get(keenio_q_last_response_was_a_user).json()["result"]
