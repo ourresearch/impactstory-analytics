@@ -110,10 +110,10 @@ def rescuetime_endpoint(first_name):
         "categories": [day["name"] for day in dayslist]
     }
     chart["yAxis"]["max"] = 15
-    colors = [
+    colors = [  # these will stack in this same order on the graph
         ("other", "#666666"),
-        ("code", "#1A9641"),
-        ("email", "#D7191C")
+        ("email", "#D7191C"),
+        ("code", "#1A9641")
     ]
     for series_name, color in colors:
         this_series = {
