@@ -147,17 +147,14 @@ def uservoice_tickets_nograph():
 @app.route("/uservoice-tickets")
 def uservoice_tickets():
 
-    keenio_q_total_tickets = "https://api.keen.io/3.0/projects/51df37f0897a2c7fcd000000/queries/average?api_key=b915f0ca9fcbe1cc4760640adf9f09fa1d330f74c763bfd1aa867d6148f528055a3f97afc6b111e8905ef78bfe7f97d1d2dd2b7ddbb0f9ed8e586fd69d79f12f2215d06298924631d8ccfa7a12845dde94921855ae223c69ad26789dca2ec5fd26296a80af72c3a014df5554948bac8e&event_collection=Ticket%20check&timeframe=today&timezone=-28800&target_property=num_all_tickets&interval=hourly"
+    keenio_q_last_response_was_an_admin = "https://api.keen.io/3.0/projects/51df37f0897a2c7fcd000000/queries/average?api_key=b915f0ca9fcbe1cc4760640adf9f09fa1d330f74c763bfd1aa867d6148f528055a3f97afc6b111e8905ef78bfe7f97d1d2dd2b7ddbb0f9ed8e586fd69d79f12f2215d06298924631d8ccfa7a12845dde94921855ae223c69ad26789dca2ec5fd26296a80af72c3a014df5554948bac8e&event_collection=Ticket%20check&timeframe=today&timezone=-28800&target_property=num_last_response_was_an_admin&interval=hourly"
     keenio_q_last_response_was_a_user = "https://api.keen.io/3.0/projects/51df37f0897a2c7fcd000000/queries/average?api_key=b915f0ca9fcbe1cc4760640adf9f09fa1d330f74c763bfd1aa867d6148f528055a3f97afc6b111e8905ef78bfe7f97d1d2dd2b7ddbb0f9ed8e586fd69d79f12f2215d06298924631d8ccfa7a12845dde94921855ae223c69ad26789dca2ec5fd26296a80af72c3a014df5554948bac8e&event_collection=Ticket%20check&timeframe=today&timezone=-28800&target_property=num_last_response_was_a_user&interval=hourly"
 
     data = {}
-    data["total_tickets"] = requests.get(keenio_q_total_tickets).json()["result"]
     data["last_response_was_a_user"] = requests.get(keenio_q_last_response_was_a_user).json()["result"]
+    data["last_response_was_an_admin"] = requests.get(keenio_q_last_response_was_an_admin).json()["result"]
 
-    lines = {
-        "total_tickets": [],
-        "last_response_was_a_user": []
-    }
+    lines = {"last_response_was_a_user": [], "last_response_was_an_admin": []}
 
     for this_line in data:
         linedata = data[this_line]
@@ -175,12 +172,18 @@ def uservoice_tickets():
                 point_def = [js_date, this_bin["value"]]
                 lines[this_line].append(point_def)
 
-
-    chart = highcharts.timeseries_line()
+    chart = highcharts.streamgraph()
     chart["series"] = [
-        {"data": lines["total_tickets"], "color": "#EF8A62", "name": "total tickets"},
-        {"data": lines["last_response_was_a_user"], "color": "#67A9CF", "name": "last_response_was_a_user"}
+        {"data": lines["last_response_was_a_user"], "color": "#67A9CF", "name": "last_response_was_a_user"},
+        {"data": lines["last_response_was_an_admin"], "color": "#EF8A62", "name": "last_response_was_an_admin"}
     ]
+
+    chart["xAxis"] = {
+            "type": "datetime",
+            "dateTimeLabelFormats": {
+                "day": "%a"
+            }
+        }
 
     resp = make_response(highcharts.as_js(chart), 200)
     resp.mimetype = "application/json"

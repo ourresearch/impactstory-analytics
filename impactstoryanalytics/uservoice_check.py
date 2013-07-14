@@ -41,5 +41,5 @@ def get_ticket_counts():
 
     #[suggestion["status"] for suggestion in owner.get("/api/v1/suggestions?per_page=1000")["suggestions"]]
 
-    return(num_all_tickets, num_last_response_was_a_user)
+    return(num_all_tickets, num_last_response_was_a_user, num_last_response_was_an_admin)
 
