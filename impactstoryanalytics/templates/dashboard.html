@@ -5,14 +5,11 @@
 {% block content %}
 
 <script type="text/javascript">
-   {% for name, data in js_data.iteritems() %}
-      {{ name }}Data = JSON.parse('{{ data|tojson|safe }}');
-      {{ name }} = new {{ name|capitalize }}( {{ name }}Data );
-      console.log(
-         "created new {{ name|capitalize }} with this data: ",
-         {{ name }}Data
-      );
-      {{ name }}.init();
+   {% for name in widget_names %}
+      var {{ name }}Widget = new {{ name.capitalize() }}(
+              "{{ url_for('widget_data', widget_name=name) }}"
+              )
+      load_widget_data({{ name }}Widget)
    {% endfor %}
 </script>
 

@@ -145,6 +145,16 @@ def uservoice_tickets():
     return resp
 
 
+@app.route("/widget_data/<widget_name>")
+def widget_data(widget_name):
+    module = sys.modules["impactstoryanalytics.widgets." + widget_name]  # hack, ick
+    class_name = widget_name.capitalize()
+    widget = getattr(module, class_name)()
+
+    resp = make_response(json.dumps(widget.get_data(), indent=4), 200)
+    resp.mimetype = "application/json"
+    return resp
+
 
 @app.route("/dashboard/<dashboard_name>")
 def dashboard(dashboard_name):
@@ -176,7 +186,7 @@ def dashboard(dashboard_name):
     return render_template(
         'dashboard.html',
         dashboard_name=dashboard_name,
-        js_data={widget.get_name(): widget.get_data() for widget in widgets}
+        widget_names=[widget.get_name() for widget in widgets]
     )
 
 

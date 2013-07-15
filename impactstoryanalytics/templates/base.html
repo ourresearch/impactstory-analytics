@@ -6,9 +6,12 @@
    <link rel="icon" type="image/ico" href="/static/img/favicon.png" />
    <title>ImpactStory: {{ dashboard_name }}</title>
 
+   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+   <script type="text/javascript" src="{{url_for('static', filename='main.js') }}"></script>
+
    <!-- load scripts dynamically -->
-   {%  if js_data %}
-   {% for name, data in js_data.iteritems() %}
+   {%  if widget_names %}
+   {% for name in widget_names %}
       <script  type="text/javascript"
                src="{{ url_for("static", filename='js_widgets' )}}/{{ name }}.js"></script>
    {% endfor %}

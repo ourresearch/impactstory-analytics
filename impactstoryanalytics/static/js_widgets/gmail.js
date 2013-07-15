@@ -1,12 +1,12 @@
-var Gmail = function(data) {
-    this.data = data
+var Gmail = function(dataUrl) {
+    this.dataUrl = dataUrl
 }
 
 Gmail.prototype = {
     init: function(){
-        console.log("here's where i do stuff w data")
-        console.log("here's where i render the finished graphic(s)")
-
+    }
+    ,create: function(data) {
+        console.log("here's where i do stuff w this data, ", data)
 
     }
     , functionsLikeThis: function(){
