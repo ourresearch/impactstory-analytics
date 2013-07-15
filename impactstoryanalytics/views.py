@@ -1,9 +1,11 @@
 import requests
 import os
+import sys
 import json
 import logging
 import iso8601
-from impactstoryanalytics import app, gmail, highcharts, rescuetime
+from impactstoryanalytics import app, highcharts, rescuetime
+from impactstoryanalytics.widgets import gmail, rescuetime
 
 from flask import request, abort, make_response, g, redirect, url_for
 from flask import render_template
@@ -129,12 +131,6 @@ def rescuetime_endpoint(first_name):
     return resp
 
 
-
-
-
-
-
-
 @app.route("/uservoice-tickets")
 def uservoice_tickets():
     from impactstoryanalytics import uservoice_check
@@ -147,6 +143,64 @@ def uservoice_tickets():
     resp = make_response(json.dumps(gecko_response, indent=4), 200)
     resp.mimetype = "application/json"
     return resp
+
+
+
+@app.route("/dashboard/<dashboard_name>")
+def dashboard(dashboard_name):
+
+    if dashboard_name == "productivity":
+        widget_names = [
+            "gmail"
+        ]
+
+    elif dashboard_name == "main":
+        # there's some other set of widget names
+        pass
+
+    else:
+        redirect("/dashboard/main")
+
+
+    widgets = []
+    for widget_name in widget_names:
+        module = sys.modules["impactstoryanalytics.widgets." + widget_name]  # hack, ick
+        class_name = widget_name.capitalize()
+        new_widget = getattr(module, class_name)()
+
+        widgets.append(new_widget)
+
+
+
+
+    return render_template(
+        'dashboard.html',
+        dashboard_name=dashboard_name,
+        js_data={widget.get_name(): widget.get_data() for widget in widgets}
+    )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

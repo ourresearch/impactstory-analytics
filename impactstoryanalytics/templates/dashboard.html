@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% set page_title = "Share the full story of your research impact" %}
+
+
+{% block content %}
+
+<script type="text/javascript">
+   {% for name, data in js_data.iteritems() %}
+      {{ name }}Data = JSON.parse('{{ data|tojson|safe }}');
+      {{ name }} = new {{ name|capitalize }}( {{ name }}Data );
+      console.log(
+         "created new {{ name|capitalize }} with this data: ",
+         {{ name }}Data
+      );
+      {{ name }}.init();
+   {% endfor %}
+</script>
+
+{% endblock %}
