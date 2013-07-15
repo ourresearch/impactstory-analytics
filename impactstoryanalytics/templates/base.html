@@ -7,21 +7,17 @@
    <title>ImpactStory: {{ dashboard_name }}</title>
 
    <!-- load scripts dynamically -->
+   {%  if js_data %}
    {% for name, data in js_data.iteritems() %}
       <script  type="text/javascript"
                src="{{ url_for("static", filename='js_widgets' )}}/{{ name }}.js"></script>
-
    {% endfor %}
+   {%  endif %}
 
 
 </head>
 <body>
 
-<ul>
-{% for name, data in js_data.iteritems() %}
-   <li>{{ name }}.js</li>
-{% endfor %}
-</ul>
 
 {% block content %}{% endblock %}
 
