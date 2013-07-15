@@ -4,8 +4,8 @@ import sys
 import json
 import logging
 import iso8601
-from impactstoryanalytics import app, highcharts, rescuetime
-from impactstoryanalytics.widgets import gmail, rescuetime
+from impactstoryanalytics import app, highcharts
+from impactstoryanalytics.widgets import rescuetime, gmail
 
 from flask import request, abort, make_response, g, redirect, url_for
 from flask import render_template
@@ -15,6 +15,17 @@ from sqlalchemy import func
 
 
 logger = logging.getLogger("impactstoryanalytics.views")
+dashboards = {
+    "main": [],
+    "productivity": [
+        gmail.Gmail(),
+        rescuetime.Rescuetime()
+    ]
+}
+
+@app.before_request
+def load_dashboards_list():
+    g.dashboards = dashboards
 
 
 # static pages
@@ -159,29 +170,10 @@ def widget_data(widget_name):
 @app.route("/dashboard/<dashboard_name>")
 def dashboard(dashboard_name):
 
-    if dashboard_name == "productivity":
-        widget_names = [
-            "gmail"
-        ]
-
-    elif dashboard_name == "main":
-        # there's some other set of widget names
-        pass
-
-    else:
-        redirect("/dashboard/main")
-
-
-    widgets = []
-    for widget_name in widget_names:
-        module = sys.modules["impactstoryanalytics.widgets." + widget_name]  # hack, ick
-        class_name = widget_name.capitalize()
-        new_widget = getattr(module, class_name)()
-
-        widgets.append(new_widget)
-
-
-
+    try:
+        widgets = g.dashboards[dashboard_name]
+    except AttributeError:
+        redirect(url_for(dashboard, dashboard_name="main"))
 
     return render_template(
         'dashboard.html',

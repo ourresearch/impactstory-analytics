@@ -20,10 +20,17 @@
 
 </head>
 <body>
-
+<div id="navbar">
+   <ul class="nav">
+      {%  for dashboard_name in g.dashboards.keys() %}
+      <li><a href='{{ url_for("dashboard", dashboard_name=dashboard_name )}}'>{{ dashboard_name }}</a></li>
+      {% endfor %}
+   </ul>
+</div>
+<div id="content">
 
 {% block content %}{% endblock %}
 
-
+</div>
 </body>
 </html>
