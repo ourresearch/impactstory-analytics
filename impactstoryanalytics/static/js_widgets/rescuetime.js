@@ -1,11 +1,11 @@
-var Gmail = function() {
+var Rescuetime = function() {
 }
 
-Gmail.prototype = {
+Rescuetime.prototype = {
     init: function(){
     }
     ,create: function(data) {
-        console.log("here's Gmail does stuff w this data, ", data)
+        console.log("here's where rescuetime widget shines! ", data)
 
     }
     , functionsLikeThis: function(){

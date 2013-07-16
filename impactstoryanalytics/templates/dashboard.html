@@ -5,12 +5,7 @@
 {% block content %}
 
 <script type="text/javascript">
-   {% for name in widget_names %}
-      var {{ name }}Widget = new {{ name.capitalize() }}(
-              "{{ url_for('widget_data', widget_name=name) }}"
-              )
-      load_widget_data({{ name }}Widget)
-   {% endfor %}
+   var widgetNames = JSON.parse('{{ widget_names|tojson|safe }}')
 </script>
 
 

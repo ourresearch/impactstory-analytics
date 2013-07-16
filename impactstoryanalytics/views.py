@@ -9,12 +9,11 @@ from impactstoryanalytics.widgets import rescuetime, gmail
 
 from flask import request, abort, make_response, g, redirect, url_for
 from flask import render_template
-
-from sqlalchemy.exc import IntegrityError, InvalidRequestError
-from sqlalchemy import func
-
+from flask.ext.assets import Environment, Bundle
 
 logger = logging.getLogger("impactstoryanalytics.views")
+
+# define dashboards
 dashboards = {
     "main": [],
     "productivity": [
@@ -22,6 +21,28 @@ dashboards = {
         rescuetime.Rescuetime()
     ]
 }
+
+
+# add all the js to the page.
+base_js = [
+    'js_libs/jquery.sparkline.js',
+    'js_libs/underscore.js',
+    'main.js']
+base_css = [
+    'css/test.css']
+assets = Environment(app)
+
+for k, v in dashboards.iteritems():
+    for widget in v:
+        base_js.append("js_widgets/" + widget.get_name() + ".js")
+
+assets.register('js_all', Bundle(*base_js))
+assets.register('css_all', Bundle(*base_css))
+
+
+
+
+# views
 
 @app.before_request
 def load_dashboards_list():
@@ -72,44 +93,6 @@ def active_users():
     resp.mimetype = "application/json"
     return resp
 
-
-@app.route("/inbox-threads")
-def inbox_threads():
-    keenio_q = "https://api.keen.io/3.0/projects/51df37f0897a2c7fcd000000/queries/minimum?api_key=b915f0ca9fcbe1cc4760640adf9f09fa1d330f74c763bfd1aa867d6148f528055a3f97afc6b111e8905ef78bfe7f97d1d2dd2b7ddbb0f9ed8e586fd69d79f12f2215d06298924631d8ccfa7a12845dde94921855ae223c69ad26789dca2ec5fd26296a80af72c3a014df5554948bac8e&event_collection=Inbox%20check&timeframe=this_48_hours&timezone=-25200&target_property=thread_count&group_by=userId&interval=hourly"
-    keenio_data = requests.get(keenio_q).json()["result"]
-    lines = {
-        "Heather": [],
-        "Jason": []
-    }
-
-
-    for this_bin in keenio_data:
-        bin_start_time = iso8601.parse_date(this_bin["timeframe"]["start"])
-        js_date = "Date.UTC({year}, {month}, {day}, {hour}, {minute})".format(
-            year=bin_start_time.year,
-            month=bin_start_time.month - 1,  # js wants jan to be 0. nice one.
-            day=bin_start_time.day,
-            hour=bin_start_time.hour,
-            minute=bin_start_time.minute
-        )
-        for val in this_bin["value"]:
-            if val["result"] is not None:
-                point_def = [
-                    js_date,
-                    val["result"]
-                ]
-
-                lines[val["userId"]].append(point_def)
-
-    chart = highcharts.timeseries_line()
-    chart["series"] = [
-        {"data": lines["Jason"], "color": "#EF8A62", "name": "Jason"},
-        {"data": lines["Heather"], "color": "#67A9CF", "name": "Heather"}
-    ]
-
-    resp = make_response(highcharts.as_js(chart), 200)
-    resp.mimetype = "application/json"
-    return resp
 
 
 
@@ -167,6 +150,7 @@ def widget_data(widget_name):
     return resp
 
 
+
 @app.route("/dashboard/<dashboard_name>")
 def dashboard(dashboard_name):
 
@@ -175,10 +159,13 @@ def dashboard(dashboard_name):
     except AttributeError:
         redirect(url_for(dashboard, dashboard_name="main"))
 
+
+    widget_names = [widget.get_name() for widget in widgets]
+
     return render_template(
         'dashboard.html',
         dashboard_name=dashboard_name,
-        widget_names=[widget.get_name() for widget in widgets]
+        widget_names=widget_names
     )
 
 

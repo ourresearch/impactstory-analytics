@@ -7,15 +7,14 @@
    <title>ImpactStory: {{ dashboard_name }}</title>
 
    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
-   <script type="text/javascript" src="{{url_for('static', filename='main.js') }}"></script>
+   {% assets "js_all" %}
+      <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+   {% endassets %}
 
-   <!-- load scripts dynamically -->
-   {%  if widget_names %}
-   {% for name in widget_names %}
-      <script  type="text/javascript"
-               src="{{ url_for("static", filename='js_widgets' )}}/{{ name }}.js"></script>
-   {% endfor %}
-   {%  endif %}
+   {% assets "css_all" %}
+      <link type="text/css" rel="stylesheet" href="{{ ASSET_URL }}" />
+   {% endassets %}
+
 
 
 </head>

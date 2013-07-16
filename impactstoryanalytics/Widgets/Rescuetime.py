@@ -6,10 +6,8 @@ from datetime import date, timedelta
 
 
 class Rescuetime(Widget):
-
-
     def get_data(self):
-        pass
+        return {"foo": "bar"}
 
 
     def get_raw_data(self, user):
