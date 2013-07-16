@@ -20,6 +20,7 @@
 </head>
 <body>
 <div id="navbar">
+   <h1><img class="brand" src="{{ url_for("static", filename="img/impactstory-logo-small.png") }}"/> <span class="sub">analytics</span></h1>
    <ul class="nav">
       {%  for dashboard_name in g.dashboards.keys() %}
       <li><a href='{{ url_for("dashboard", dashboard_name=dashboard_name )}}'>{{ dashboard_name }}</a></li>

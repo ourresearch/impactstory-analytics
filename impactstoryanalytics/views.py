@@ -27,9 +27,12 @@ dashboards = {
 base_js = [
     'js_libs/jquery.sparkline.js',
     'js_libs/underscore.js',
-    'main.js']
+    'main.js'
+]
 base_css = [
-    'css/test.css']
+    'css/main.css',
+    'css/dashboard.css'
+]
 assets = Environment(app)
 
 for k, v in dashboards.iteritems():
