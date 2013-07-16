@@ -17,8 +17,8 @@ logger = logging.getLogger("impactstoryanalytics.views")
 dashboards = {
     "main": [],
     "productivity": [
-        gmail.Gmail(),
-        rescuetime.Rescuetime()
+        # rescuetime.Rescuetime(),
+        gmail.Gmail()
     ]
 }
 
@@ -27,13 +27,14 @@ dashboards = {
 base_js = [
     'js_libs/jquery.sparkline.js',
     'js_libs/underscore.js',
+    'js_libs/d3.min.js',
+    'js_libs/d3.layout.min.js',
     'js_libs/rickshaw.js',
     'main.js'
 ]
 base_css = [
     'css/rickshaw.css',
-    'css/main.css',
-    'css/dashboard.css'
+    'css/main.css'
 ]
 assets = Environment(app)
 

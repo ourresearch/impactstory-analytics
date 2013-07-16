@@ -16,6 +16,7 @@ div#navbar {
   left: 0;
   right: 0;
   border-bottom: 1px solid #aaa;
+  background: #fff;
 }
 div#navbar h1 {
   float: left;
@@ -55,4 +56,22 @@ div#navbar ul.nav li a {
 div#content {
   margin-top: 100px;
   padding: 0 50px;
+}
+div.dashboard div.widget div.container {
+  position: relative;
+}
+div.dashboard div.widget div.container div.y_axis {
+  top: 0;
+  position: absolute;
+  bottom: 0;
+  width: 40px;
+}
+div.dashboard div.widget div.container div.graphic {
+  position: relative;
+}
+div.dashboard div.widget div.container div.graphic.rickshaw_graph {
+  left: 40px;
+}
+div.dashboard div.widget div.container div.graphic.rickshaw_graph div.x_tick div.title {
+  bottom: -16px;
 }
