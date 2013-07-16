@@ -27,9 +27,11 @@ dashboards = {
 base_js = [
     'js_libs/jquery.sparkline.js',
     'js_libs/underscore.js',
+    'js_libs/rickshaw.js',
     'main.js'
 ]
 base_css = [
+    'css/rickshaw.css',
     'css/main.css',
     'css/dashboard.css'
 ]

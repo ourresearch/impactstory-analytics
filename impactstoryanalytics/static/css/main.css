@@ -52,3 +52,7 @@ div#navbar ul.nav li a {
   display: block;
   color: #555;
 }
+div#content {
+  margin-top: 100px;
+  padding: 0 50px;
+}
