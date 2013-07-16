@@ -4,6 +4,7 @@ body {
    padding: 0;
    margin: 0;
    font-family: "Helvetica Neue";
+   color:  #333;
 }
 
 a {
@@ -68,8 +69,16 @@ div#content {
 
 div.dashboard {
    div.widget {
+      padding:  10px 40px 10px 10px;
+      float:left;
       h2 {
-
+         padding-left: 20px;
+         span {
+            font-size: 12px;
+            font-weight: normal;
+            color: #666;
+            margin-left: 8px;
+         }
       }
       div.container {
          position: relative;
@@ -87,6 +96,34 @@ div.dashboard {
                   div.title {
                      bottom:  -16px;
                   }
+               }
+            }
+         }
+
+         div.sparkline-with-numbers {
+            margin-bottom: 20px;
+            font-size: 22px;
+            span.label{
+               width:  100px;
+               text-align: right;
+               display: inline-block;
+            }
+            span.sparkline {
+               canvas {
+               }
+            }
+            span.current-value {
+               font-weight: bolder;
+               font-size: 28px;
+            }
+            span.max-value {
+               font-size: 10px;
+               font-weight: normal;
+               color:  #bbb;
+               span.value{
+                  color:  #333;
+                  font-weight: normal;
+                  font-size: 15px;
                }
             }
          }

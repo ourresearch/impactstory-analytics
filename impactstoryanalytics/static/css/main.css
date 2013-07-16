@@ -2,6 +2,7 @@ body {
   padding: 0;
   margin: 0;
   font-family: "Helvetica Neue";
+  color: #333;
 }
 a {
   text-decoration: none;
@@ -57,6 +58,19 @@ div#content {
   margin-top: 100px;
   padding: 0 50px;
 }
+div.dashboard div.widget {
+  padding: 10px 40px 10px 10px;
+  float: left;
+}
+div.dashboard div.widget h2 {
+  padding-left: 20px;
+}
+div.dashboard div.widget h2 span {
+  font-size: 12px;
+  font-weight: normal;
+  color: #666;
+  margin-left: 8px;
+}
 div.dashboard div.widget div.container {
   position: relative;
 }
@@ -74,4 +88,27 @@ div.dashboard div.widget div.container div.graphic.rickshaw_graph {
 }
 div.dashboard div.widget div.container div.graphic.rickshaw_graph div.x_tick div.title {
   bottom: -16px;
+}
+div.dashboard div.widget div.container div.sparkline-with-numbers {
+  margin-bottom: 20px;
+  font-size: 22px;
+}
+div.dashboard div.widget div.container div.sparkline-with-numbers span.label {
+  width: 100px;
+  text-align: right;
+  display: inline-block;
+}
+div.dashboard div.widget div.container div.sparkline-with-numbers span.current-value {
+  font-weight: bolder;
+  font-size: 28px;
+}
+div.dashboard div.widget div.container div.sparkline-with-numbers span.max-value {
+  font-size: 10px;
+  font-weight: normal;
+  color: #bbb;
+}
+div.dashboard div.widget div.container div.sparkline-with-numbers span.max-value span.value {
+  color: #333;
+  font-weight: normal;
+  font-size: 15px;
 }
