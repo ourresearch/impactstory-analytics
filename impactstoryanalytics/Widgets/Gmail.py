@@ -29,7 +29,7 @@ class Gmail(Widget):
 
         for this_bin in raw_data:
             bin_start_time = iso8601.parse_date(this_bin["timeframe"]["start"])
-            adj_start_time = bin_start_time - timedelta(hours=7)
+            adj_start_time = bin_start_time
 
             for val in this_bin["value"]:
                 if val["result"] is not None:

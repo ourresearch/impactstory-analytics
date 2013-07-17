@@ -19,7 +19,7 @@ logger = logging.getLogger("analytics.run_gmail")
 
 
 
-def count_threads_in_inbox(self, client_id, client_secret, refresh_token, email_address):
+def count_threads_in_inbox(client_id, client_secret, refresh_token, email_address):
     thread_id_list = []
 
 
@@ -54,7 +54,7 @@ def count_threads_in_inbox(self, client_id, client_secret, refresh_token, email_
 
 def check_inbox(name):
     logger.info("Getting inbox thread count for " + name.capitalize())
-    count = gmail.count_threads_in_inbox(
+    count = count_threads_in_inbox(
         os.getenv("GMAIL_CLIENT_ID"),
         os.getenv("GMAIL_CLIENT_SECRET"),
         os.getenv("GMAIL_REFRESH_TOKEN_" + name.upper()),

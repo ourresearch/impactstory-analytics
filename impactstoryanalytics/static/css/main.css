@@ -112,3 +112,17 @@ div.dashboard div.widget div.container div.sparkline-with-numbers span.max-value
   font-weight: normal;
   font-size: 15px;
 }
+div#jqstooltip {
+  display: block;
+  padding: 7px 25px 7px 7px;
+  border-radius: 3px;
+  border: none;
+  font-family: "Helvetica Neue";
+  font-weight: 100;
+  font-size: 12px;
+  letter-spacing: 1px;
+  background: rgba(0, 0, 0, 0.7);
+}
+div#jqstooltip span {
+  font-weight: bold;
+}
