@@ -5,8 +5,7 @@ import json
 import logging
 import iso8601
 from impactstoryanalytics import app, highcharts
-# from impactstoryanalytics.widgets import rescuetime, gmail
-from impactstoryanalytics.widgets.gmail import Gmail
+from impactstoryanalytics.widgets import rescuetime, gmail
 
 from flask import request, abort, make_response, g, redirect, url_for
 from flask import render_template
