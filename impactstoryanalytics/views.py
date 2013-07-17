@@ -17,8 +17,9 @@ logger = logging.getLogger("impactstoryanalytics.views")
 dashboards = {
     "main": [],
     "productivity": [
-        # Rescuetime(),
-        Gmail()
+        Rescuetime(),
+        Gmail(),
+        Github()
     ]
 }
 

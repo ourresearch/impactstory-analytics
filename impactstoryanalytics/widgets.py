@@ -4,6 +4,10 @@ from datetime import date
 import requests
 import iso8601
 import os
+import logging
+import numpy as np
+
+logger = logging.getLogger("impactstoryanalytics.widgets")
 
 
 class Widget:
@@ -12,6 +16,9 @@ class Widget:
 
     def get_data(self):
         raise NotImplementedError
+
+    def make_day_bins(self, num_days):
+        pass
 
 
 
@@ -60,9 +67,17 @@ class Gmail(Widget):
 
 
 
+
+
 class Rescuetime(Widget):
     def get_data(self):
-        return {"foo": "bar"}
+        heather_and_jason_activity = {}
+        for user in ["Heather", "Jason"]:
+            raw_data = self.get_raw_data(user)
+            heather_and_jason_activity[user] = self.list_activity_by_day(raw_data)
+
+        return heather_and_jason_activity
+
 
 
     def get_raw_data(self, user):
@@ -85,9 +100,6 @@ class Rescuetime(Widget):
         data = requests.get(url, params=params).json()["rows"]
         return data
 
-
-
-
     def is_code_category(self, category):
         code_categories = [
             "general software development",
@@ -103,8 +115,6 @@ class Rescuetime(Widget):
         else:
             return False
 
-
-
     def list_activity_by_day(self, data):
 
         days = {}
@@ -115,11 +125,15 @@ class Rescuetime(Widget):
 
             # add this day if we don't have it yet
             if datestring not in days:
+                # crazy hack to fix rescuetime rickshaw axis
+                adj_data = iso8601.parse_date(datestring)
+
+                timestamp = int(time.mktime(adj_data.timetuple()))
                 days[datestring] = {
                     "total": 0,
                     "email": 0,
                     "code": 0,
-                    "name": iso8601.parse_date(datestring).strftime("%a%e")
+                    "timestamp": timestamp
                 }
 
             # add to the time counts for this day
@@ -139,4 +153,47 @@ class Rescuetime(Widget):
         for k in sorted(days.keys()):
             dayslist.append(days[k])
 
-        return dayslist
+        # convert to the format Rickshaw likes
+        categories = {"other": [], "email": [], "code": []}
+        for category_name, category_values in categories.iteritems():
+            for index, day in enumerate(dayslist):
+                datapoint = {
+                    "x": index,
+                    "y": day[category_name]
+                }
+                category_values.append(datapoint)
+
+
+
+
+        return categories
+
+
+
+class Github(Widget):
+    issue_q_url_template = "https://api.github.com/repos/total-impact/total-impact-{NAME}"
+    num_days = 31
+    repo_names = ["webapp", "core"]
+
+    def get_data(self):
+        return self.get_raw_data()
+
+    def get_both_closed_and_open_issues(self, q_url):
+        issues = []
+        params = {
+            "since": date.today() - timedelta(days=self.num_days)
+        }
+        for state in ["closed", "open"]:
+            params["state"] = state
+            logger.info("querying github with url " + q_url)
+            issues += requests.get(q_url, params=params).json()
+
+        return issues
+
+    def get_raw_data(self):
+        raw_data = {}
+        for repo_name in self.repo_names:
+            q_url = self.issue_q_url_template.format(NAME=repo_name)
+            raw_data[repo_name] = self.get_both_closed_and_open_issues(q_url)
+
+        return raw_data

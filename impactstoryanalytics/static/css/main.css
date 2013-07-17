@@ -89,6 +89,9 @@ div.dashboard div.widget div.container div.graphic.rickshaw_graph {
 div.dashboard div.widget div.container div.graphic.rickshaw_graph div.x_tick div.title {
   bottom: -16px;
 }
+div.dashboard div.widget div.container div.graphic.rickshaw_graph.bar div.x_tick {
+  border: none;
+}
 div.dashboard div.widget div.container div.sparkline-with-numbers {
   margin-bottom: 20px;
   font-size: 22px;
