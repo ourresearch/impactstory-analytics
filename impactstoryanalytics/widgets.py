@@ -171,12 +171,13 @@ class Rescuetime(Widget):
 
 
 class Github(Widget):
-    issue_q_url_template = "https://api.github.com/repos/total-impact/total-impact-{NAME}"
+    issue_q_url_template = "https://api.github.com/repos/total-impact/total-impact-{NAME}/issues"
     num_days = 31
     repo_names = ["webapp", "core"]
 
     def get_data(self):
-        return self.get_raw_data()
+        raw_data = self.get_raw_data()
+
 
     def get_both_closed_and_open_issues(self, q_url):
         issues = []
@@ -197,3 +198,13 @@ class Github(Widget):
             raw_data[repo_name] = self.get_both_closed_and_open_issues(q_url)
 
         return raw_data
+
+    def make_histogram(self, issues_list):
+        timestamps = []
+        for issue in issues_list:
+            iso_str = issue["created_at"]
+            date = iso8601.parse(iso_str)
+            timestamp = time.mktime(date.timetuple())
+            timestamps.append(timestamp)
+
+        return timestamps

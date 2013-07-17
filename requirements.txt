@@ -12,6 +12,7 @@ distribute==0.6.27
 gunicorn==17.5
 iso8601==0.1.4
 itsdangerous==0.22
+numpy==1.7.1
 oauthlib==0.5.0
 pycrypto==2.6
 python-dateutil==2.1
