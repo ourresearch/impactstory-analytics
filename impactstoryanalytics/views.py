@@ -5,7 +5,7 @@ import json
 import logging
 import iso8601
 from impactstoryanalytics import app, highcharts
-from impactstoryanalytics.widgets import rescuetime, gmail
+from impactstoryanalytics.widgets import *
 
 from flask import request, abort, make_response, g, redirect, url_for
 from flask import render_template
@@ -17,8 +17,8 @@ logger = logging.getLogger("impactstoryanalytics.views")
 dashboards = {
     "main": [],
     "productivity": [
-        # rescuetime.Rescuetime(),
-        gmail.Gmail()
+        # Rescuetime(),
+        Gmail()
     ]
 }
 
@@ -147,7 +147,7 @@ def uservoice_tickets():
 
 @app.route("/widget_data/<widget_name>")
 def widget_data(widget_name):
-    module = sys.modules["impactstoryanalytics.widgets." + widget_name]  # hack, ick
+    module = sys.modules["impactstoryanalytics.widgets"]  # hack, ick
     class_name = widget_name.capitalize()
     widget = getattr(module, class_name)()
 
