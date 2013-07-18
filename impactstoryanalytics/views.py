@@ -170,7 +170,7 @@ def dashboard(dashboard_name):
     widget_names = [widget.get_name() for widget in widgets]
 
     return render_template(
-        'dashboard.html',
+        "dashboards/{name}.html".format(name=dashboard_name),
         dashboard_name=dashboard_name,
         widget_names=widget_names
     )
