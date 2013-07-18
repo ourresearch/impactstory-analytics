@@ -5,6 +5,7 @@ import requests
 import iso8601
 import os
 import logging
+from collections import defaultdict
 import numpy as np
 
 logger = logging.getLogger("impactstoryanalytics.widgets")
@@ -176,7 +177,14 @@ class Github(Widget):
     repo_names = ["webapp", "core"]
 
     def get_data(self):
-        raw_data = self.get_raw_data()
+        lines = {}
+        for repo_name in self.repo_names:
+            issues_list = self.get_raw_data_repo(repo_name)
+            line = self.make_line(issues_list)
+            x_y_points = [[k, line[k]] for k in line.keys()]
+            lines[repo_name] = x_y_points
+
+        return lines
 
 
     def get_both_closed_and_open_issues(self, q_url):
@@ -191,20 +199,16 @@ class Github(Widget):
 
         return issues
 
-    def get_raw_data(self):
-        raw_data = {}
-        for repo_name in self.repo_names:
-            q_url = self.issue_q_url_template.format(NAME=repo_name)
-            raw_data[repo_name] = self.get_both_closed_and_open_issues(q_url)
+    def get_raw_data_repo(self, repo_name):
+        q_url = self.issue_q_url_template.format(NAME=repo_name)
+        return self.get_both_closed_and_open_issues(q_url)
 
-        return raw_data
-
-    def make_histogram(self, issues_list):
-        timestamps = []
+    def make_line(self, issues_list):
+        line = defaultdict(int)
         for issue in issues_list:
-            iso_str = issue["created_at"]
-            date = iso8601.parse(iso_str)
-            timestamp = time.mktime(date.timetuple())
-            timestamps.append(timestamp)
+            d = iso8601.parse_date(issue["created_at"])
+            d = d.replace(hour=0, minute=0, second=0)  # beginning of day
+            timestamp = int(time.mktime(d.timetuple()))
+            line[timestamp] += 1
 
-        return timestamps
+        return line
