@@ -9,6 +9,7 @@ a {
 }
 a:hover {
   text-decoration: underline;
+  color: #ff4e00;
 }
 div#navbar {
   position: fixed;

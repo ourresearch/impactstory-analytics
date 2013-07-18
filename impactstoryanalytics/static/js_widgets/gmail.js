@@ -5,17 +5,13 @@ Gmail.prototype = {
     init: function(){
     }
     ,create:function(data){
-        this.createSparklineSet(data)
-    }
-    ,createSparklineSet: function(data){
-        var that = this
         var overallMax = 0
         for (name in data) {
             var values =  _.pluck(data[name], "y")
             overallMax = _.max([overallMax, _.max(values)])
         }
         var ss = new SparklineSet(
-            $(".widget-gmail-sparklines"),
+            $(".widget-gmail"),
             {chartRangeMax: overallMax}
         )
 

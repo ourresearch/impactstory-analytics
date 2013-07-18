@@ -20,7 +20,16 @@ function load_widget_data(widget, dataUrl) {
 // OBJECTS
 
 var SparklineSet = function(container$, options){
-    this.options = options
+    var defaultOptions = {
+        iaPrimaryValueLabel:'',
+        iaSecondaryValueLabel: "max",
+        iaHref: "#",
+        maxSpotColor: false,
+        minSpotColor: false,
+        spotColor: false,
+        chartRangeMin:0
+    }
+    this.options = _.extend(defaultOptions, options)
     this.container$ = container$
     this.init()
 }
@@ -28,40 +37,28 @@ SparklineSet.prototype = {
     init: function(){
         console.log("init IsaSparkline")
     }
-    ,createSparklineBar: function(container$, values){
+    ,createSparklineBar: function(name, values){
         var defaultOptions = {
-            primaryNum: _.reduce(values, function(memo, num) { return memo + num}),
-            primaryNumLabel:'',
-            secondaryNum: _.max(values),
-            secondaryNumLabel: "max",
+            iaPrimaryValue: _.reduce(values, function(memo, num) { return memo + num}),
+            iaSecondaryValue: _.max(values),
             tooltipFomatter: function(sparkline, options, fields) {
                 return "still working on it..."
             },
             type:"bar",
-            chartRangeMin:0,
+            iaName: name,
             barWidth: 2
         }
         var options = _.extend(defaultOptions, this.options)
+        this.renderSparkline(name, values, options)
 
-
-        container$.find("span.primary span.value").html(options.primaryNum)
-        container$.find("span.secondary span.value").html(options.secondaryNum)
-        container$.find("span.sparkline").sparkline(values, options)
     }
     ,createSparklineLine: function(name, xValues, yValues){
         var weekDays = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"]
         var defaultOptions = {
             iaPrimaryValue: _.last(yValues),
-            iaPrimaryValueLabel:'',
             iaSecondaryValue: _.max(yValues),
-            iaSecondaryValueLabel: "max",
-            iaHref: "#",
             iaName: name,
             type:"line",
-            maxSpotColor: false,
-            minSpotColor: false,
-            spotColor: false,
-            chartRangeMin:0,
             xvalues: xValues,
             tooltipFormatter:function(sparkline, options, fields){
                 var d = new Date(fields.x * 1000)
@@ -71,11 +68,13 @@ SparklineSet.prototype = {
             }
         }
         var options = _.extend(defaultOptions, this.options)
+        this.renderSparkline(name, yValues, options)
+
+    }
+    ,renderSparkline: function(name, values, options) {
         var elem$ = ich.sparklineWithNumbers(options)
-
         this.container$.find("div.container").append(elem$)
-        this.container$.find(".sparkline."+name).sparkline(yValues, options)
-
+        this.container$.find(".sparkline."+name).sparkline(values, options)
     }
 }
 
