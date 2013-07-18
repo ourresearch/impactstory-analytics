@@ -158,10 +158,9 @@ def widget_data(widget_name):
     return resp
 
 
-
+@app.route('/dashboard', defaults={'dashboard_name': 'main'})
 @app.route("/dashboard/<dashboard_name>")
 def dashboard(dashboard_name):
-
     try:
         widgets = g.dashboards[dashboard_name]
     except AttributeError:
