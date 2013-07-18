@@ -7,7 +7,8 @@ function capitalize(str){
 
 // PAGE FUNCTIONS
 
-function load_widget_data(widget, dataUrl) {
+function load_widget(widget, dataUrl) {
+    // first load the data, then use it to creat the widget
     $.ajax({
                url: dataUrl,
                type:"GET",
@@ -24,7 +25,7 @@ $(document).ready(function(){
     _.each(widgetNames, function(name){
         var widget = new window[capitalize(name)]()
         var dataUrl = "/widget_data/"+name
-        load_widget_data(widget, dataUrl)
+        load_widget(widget, dataUrl)
     })
 
 })
