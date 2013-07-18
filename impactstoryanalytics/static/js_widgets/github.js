@@ -15,11 +15,8 @@ Github.prototype = {
     }
     ,createSparklineSet: function(data){
 
-        var max = 0
-        for (values in data) {
-            console.log("using this values:", values)
-            max = _.max([max, _.max(values)])
-        }
+        seriesMaxes = _.map(_.values(data), function(x) { return _.max(x) })
+        max = _.max(seriesMaxes)
         console.log("using this max: ", max)
 
         this.createSparklineBar($("div.github-issues-webapp"), data["webapp"], max)
