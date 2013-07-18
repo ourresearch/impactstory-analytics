@@ -14,13 +14,15 @@ Gmail.prototype = {
             var values =  _.pluck(data[name], "y")
             overallMax = _.max([overallMax, _.max(values)])
         }
-        var isaSparkline = new IsaSparkline({chartRangeMax: overallMax})
+        var ss = new SparklineSet(
+            $(".widget-gmail-sparklines"),
+            {chartRangeMax: overallMax}
+        )
 
         _.each(data, function(points, name) {
             var xValues = _.pluck(points, "x" )
             var yValues = _.pluck(points, "y" )
-            var loc$ = $("div.widget-gmail-sparklines."+name)
-            isaSparkline.createSparklineLine(loc$, xValues, yValues)
+            ss.createSparklineLine(name, xValues, yValues)
         })
     }
 }

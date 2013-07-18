@@ -19,15 +19,16 @@ function load_widget_data(widget, dataUrl) {
 
 // OBJECTS
 
-var IsaSparkline = function(options){
+var SparklineSet = function(container$, options){
     this.options = options
+    this.container$ = container$
     this.init()
 }
-IsaSparkline.prototype = {
+SparklineSet.prototype = {
     init: function(){
         console.log("init IsaSparkline")
     }
-    ,createSparklineBar: function(loc$, values){
+    ,createSparklineBar: function(container$, values){
         var defaultOptions = {
             primaryNum: _.reduce(values, function(memo, num) { return memo + num}),
             primaryNumLabel:'',
@@ -43,17 +44,19 @@ IsaSparkline.prototype = {
         var options = _.extend(defaultOptions, this.options)
 
 
-        loc$.find("span.primary span.value").html(options.primaryNum)
-        loc$.find("span.secondary span.value").html(options.secondaryNum)
-        loc$.find("span.sparkline").sparkline(values, options)
+        container$.find("span.primary span.value").html(options.primaryNum)
+        container$.find("span.secondary span.value").html(options.secondaryNum)
+        container$.find("span.sparkline").sparkline(values, options)
     }
-    ,createSparklineLine: function(loc$, xValues, yValues){
+    ,createSparklineLine: function(name, xValues, yValues){
         var weekDays = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"]
         var defaultOptions = {
-            primaryNum: _.last(yValues),
-            primaryNumLabel:'',
-            secondaryNum: _.max(yValues),
-            secondaryNumLabel: "max",
+            iaPrimaryValue: _.last(yValues),
+            iaPrimaryValueLabel:'',
+            iaSecondaryValue: _.max(yValues),
+            iaSecondaryValueLabel: "max",
+            iaHref: "#",
+            iaName: name,
             type:"line",
             maxSpotColor: false,
             minSpotColor: false,
@@ -68,11 +71,10 @@ IsaSparkline.prototype = {
             }
         }
         var options = _.extend(defaultOptions, this.options)
+        var elem$ = ich.sparklineWithNumbers(options)
 
-
-        loc$.find("span.primary span.value").html(options.primaryNum)
-        loc$.find("span.secondary span.value").html(options.secondaryNum)
-        loc$.find("span.sparkline").sparkline(yValues, options)
+        this.container$.find("div.container").append(elem$)
+        this.container$.find(".sparkline."+name).sparkline(yValues, options)
 
     }
 }

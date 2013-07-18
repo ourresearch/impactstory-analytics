@@ -96,10 +96,21 @@ div.dashboard div.widget div.container div.sparkline-with-numbers {
   margin-bottom: 20px;
   font-size: 22px;
 }
-div.dashboard div.widget div.container div.sparkline-with-numbers span.sparkline-label {
+div.dashboard div.widget div.container div.sparkline-with-numbers a.sparkline-label {
   width: 100px;
   text-align: right;
   display: inline-block;
+  padding-top: 0;
+}
+div.dashboard div.widget div.container div.sparkline-with-numbers a.sparkline-label[href='#'] {
+  cursor: default;
+  color: #333;
+}
+div.dashboard div.widget div.container div.sparkline-with-numbers a.sparkline-label[href='#']:hover {
+  text-decoration: none;
+}
+div.dashboard div.widget div.container div.sparkline-with-numbers span.sparkline canvas {
+  margin-top: 4px;
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers span.primary span.value {
   font-weight: bolder;

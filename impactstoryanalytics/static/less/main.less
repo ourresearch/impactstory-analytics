@@ -109,13 +109,23 @@ div.dashboard {
          div.sparkline-with-numbers {
             margin-bottom: 20px;
             font-size: 22px;
-            span.sparkline-label{
+            a.sparkline-label{
                width:  100px;
                text-align: right;
                display: inline-block;
+               padding-top:0;
+               &[href='#'] {
+                  cursor: default;;
+                  color: #333;
+                  &:hover{
+                     text-decoration: none;
+                  }
+               }
+
             }
             span.sparkline {
                canvas {
+                  margin-top: 4px;
                }
             }
             span.primary {
