@@ -1,12 +1,13 @@
 import time
 from datetime import timedelta
 from datetime import date
+from datetime import datetime
 import requests
 import iso8601
 import os
 import logging
-from collections import defaultdict
-import numpy as np
+import pytz
+
 
 logger = logging.getLogger("impactstoryanalytics.widgets")
 
@@ -181,34 +182,49 @@ class Github(Widget):
         for repo_name in self.repo_names:
             issues_list = self.get_raw_data_repo(repo_name)
             line = self.make_line(issues_list)
-            x_y_points = [[k, line[k]] for k in line.keys()]
-            lines[repo_name] = x_y_points
+            lines[repo_name] = line.values()
 
         return lines
 
 
     def get_both_closed_and_open_issues(self, q_url):
         issues = []
+        tz = pytz.timezone(os.getenv("TZ"))
+        begin = (datetime.now(tz) - timedelta(days=self.num_days))
         params = {
-            "since": date.today() - timedelta(days=self.num_days)
+            "since": begin.isoformat()
         }
+        logger.info("querying github with url " + q_url)
         for state in ["closed", "open"]:
             params["state"] = state
-            logger.info("querying github with url " + q_url)
             issues += requests.get(q_url, params=params).json()
 
+        logger.debug("these are the issues we got back", str(issues))
         return issues
 
     def get_raw_data_repo(self, repo_name):
         q_url = self.issue_q_url_template.format(NAME=repo_name)
         return self.get_both_closed_and_open_issues(q_url)
 
+    def beginning_of_day_ts(self, datetime_obj):
+        d = datetime_obj.replace(hour=0, minute=0, second=0)
+        return str(d.isoformat()[0:10])
+
     def make_line(self, issues_list):
-        line = defaultdict(int)
+        d = datetime.utcnow()
+        days_list = {}
+        for _ in xrange(0, 50):
+            days_list[self.beginning_of_day_ts(d)] = 0
+            d -= timedelta(days=1)
+
+        logger.info("days list is this: " + str(sorted(days_list.keys())))
+
         for issue in issues_list:
             d = iso8601.parse_date(issue["created_at"])
-            d = d.replace(hour=0, minute=0, second=0)  # beginning of day
-            timestamp = int(time.mktime(d.timetuple()))
-            line[timestamp] += 1
 
-        return line
+            try:
+                days_list[self.beginning_of_day_ts(d)] += 1
+            except KeyError:
+                continue  # it's not in our window of interest
+
+        return days_list
