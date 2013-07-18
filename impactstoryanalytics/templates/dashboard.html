@@ -101,4 +101,30 @@
 <div id="chart"></div>
 
 
+<!------------------------------------------------------------------------------
+Javascript templates
+These are for rendering items with javascript using Mustache
+------------------------------------------------------------------------------->
+{% raw %}
+<div id="templates">
+   <script id="sparkline-with-numbers" type="text/html">
+      <div class="sparkline-with-numbers {{ class }}">
+         <span class="sparkline-label"><a href="{{ link }}">{{ name }}</a></span>
+         <span class="sparkline graphic"></span>
+         <span class="primary number">
+            <span class="value">{{ primaryValue }}</span>
+            <span class="label">{{ primaryValueLabel }}</span>
+         </span>
+         <span class="secondary number">
+            <span class="value">{{ secondaryValue }}</span>
+            <span class="label">{{ primaryValueLabel }}</span>
+         </span>
+      </div>
+   </script>
+
+
+</div>
+
+{% endraw %}
+
 {% endblock %}

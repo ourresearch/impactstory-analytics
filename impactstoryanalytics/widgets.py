@@ -193,14 +193,12 @@ class Github(Widget):
         tz = pytz.timezone(os.getenv("TZ"))
         begin = (datetime.now(tz) - timedelta(days=self.num_days))
         params = {
-            "since": begin.isoformat()
+            "since": begin.isoformat(),
+            "state": "open"
         }
         logger.info("querying github with url " + q_url)
-        for state in ["closed", "open"]:
-            params["state"] = state
-            issues += requests.get(q_url, params=params).json()
+        issues = requests.get(q_url, params=params).json()
 
-        logger.debug("these are the issues we got back", str(issues))
         return issues
 
     def get_raw_data_repo(self, repo_name):
