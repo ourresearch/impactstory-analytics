@@ -1,56 +1,57 @@
 var Github = function() {
 }
 
+
+
 Github.prototype = {
+    urls: {
+      "webapp": "https://github.com/total-impact/total-impact-webapp/issues?state=open" ,
+      "core": "https://github.com/total-impact/total-impact-core/issues?state=open"
+    },
     init: function(){
     }
     ,create:function(data){
         this.createSparklineSet(data)
     }
     ,createSparklineSet: function(data){
-        var that = this
-        var repos = _.keys(data)
-        var totalIssues = 0
-        _.each(data, function(x){
-            totalIssues += _.sum(_.map(data, function(x){ return x[1] }))
-        })
 
-        for (name in data) {
-            var values =  _.pluck(data[name], "y")
-            overallMax = _.max([overallMax, _.max(values)])
+        var max = 0
+        for (values in data) {
+            console.log("using this values:", values)
+            max = _.max([max, _.max(values)])
+        }
+        console.log("using this max: ", max)
+
+        this.createSparklineBar($("div.github-issues-webapp"), data["webapp"], max)
+        this.createSparklineBar($("div.github-issues-core"), data["core"], max)
+    }
+    ,createSparklineBar: function(loc$, values, max, primaryNum, secondaryNum){
+        if (!max) {
+            var max = _.max(values)
+        }
+        if (!primaryNum) {
+            var primaryNum = _.reduce(values, function(memo, num) { return memo + num})
+        }
+        if (!secondaryNum) {
+            var secondaryNum = _.max(values)
         }
 
-        _.each(data, function(points, name) {
-            var xValues = _.pluck(points, "x" )
-            var yValues = _.pluck(points, "y" )
-            that.createSparkline(name, xValues, yValues, overallMax)
-        })
-    }
-    ,createSparkline: function(name, xValues, yValues){
-        var weekDays = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"]
+        console.log("setting options w this max: ", max)
         var options = {
-            type:"line",
-            maxSpotColor: false,
-            minSpotColor: false,
-            spotColor: false,
+            type:"bar",
             chartRangeMin:0,
+            chartRangeMax: max,
+            barWidth: 2,
             tooltipFormatter:function(sparkline, options, fields){
-                var d = new Date(fields.x * 1000)
-                var mins = (d.getMinutes() < 10 ? '0' : '') + d.getMinutes()
-                var dateStr = weekDays[d.getDay()] + ' ' + d.getHours() + ':' + mins
-                return "<span>" + fields.y + '</span>' + ', ' + dateStr
+                console.log(fields)
+                var d = new Date()
+                var str = "still working on this..."
+                return str
             }
         }
-        options.chartRangeMax = overallMax
-        options.xvalues = xValues
+        loc$.find("span.primary span.value").html(primaryNum)
+        loc$.find("span.secondary span.value").html(secondaryNum)
+        loc$.find("span.sparkline").sparkline(values, options)
 
-        var loc$ = $("div.widget-gmail-sparklines ." + name)
-        loc$.find("span.max-value span.value").html(_.max(yValues))
-        loc$.find("span.current-value").html(_.last(yValues))
-        loc$.find("span.sparkline").sparkline(yValues, options)
-
-    }
-    , functionsLikeThis: function(){
-        // hey i can do stuff!
     }
 }

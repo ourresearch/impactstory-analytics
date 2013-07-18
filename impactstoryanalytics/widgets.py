@@ -184,8 +184,8 @@ class Github(Widget):
             line = self.make_line(issues_list)
             lines[repo_name] = line.values()
 
-        zipped = zip(*lines.values())
-        return zipped
+        # zipped = zip(*lines.values())
+        return lines
 
 
     def get_both_closed_and_open_issues(self, q_url):

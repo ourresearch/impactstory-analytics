@@ -109,7 +109,7 @@ div.dashboard {
          div.sparkline-with-numbers {
             margin-bottom: 20px;
             font-size: 22px;
-            span.label{
+            span.sparkline-label{
                width:  100px;
                text-align: right;
                display: inline-block;
@@ -118,11 +118,13 @@ div.dashboard {
                canvas {
                }
             }
-            span.current-value {
-               font-weight: bolder;
-               font-size: 28px;
+            span.primary {
+               span.value{
+                  font-weight: bolder;
+                  font-size: 28px;
+               }
             }
-            span.max-value {
+            span.secondary {
                font-size: 10px;
                font-weight: normal;
                color:  #bbb;

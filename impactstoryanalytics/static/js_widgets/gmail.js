@@ -39,9 +39,9 @@ Gmail.prototype = {
         options.chartRangeMax = overallMax
         options.xvalues = xValues
 
-        var loc$ = $("div.widget-gmail-sparklines ." + name)
-        loc$.find("span.max-value span.value").html(_.max(yValues))
-        loc$.find("span.current-value").html(_.last(yValues))
+        var loc$ = $("div.widget-gmail-sparklines." + name)
+        loc$.find("span.secondary span.value").html(_.max(yValues))
+        loc$.find("span.primary span.value").html(_.last(yValues))
         loc$.find("span.sparkline").sparkline(yValues, options)
 
     }
