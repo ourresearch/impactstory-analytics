@@ -12,6 +12,21 @@ import pytz
 logger = logging.getLogger("impactstoryanalytics.widgets")
 
 
+## Utility functions
+def get_raw_dataclip_data(query_url):
+    #example query_url: "https://dataclips.heroku.com/brczfyjvdlovipuuukgjselrnilk.json"
+    raw_data = requests.get(query_url).json()
+    print raw_data
+    return raw_data
+
+def get_raw_keenio_data(query_url):
+    raw_data = requests.get(query_url).json()["result"]
+    return raw_data
+
+
+
+
+
 class Widget:
     def get_name(self):
         return self.__class__.__name__.lower()
@@ -229,3 +244,22 @@ class Github(Widget):
                 continue  # it's not in our window of interest
 
         return days_list
+
+
+
+class Mixpanel(Widget):
+
+    total_accounts_query_url = "https://dataclips.heroku.com/brczfyjvdlovipuuukgjselrnilk.json"
+    active_accounts_query_url = "https://api.keen.io/3.0/projects/51d858213843314922000002/queries/count_unique?api_key=69023dd079bdb913522954c0f9bb010766be7e87a543674f8ee5d3a66e9b127f5ee641546858bf2c260af4831cd2f7bba4e37c22efb4b21b57bab2a36b9e8e3eccd57db3c75114ba0f788013a08f404738535e9a7eb8a29a30592095e5347e446cf61d50d5508a624934584e17a436ba&event_collection=Loaded%20own%20profile&filters=%5B%7B%22property_name%22%3A%22keen.timestamp%22%2C%22operator%22%3A%22lt%22%2C%22property_value%22%3A%222013%2F07%2F17%22%7D%2C%7B%22property_name%22%3A%22keen.timestamp%22%2C%22operator%22%3A%22gt%22%2C%22property_value%22%3A%222013%2F06%2F17%22%7D%5D&timezone=-25200&target_property=user.userId"
+
+    def get_data(self):
+        data = {
+            "total_accounts": get_raw_dataclip_data(self.total_accounts_query_url),
+            "active_accounts": get_raw_keenio_data(self.active_accounts_query_url)
+            }
+        return data 
+
+
+
+
+
