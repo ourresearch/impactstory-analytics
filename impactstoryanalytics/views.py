@@ -38,7 +38,7 @@ base_js = [
 ]
 base_css = [
     'css/rickshaw.css',
-    'css/main.css'
+    'css/dashboard.css'
 ]
 assets = Environment(app)
 
