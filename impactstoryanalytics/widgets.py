@@ -277,10 +277,12 @@ class Mixpanel(Widget):
                 to_date = self.format_date(to_date))
 
             active_accounts = get_raw_keenio_data(active_accounts_query_url)
+            fraction_active = (0.0+int(active_accounts)) / int(total_accounts)
+
             data["timestamp_list"].append(int(time.mktime(from_date.timetuple())))
             data["total_account_list"].append(int(total_accounts))
             data["active_account_list"].append(int(active_accounts))
-            data["fraction_list"].append((0.0+int(active_accounts))/int(total_accounts))
+            data["fraction_list"].append(round(100*fraction_active, 1))
 
         return data
 
@@ -288,6 +290,13 @@ class Mixpanel(Widget):
     def get_data(self):
         number_of_bins = 7  # eventually make this 30 days
         data = self.get_raw_data(number_of_bins)
-        return {"fraction": {"x": data["timestamp_list"], "y": data["fraction_list"]}}
+
+        data["timestamp_list"].reverse()
+        data["fraction_list"].reverse()
+
+        return {"fraction": {
+                                "x": data["timestamp_list"], 
+                                "y": data["fraction_list"]
+                                }}
 
 
