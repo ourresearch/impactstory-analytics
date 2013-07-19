@@ -24,11 +24,15 @@ These are for rendering items with javascript using Mustache
          <a class="sparkline-label" href="{{ iaHref }}">{{ iaName }}</a>
          <span class="sparkline graphic {{ iaName }}"></span>
          <span class="primary number">
-            <span class="value">{{ iaPrimaryValue }}</span>
+            <span class="value">{{ iaPrimaryValue }}
+               <span class="unit">{{ iaPrimaryUnit }}</span>
+            </span>
             <span class="label">{{ iaPrimaryValueLabel }}</span>
          </span>
          <span class="secondary number">
-            <span class="value">{{ iaSecondaryValue }}</span>
+            <span class="value">{{ iaSecondaryValue }}
+               <span class="unit">{{ iaSecondaryUnit }}</span>
+            </span>
             <span class="label">{{ iaSecondaryValueLabel }}</span>
          </span>
       </div>
