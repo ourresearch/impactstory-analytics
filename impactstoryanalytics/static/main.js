@@ -47,6 +47,7 @@ SparklineSet.prototype = {
             },
             type:"bar",
             iaName: name,
+            iaDisplayName: name,
             barWidth: 2
         }
         var options = _.extend(defaultOptions, this.options)
@@ -59,6 +60,7 @@ SparklineSet.prototype = {
             iaPrimaryValue: _.last(yValues),
             iaSecondaryValue: _.max(yValues),
             iaName: name,
+            iaDisplayName: name,
             type:"line",
             xvalues: xValues,
             tooltipFormatter:function(sparkline, options, fields){
