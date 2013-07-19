@@ -5,23 +5,27 @@ Keen.prototype = {
     init: function(){
     }
     ,create:function(data){
-        var overallMax = 0
-        for (name in data) {
-            var values =  data[name]["y"]
-            overallMax = _.max([overallMax, _.max(values)])
-        }
+        for (chart_index in data) {
+            var ss_absolute = new SparklineSet(
+                        $(".widget-keen"), 
+                        { 
+                            iaDisplayName: data[chart_index]["display"]
+                        })
+            var ss_percent = new SparklineSet(
+                        $(".widget-keen"),
+                        {   
+                            iaDisplayName: data[chart_index]["display"],
+                            iaPrimaryUnit: "%",   
+                            iaSecondaryUnit: "%"   
+                        })
 
-        var ss = new SparklineSet(
-                    $(".widget-keen"),
-                    {   chartRangeMax: overallMax, 
-                        iaPrimaryUnit: "%",   
-                        iaSecondaryUnit: "%"   
-                    })
-
-        for (name in data) {
-            var xValues =  data[name]["x"]
-            var yValues =  data[name]["y"]
-            ss.createSparklineLine(name, xValues, yValues)
+            var ss = ss_absolute
+            if (data[chart_index]["name"].indexOf("percent") >= 0) {
+                ss = ss_percent
+            }
+            ss.createSparklineLine(data[chart_index]["name"], 
+                data[chart_index]["x"], 
+                data[chart_index]["y"])
         }
     }
 }

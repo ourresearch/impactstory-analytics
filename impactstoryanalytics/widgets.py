@@ -2,6 +2,7 @@ import time
 from datetime import timedelta
 from datetime import date
 from datetime import datetime
+from collections import defaultdict
 import requests
 import iso8601
 import os
@@ -258,16 +259,15 @@ class Keen(Widget):
         return date_only
 
     def get_raw_data(self, number_of_bins):
-        data = {
-            "timestamp_list": [],
-            "total_account_list": [],
-            "active_account_list": [],
-            "fraction_list": [],
-        }
+        data = defaultdict(list)
 
         total_accounts = get_raw_dataclip_data(self.total_accounts_query_url)
 
-        for datapoint in total_accounts["values"][0:number_of_bins]:
+        datapoints = total_accounts["values"][0:number_of_bins]
+        # javascript currently expects data with most recent data last
+        datapoints.reverse()
+
+        for datapoint in datapoints:
             (date, new_accounts, total_accounts) = datapoint
 
             from_date = iso8601.parse_date(date)
@@ -289,9 +289,9 @@ class Keen(Widget):
             fraction_active = (0.0+int(active_accounts)) / int(total_accounts)
 
             data["timestamp_list"].append(int(time.mktime(from_date.timetuple())))
-            data["total_account_list"].append(int(total_accounts))
-            data["active_account_list"].append(int(active_accounts))
-            data["fraction_list"].append(round(100*fraction_active, 1))
+            data["total_accounts"].append(int(total_accounts))
+            data["monthly_active_accounts"].append(int(active_accounts))
+            data["percent_monthly_active_users"].append(round(100*fraction_active, 1))
 
         return data
 
@@ -300,12 +300,26 @@ class Keen(Widget):
         number_of_bins = 7  # eventually make this bins for 30 days
         data = self.get_raw_data(number_of_bins)
 
-        data["timestamp_list"].reverse()
-        data["fraction_list"].reverse()
-
-        return {"fraction": {
+        response = [
+                    { 
+                                "display": "accounts",
+                                "name": "accounts",
                                 "x": data["timestamp_list"], 
-                                "y": data["fraction_list"]
-                                }}
+                                "y": data["total_accounts"]
+                                }, 
+                    { 
+                                "display": "monthly actives",
+                                "name": "monthly_actives",
+                                "x": data["timestamp_list"], 
+                                "y": data["monthly_active_accounts"]
+                                }, 
+                    {
+                                "display": "% MAU",
+                                "name": "percent_MAU",
+                                "x": data["timestamp_list"], 
+                                "y": data["percent_monthly_active_users"]
+                                }
+                    ]                   
+        return response
 
 
