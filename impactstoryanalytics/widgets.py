@@ -288,6 +288,6 @@ class Mixpanel(Widget):
     def get_data(self):
         number_of_bins = 7  # eventually make this 30 days
         data = self.get_raw_data(number_of_bins)
-        return {"x": data["timestamp_list"], "y": data["fraction_list"]}
+        return {"fraction": {"x": data["timestamp_list"], "y": data["fraction_list"]}}
 
 
