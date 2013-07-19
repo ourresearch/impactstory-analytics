@@ -1,7 +1,7 @@
-var Mixpanel = function() {
+var Keen = function() {
 }
 
-Mixpanel.prototype = {
+Keen.prototype = {
     init: function(){
     }
     ,create:function(data){
@@ -12,7 +12,7 @@ Mixpanel.prototype = {
         }
 
         var ss = new SparklineSet(
-                    $(".widget-mixpanel"),
+                    $(".widget-keen"),
                     {   chartRangeMax: overallMax, 
                         iaPrimaryUnit: "%",   
                         iaSecondaryUnit: "%"   

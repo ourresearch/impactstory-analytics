@@ -16,7 +16,7 @@ logger = logging.getLogger("impactstoryanalytics.views")
 # define dashboards
 dashboards = {
     "main": [
-        Mixpanel()
+        Keen()
     ],
     "productivity": [
         Rescuetime(),
