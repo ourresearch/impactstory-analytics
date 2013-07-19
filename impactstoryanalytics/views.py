@@ -34,7 +34,7 @@ base_js = [
     'js_libs/d3.layout.min.js',
     'js_libs/rickshaw.js',
     'js_libs/icanhaz.js',
-    'main.js'
+    'dashboard.js'
 ]
 base_css = [
     'css/rickshaw.css',
