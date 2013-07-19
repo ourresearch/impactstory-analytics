@@ -10,10 +10,13 @@ Mixpanel.prototype = {
             var values =  data[name]["y"]
             overallMax = _.max([overallMax, _.max(values)])
         }
+
         var ss = new SparklineSet(
-            $(".widget-mixpanel"),
-            {chartRangeMax: overallMax}
-        )
+                    $(".widget-mixpanel"),
+                    {   chartRangeMax: overallMax, 
+                        iaPrimaryUnit: "%",   
+                        iaSecondaryUnit: "%"   
+                    })
 
         for (name in data) {
             var xValues =  data[name]["x"]
