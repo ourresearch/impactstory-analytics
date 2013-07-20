@@ -8,7 +8,10 @@ import iso8601
 import os
 import logging
 import pytz
+import json
 import cache
+
+from impactstoryanalytics.lib import mixpanel_export
 
 
 logger = logging.getLogger("impactstoryanalytics.widgets")
@@ -251,7 +254,7 @@ class Github(Widget):
 
 
 
-class Keen(Widget):
+class Monthly_active_users(Widget):
 
     total_accounts_query_url = "https://dataclips.heroku.com/brczfyjvdlovipuuukgjselrnilk.json"
     active_accounts_query_pattern = "https://api.keen.io/3.0/projects/51d858213843314922000002/queries/count_unique?api_key=69023dd079bdb913522954c0f9bb010766be7e87a543674f8ee5d3a66e9b127f5ee641546858bf2c260af4831cd2f7bba4e37c22efb4b21b57bab2a36b9e8e3eccd57db3c75114ba0f788013a08f404738535e9a7eb8a29a30592095e5347e446cf61d50d5508a624934584e17a436ba&event_collection=Loaded%20own%20profile&filters=%5B%7B%22property_name%22%3A%22keen.created_at%22%2C%22operator%22%3A%22lt%22%2C%22property_value%22%3A%22{from_date}%22%7D%2C%7B%22property_name%22%3A%22keen.created_at%22%2C%22operator%22%3A%22gte%22%2C%22property_value%22%3A%22{to_date}%22%7D%5D&target_property=user.userId"
@@ -327,6 +330,54 @@ class Keen(Widget):
         return response
 
 
+class Signup_funnel(Widget):
+
+    def get_funnel_data(self, api, funnel, funnel_params):
+        logger.info("Getting funnel data for " + funnel["name"])
+
+        funnel_params["funnel_id"] = funnel["funnel_id"]
+        funnel_data = api.request(['funnels'], funnel_params)
+
+        print json.dumps(funnel_data, indent=4)
+
+        logger.info("found data")
+
+        return funnel_data["data"]
+
+    def get_funnels(self, api):
+        funnels = api.request(['funnels', 'list'], {})
+        return funnels
+
+    def get_data(self):
+
+        api = mixpanel_export.Mixpanel(
+            api_key = os.getenv("MIXPANEL_API_KEY"), 
+            api_secret = os.getenv("MIXPANEL_API_SECRET")
+        )
+
+        funnels = self.get_funnels(api)
+
+        funnel_params = {
+            # The first date in yyyy-mm-dd format from which a user can begin the first step in the funnel. This date is inclusive.
+            "from_date": "2013-07-17"  # first date we started getting data
+
+            # The number of days each user has to complete the funnel, starting from the time they 
+            # triggered the first step in the funnel. May not be greater than 60 days. 
+            # Note that we will query for events past the end of to_date to look for funnel completions.
+            #The default value is 14.
+            ,"length": 1
+
+            # The number of days you want your results bucketed into. The default value is 1
+            ,"interval": 1
+        }
+
+        response = {}
+        for funnel in funnels:
+            response[funnel["name"]] = self.get_funnel_data(api, funnel, funnel_params)
+
+        return response
+
+
 class LatestProfile(Widget):
     dataclip_url = "https://dataclips.heroku.com/nhkmopcglhvmyoepqlxtxyxiewfj.json"
 
@@ -336,10 +387,3 @@ class LatestProfile(Widget):
             "date": values[0] + "+00:00",  # dates go out in UTC
             "url": values[1]
         }
-
-
-
-
-
-
-
