@@ -85,7 +85,7 @@ SparklineSet.prototype = {
 $(document).ready(function(){
 
     _.each(widgetNames, function(name){
-        console.log("name", name)
+        console.log("Now running the '"+ name + "' widget")
         var widget = new window[capitalize(name)]()
         var dataUrl = "/widget_data/"+name
         load_widget(widget, dataUrl)

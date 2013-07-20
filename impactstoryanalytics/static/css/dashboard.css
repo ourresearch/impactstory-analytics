@@ -81,9 +81,6 @@ div.dashboard div.widget.widget-iframe div.container iframe {
   left: -179px;
   z-index: 1;
 }
-div.dashboard div.widget.widget-iframe div.container iframe.hidden {
-  display: none;
-}
 div.dashboard div.widget h2 {
   padding-left: 20px;
   margin-bottom: 10px;

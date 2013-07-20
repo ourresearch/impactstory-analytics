@@ -33,6 +33,10 @@ class Widget:
     def get_name(self):
         return self.__class__.__name__
 
+    def get_js_name_lower(self):
+        name = self.__class__.__name__
+        return name[0].lower() + name[1:]
+
     def get_data(self):
         raise NotImplementedError
 

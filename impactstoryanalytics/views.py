@@ -48,7 +48,8 @@ assets = Environment(app)
 
 for k, v in dashboards.iteritems():
     for widget in v:
-        base_js.append("js_widgets/" + widget.get_name().lower() + ".js")
+
+        base_js.append("js_widgets/" + widget.get_js_name_lower() + ".js")
 
 assets.register('js_all', Bundle(*base_js))
 assets.register('css_all', Bundle(*base_css))
