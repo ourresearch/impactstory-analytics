@@ -1,3 +1,4 @@
+.env
 *.pyc
 *.egg-info/*
 .*.swp
@@ -13,4 +14,4 @@ venv
 .idea
 packed.css
 packed.js
-.env
+
