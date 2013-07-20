@@ -31,7 +31,7 @@ def get_raw_keenio_data(query_url):
 
 class Widget:
     def get_name(self):
-        return self.__class__.__name__.lower()
+        return self.__class__.__name__
 
     def get_data(self):
         raise NotImplementedError
@@ -319,7 +319,23 @@ class Keen(Widget):
                                 "x": data["timestamp_list"], 
                                 "y": data["percent_monthly_active_users"]
                                 }
-                    ]                   
+                   ]
         return response
+
+
+class LatestProfile(Widget):
+    dataclip_url = "https://dataclips.heroku.com/nhkmopcglhvmyoepqlxtxyxiewfj.json"
+
+    def get_data(self):
+        values = get_raw_dataclip_data(self.dataclip_url)["values"][0]
+        return {
+            "date": values[0] + "+00:00",  # dates go out in UTC
+            "url": values[1]
+        }
+
+
+
+
+
 
 

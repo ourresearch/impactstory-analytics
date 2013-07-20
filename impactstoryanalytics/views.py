@@ -22,6 +22,9 @@ dashboards = {
         Rescuetime(),
         Gmail(),
         Github()
+    ],
+    "latest": [
+        LatestProfile()
     ]
 }
 
@@ -34,6 +37,7 @@ base_js = [
     'js_libs/d3.layout.min.js',
     'js_libs/rickshaw.js',
     'js_libs/icanhaz.js',
+    'js_libs/moment.min.js',
     'dashboard.js'
 ]
 base_css = [
@@ -44,7 +48,7 @@ assets = Environment(app)
 
 for k, v in dashboards.iteritems():
     for widget in v:
-        base_js.append("js_widgets/" + widget.get_name() + ".js")
+        base_js.append("js_widgets/" + widget.get_name().lower() + ".js")
 
 assets.register('js_all', Bundle(*base_js))
 assets.register('css_all', Bundle(*base_css))
@@ -152,7 +156,7 @@ def uservoice_tickets():
 @app.route("/widget_data/<widget_name>")
 def widget_data(widget_name):
     module = sys.modules["impactstoryanalytics.widgets"]  # hack, ick
-    class_name = widget_name.capitalize()
+    class_name = widget_name[0].capitalize() + widget_name[1:]
     widget = getattr(module, class_name)()
 
     resp = make_response(json.dumps(widget.get_data(), indent=4), 200)

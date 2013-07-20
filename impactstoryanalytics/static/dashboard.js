@@ -55,7 +55,6 @@ SparklineSet.prototype = {
 
     }
     ,createSparklineLine: function(name, xValues, yValues){
-        var weekDays = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"]
         var defaultOptions = {
             iaPrimaryValue: _.last(yValues),
             iaSecondaryValue: _.max(yValues),
@@ -64,9 +63,7 @@ SparklineSet.prototype = {
             type:"line",
             xvalues: xValues,
             tooltipFormatter:function(sparkline, options, fields){
-                var d = new Date(fields.x * 1000)
-                var mins = (d.getMinutes() < 10 ? '0' : '') + d.getMinutes()
-                var dateStr = weekDays[d.getDay()] + ' ' + d.getHours() + ':' + mins
+                var dateStr = moment(fields.x*1000).format("MMM D")
                 return "<span>" + fields.y + '</span>' + ', ' + dateStr
             }
         }
@@ -88,6 +85,7 @@ SparklineSet.prototype = {
 $(document).ready(function(){
 
     _.each(widgetNames, function(name){
+        console.log("name", name)
         var widget = new window[capitalize(name)]()
         var dataUrl = "/widget_data/"+name
         load_widget(widget, dataUrl)
