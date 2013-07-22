@@ -4,8 +4,10 @@ import sys
 import json
 import logging
 import iso8601
-from impactstoryanalytics import app, highcharts
-from impactstoryanalytics.widgets import *
+from impactstoryanalytics import app
+from impactstoryanalytics import widgets
+from impactstoryanalytics.widgets import signup_growth
+from impactstoryanalytics.widgets.widget import Widget
 
 from flask import request, abort, make_response, g, redirect, url_for
 from flask import render_template
@@ -16,7 +18,7 @@ logger = logging.getLogger("impactstoryanalytics.views")
 # define dashboards
 dashboards = {
     "main": [
-        Signup_growth(),
+        widgets.signup_growth.Signup_growth(),
         Signup_funnel(),
         Monthly_active_users(),
     ],
