@@ -12,7 +12,7 @@ Monthly_active_users.prototype = {
 
             if (data[chart_index]["name"].indexOf("percent") >= 0) {
                 var ss_percent = {iaPrimaryUnit: "%", iaSecondaryUnit: "%"}
-                var ss = _.extend(ss, ss_percent)
+                ss["options"] = _.extend(ss["options"], ss_percent)
             }
             ss.createSparklineLine(data[chart_index]["name"], 
                 data[chart_index]["x"], 
