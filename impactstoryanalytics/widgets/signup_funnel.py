@@ -11,9 +11,9 @@ import pytz
 import json
 import arrow
 
-from impactstoryanalytics.widgets.widgets import Widget
+from impactstoryanalytics.widgets.widget import Widget
 
-import external_providers
+import widget_api_helpers
 import cache
 
 
@@ -23,4 +23,4 @@ logger = logging.getLogger("impactstoryanalytics.widgets.signup_funnel")
 
 class Signup_funnel(Widget):
     def get_data(self):
-        return external_providers.Mixpanel.get_data("omtm")
+        return widget_api_helpers.Mixpanel.get_data("omtm")

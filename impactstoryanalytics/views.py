@@ -6,7 +6,7 @@ import logging
 import iso8601
 from impactstoryanalytics import app
 from impactstoryanalytics import widgets
-from impactstoryanalytics.widgets import signup_growth
+from impactstoryanalytics.widgets import signup_growth, signup_funnel, monthly_active_users, rescuetime, gmail, github, latestprofile, itemsbycreateddate
 from impactstoryanalytics.widgets.widget import Widget
 
 from flask import request, abort, make_response, g, redirect, url_for
@@ -19,19 +19,19 @@ logger = logging.getLogger("impactstoryanalytics.views")
 dashboards = {
     "main": [
         widgets.signup_growth.Signup_growth(),
-        Signup_funnel(),
-        Monthly_active_users(),
+        widgets.signup_funnel.Signup_funnel(),
+        widgets.monthly_active_users.Monthly_active_users(),
     ],
     "productivity": [
-        Rescuetime(),
-        Gmail(),
-        Github()
+        widgets.rescuetime.Rescuetime(),
+        widgets.gmail.Gmail(),
+        widgets.github.Github()
     ],
     "latest": [
-        LatestProfile()
+        widgets.latestprofile.LatestProfile()
     ],
     "scale":[
-        ItemsByCreatedDate()
+        widgets.itemsbycreateddate.ItemsByCreatedDate()
     ]
 }
 
@@ -163,7 +163,7 @@ def uservoice_tickets():
 
 @app.route("/widget_data/<widget_name>")
 def widget_data(widget_name):
-    module = sys.modules["impactstoryanalytics.widgets"]  # hack, ick
+    module = sys.modules["impactstoryanalytics.widgets." + widget_name.lower()]  # hack, ick
     class_name = widget_name[0].capitalize() + widget_name[1:]
     widget = getattr(module, class_name)()
 

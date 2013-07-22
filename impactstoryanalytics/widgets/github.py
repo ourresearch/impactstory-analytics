@@ -11,10 +11,7 @@ import pytz
 import json
 import arrow
 
-from impactstoryanalytics.widgets import widgets
-from impactstoryanalytics.widgets.widgets import Widget
-
-import external_providers
+from impactstoryanalytics.widgets.widget import Widget
 import cache
 
 

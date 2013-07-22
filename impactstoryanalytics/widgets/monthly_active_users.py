@@ -11,125 +11,84 @@ import pytz
 import json
 import arrow
 
-from impactstoryanalytics.widgets import widgets
-from impactstoryanalytics.widgets.widgets import Widget
-
-import external_providers
+from impactstoryanalytics.widgets.widget import Widget, get_raw_dataclip_data
 import cache
 
 
 
 logger = logging.getLogger("impactstoryanalytics.widgets.monthly_active_users")
 
+class Monthly_active_users(Widget):
 
-class ItemsCount():
-    total = 0
-    registered = 0
-    cum_total = 0
-    cum_registered = 0
-    d = None
+    total_accounts_query_url = "https://dataclips.heroku.com/brczfyjvdlovipuuukgjselrnilk.json"
+    active_accounts_query_pattern = "https://api.keen.io/3.0/projects/51d858213843314922000002/queries/count_unique?api_key=69023dd079bdb913522954c0f9bb010766be7e87a543674f8ee5d3a66e9b127f5ee641546858bf2c260af4831cd2f7bba4e37c22efb4b21b57bab2a36b9e8e3eccd57db3c75114ba0f788013a08f404738535e9a7eb8a29a30592095e5347e446cf61d50d5508a624934584e17a436ba&event_collection=Loaded%20own%20profile&filters=%5B%7B%22property_name%22%3A%22keen.created_at%22%2C%22operator%22%3A%22lt%22%2C%22property_value%22%3A%22{from_date}%22%7D%2C%7B%22property_name%22%3A%22keen.created_at%22%2C%22operator%22%3A%22gte%22%2C%22property_value%22%3A%22{to_date}%22%7D%5D&target_property=user.userId"
+    max_cache_duration = 24*60*60 # one day
+    cache_client = cache.Cache(max_cache_duration)
 
-    def set_or_zero(self, k, dict):
-        try:
-            return dict[k]
-        except KeyError:
-            return 0
+    def format_date(self, date):
+        date_only = date.isoformat()[0:10]
+        return date_only
 
-    def set_counts_from_dict(self, type, k, dict):    # "type" can be 'total' or 'registered'
-        num = self.set_or_zero(k, dict)
-        setattr(self, type, num)
-        self.add_to_cum(num, type)
+    def get_raw_data(self, number_of_bins):
+        data = defaultdict(list)
 
-    def add_to_cum(self, num_to_add, type):
-        property_str = "cum_" + type
-        current_val = getattr(self, property_str)
-        new_val = current_val + num_to_add
-        setattr(self, property_str, new_val)
+        total_accounts = get_raw_dataclip_data(self.total_accounts_query_url)
 
-    def get_dict(self):
-        return {
-            "date": self.d.isoformat(),
-            "total": self.total,
-            "registered": self.registered,
-            "unregistered": self.total - self.registered,
-            "cum_total": self.cum_total,
-            "cum_registered": self.cum_registered,
-            "cum_unregistered": self.cum_total - self.cum_registered
-        }
+        datapoints = total_accounts["values"][0:number_of_bins]
+        # javascript currently expects data with most recent data last
+        datapoints.reverse()
 
+        for datapoint in datapoints:
+            (date, new_accounts, total_accounts) = datapoint
 
+            from_date = iso8601.parse_date(date)
+            to_date = from_date - timedelta(days=30)
 
-class ItemsByCreatedDate(Widget):
-    couch_query = "_design/dashboard/_view/items_by_day_created?reduce=true&group=true"
-    registered_items_url = "https://dataclips.heroku.com/btawwfbgqkmuzkkstbvlrqfyjqzz.json"
+            # get it from the cache if it is there
+            cache_key = "Keen_active_accounts_{from_date}_{to_date}".format(
+                from_date=from_date, 
+                to_date=to_date)
 
-    def get_point(self, k, table):
-        try:
-            return table[k]
-        except KeyError:
-            return 0
+            active_accounts = self.cache_client.get_cache_entry(cache_key)
+            if active_accounts is None:  
+                active_accounts_query_url = self.active_accounts_query_pattern.format(
+                    from_date = self.format_date(from_date), 
+                    to_date = self.format_date(to_date))
+                active_accounts = get_raw_keenio_data(active_accounts_query_url)
+                self.cache_client.set_cache_entry(cache_key, active_accounts)
+
+            fraction_active = (0.0+int(active_accounts)) / int(total_accounts)
+
+            data["timestamp_list"].append(int(time.mktime(from_date.timetuple())))
+            data["total_accounts"].append(int(total_accounts))
+            data["monthly_active_accounts"].append(int(active_accounts))
+            data["percent_monthly_active_users"].append(round(100*fraction_active, 1))
+
+        return data
 
 
     def get_data(self):
-        items_by_day = {
-            "total": self.get_total_items_by_day(),
-            "registered": self.get_registered_items_by_day()
-        }
+        number_of_bins = 7  # eventually make this bins for 30 days
+        data = self.get_raw_data(number_of_bins)
 
-        first_day_str = sorted(items_by_day["total"].keys())[0]
-        first_day = arrow.get(str(first_day_str), 'YYYY-MM-DD')
-
-        days = []
-        day = ItemsCount()
-
-        for r in arrow.Arrow.range("day", first_day, arrow.get()):
-            day.d = r
-            day_key = r.isoformat()[0:10]
-            day.set_counts_from_dict(
-                "total",
-                day_key,
-                items_by_day["total"]
-            )
-            day.set_counts_from_dict("registered",
-                day_key,
-                items_by_day["registered"]
-            )
-
-            days.append(day.get_dict())
-
-
-        return days
-
-
-
-    def make_days_dict(self, start_date):
-        d = datetime.utcnow()
-        days_dict = {}
-        for _ in xrange(0, 50):
-            days_dict[self.beginning_of_day_ts(d)] = 0
-            d -= timedelta(days=1)
-
-
-    def get_total_items_by_day(self):
-            url = "/".join([
-                os.getenv("CLOUDANT_URL"),
-                os.getenv("CLOUDANT_DB"),
-                self.couch_query
-            ])
-
-            items_by_day = requests.get(url).json()["rows"]
-            ret = {}
-            for day in items_by_day:
-                ret[day["key"]] = day["value"]
-
-            return ret
-
-    def get_registered_items_by_day(self):
-        raw_data = get_raw_dataclip_data(self.registered_items_url)
-        ret = {}
-        for datapoint in raw_data["values"]:
-            short_date = datapoint[0][0:10]
-            ret[short_date] = int(datapoint[1])
-
-        return ret
-
+        response = [
+                    { 
+                        "display": "accounts",
+                        "name": "accounts",
+                        "x": data["timestamp_list"], 
+                        "y": data["total_accounts"]
+                        }, 
+                    { 
+                        "display": "monthly actives",
+                        "name": "monthly_actives",
+                        "x": data["timestamp_list"], 
+                        "y": data["monthly_active_accounts"]
+                        }, 
+                    {
+                        "display": "% MAU",
+                        "name": "percent_MAU",
+                        "x": data["timestamp_list"], 
+                        "y": data["percent_monthly_active_users"]
+                        }
+                   ]
+        return response
