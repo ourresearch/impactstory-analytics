@@ -28,7 +28,10 @@ dashboards = {
         LatestProfile()
     ],
     "scale":[
+    ],
+    "totals": [
         ItemsByCreatedDate()
+
     ]
 }
 

@@ -57,8 +57,8 @@ SparklineSet.prototype = {
     }
     ,createSparklineLine: function(name, xValues, yValues){
         var defaultOptions = {
-            iaPrimaryValue: _.last(yValues),
-            iaSecondaryValue: _.max(yValues),
+            iaPrimaryValue: function(xValues, yValues) {return _.last(yValues)},
+            iaSecondaryValue: function(xValues, yValues) {return _.max(yValues)},
             iaName: name,
             iaDisplayName: name,
             type:"line",
@@ -69,6 +69,10 @@ SparklineSet.prototype = {
             }
         }
         var options = _.extend(defaultOptions, this.options)
+        // run the options functions and replace them w values
+        options.iaPrimaryValue = options.iaPrimaryValue(xValues, yValues)
+        options.iaSecondaryValue = options.iaSecondaryValue(xValues, yValues)
+
         this.renderSparkline(name, yValues, options)
 
     }
