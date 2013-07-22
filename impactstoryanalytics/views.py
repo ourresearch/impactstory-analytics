@@ -25,6 +25,9 @@ dashboards = {
     ],
     "latest": [
         LatestProfile()
+    ],
+    "scale":[
+        ItemsByCreatedDate()
     ]
 }
 
@@ -165,8 +168,7 @@ def widget_data(widget_name):
     return resp
 
 
-@app.route('/dashboard', defaults={'dashboard_name': 'main'})
-@app.route("/dashboard/<dashboard_name>")
+@app.route('/<dashboard_name>')
 def dashboard(dashboard_name):
     try:
         widgets = g.dashboards[dashboard_name]
