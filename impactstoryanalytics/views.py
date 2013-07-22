@@ -4,8 +4,17 @@ import sys
 import json
 import logging
 import iso8601
-from impactstoryanalytics import app, highcharts
-from impactstoryanalytics.widgets import *
+from impactstoryanalytics import app
+from impactstoryanalytics import widgets
+from impactstoryanalytics.widgets import signup_growth
+from impactstoryanalytics.widgets import signup_funnel
+from impactstoryanalytics.widgets import monthly_active_users
+from impactstoryanalytics.widgets import rescuetime
+from impactstoryanalytics.widgets import gmail
+from impactstoryanalytics.widgets import github
+from impactstoryanalytics.widgets import latestprofile
+from impactstoryanalytics.widgets import itemsbycreateddate
+from impactstoryanalytics.widgets.widget import Widget
 
 from flask import request, abort, make_response, g, redirect, url_for
 from flask import render_template
@@ -16,22 +25,20 @@ logger = logging.getLogger("impactstoryanalytics.views")
 # define dashboards
 dashboards = {
     "main": [
-        Monthly_active_users(),
-        Signup_funnel()
+        signup_growth.Signup_growth(),
+        signup_funnel.Signup_funnel(),
+        monthly_active_users.Monthly_active_users(),
     ],
     "productivity": [
-        Rescuetime(),
-        Gmail(),
-        Github()
+        rescuetime.Rescuetime(),
+        gmail.Gmail(),
+        github.Github()
     ],
     "latest": [
-        LatestProfile()
+        latestprofile.LatestProfile()
     ],
     "scale":[
-    ],
-    "totals": [
-        ItemsByCreatedDate()
-
+        itemsbycreateddate.ItemsByCreatedDate()
     ]
 }
 
@@ -163,7 +170,7 @@ def uservoice_tickets():
 
 @app.route("/widget_data/<widget_name>")
 def widget_data(widget_name):
-    module = sys.modules["impactstoryanalytics.widgets"]  # hack, ick
+    module = sys.modules["impactstoryanalytics.widgets." + widget_name.lower()]  # hack, ick
     class_name = widget_name[0].capitalize() + widget_name[1:]
     widget = getattr(module, class_name)()
 
