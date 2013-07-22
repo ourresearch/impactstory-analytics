@@ -64,6 +64,7 @@ SparklineSet.prototype = {
             iaDisplayName: name,
             barWidth: 2
         }
+        var options = this.optionsForDisplay(defaultOptions, this.options, [values])
         this.renderSparkline(name, values, options)
 
     }
