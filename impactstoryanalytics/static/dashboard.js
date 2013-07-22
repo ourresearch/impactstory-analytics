@@ -4,6 +4,16 @@ function capitalize(str){
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+function nFormatter(num) {
+    // from http://stackoverflow.com/a/14994860/226013
+    if (num >= 1000000) {
+        return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+    }
+    if (num >= 1000) {
+        return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
+    }
+    return num;
+}
 
 // PAGE FUNCTIONS
 
@@ -40,9 +50,12 @@ SparklineSet.prototype = {
         console.log("init IsaSparkline")
     }
     ,createSparklineBar: function(name, values){
+        var reduce = function(values){
+            return _.reduce(values, function(memo, num) { return memo + num})
+        }
         var defaultOptions = {
-            iaPrimaryValue: _.reduce(values, function(memo, num) { return memo + num}),
-            iaSecondaryValue: _.max(values),
+            iaPrimaryValue: reduce,
+            iaSecondaryValue: function(values) {return _.max(values)},
             tooltipFomatter: function(sparkline, options, fields) {
                 return "still working on it..."
             },
@@ -51,7 +64,6 @@ SparklineSet.prototype = {
             iaDisplayName: name,
             barWidth: 2
         }
-        var options = _.extend(defaultOptions, this.options)
         this.renderSparkline(name, values, options)
 
     }
@@ -68,11 +80,7 @@ SparklineSet.prototype = {
                 return "<span>" + fields.y + '</span>' + ', ' + dateStr
             }
         }
-        var options = _.extend(defaultOptions, this.options)
-        // run the options functions and replace them w values
-        options.iaPrimaryValue = options.iaPrimaryValue(xValues, yValues)
-        options.iaSecondaryValue = options.iaSecondaryValue(xValues, yValues)
-
+        var options = this.optionsForDisplay(defaultOptions, this.options, [xValues, yValues])
         this.renderSparkline(name, yValues, options)
 
     }
@@ -80,6 +88,21 @@ SparklineSet.prototype = {
         var elem$ = ich.sparklineWithNumbers(options)
         this.container$.find("div.container").append(elem$)
         this.container$.find(".sparkline."+name).sparkline(values, options)
+    }
+    ,optionsForDisplay: function(defaultOptions, newOptions, args){
+        var options = _.extend(defaultOptions, newOptions)
+
+        // run the functions defined here, and replace them with their values.
+        var primaryValue = options.iaPrimaryValue.apply(this, args)
+        var secondaryValue = options.iaSecondaryValue.apply(this, args)
+
+        options.iaPrimaryValue = primaryValue
+        options.iaSecondaryValue = secondaryValue
+
+        // format primary and secondary values for display
+        options.iaPrimaryValueDisplay = nFormatter(primaryValue)
+        options.iaSecondaryValueDisplay = nFormatter(secondaryValue)
+        return options
     }
 }
 

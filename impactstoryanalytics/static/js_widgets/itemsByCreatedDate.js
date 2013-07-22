@@ -6,6 +6,10 @@ ItemsByCreatedDate.prototype = {
     }
     ,create:function(data){
         var that = this
+        var getYesterdayCount = function(xValues, dailyCum){
+            var revDailyCum = dailyCum.slice().reverse()
+            return revDailyCum[1] - revDailyCum[2]
+        }
 
         var cumTotals = _.pluck(data, "cum_total")
         var cumProfiles = _.pluck(data, "cum_unregistered")
@@ -18,8 +22,8 @@ ItemsByCreatedDate.prototype = {
         var options = {
             chartRangeMax: _.max(cumTotals),
             width: "150px",
-            iaLabelWidth: "2",
-            iaSecondaryValue: function(xValues, yValues){ return "hi!"}
+            iaSecondaryValue: getYesterdayCount,
+            iaSecondaryValueLabel: "yesterday"
 
         }
 
