@@ -4,8 +4,13 @@ var ItemsByCreatedDate = function() {
 ItemsByCreatedDate.prototype = {
     init: function(){
     }
-    ,create:function(data){
-        var that = this
+    ,create: function(data){
+        this.createCumulativeCharts()
+    }
+    ,createDailyCharts:function(data){
+
+    }
+    ,createCumulativeCharts:function(data){
         var getYesterdayCount = function(xValues, dailyCum){
             var revDailyCum = dailyCum.slice().reverse()
             return revDailyCum[1] - revDailyCum[2]
