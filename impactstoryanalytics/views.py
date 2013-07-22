@@ -6,7 +6,14 @@ import logging
 import iso8601
 from impactstoryanalytics import app
 from impactstoryanalytics import widgets
-from impactstoryanalytics.widgets import signup_growth, signup_funnel, monthly_active_users, rescuetime, gmail, github, latestprofile, itemsbycreateddate
+from impactstoryanalytics.widgets import signup_growth
+from impactstoryanalytics.widgets import signup_funnel
+from impactstoryanalytics.widgets import monthly_active_users
+from impactstoryanalytics.widgets import rescuetime
+from impactstoryanalytics.widgets import gmail
+from impactstoryanalytics.widgets import github
+from impactstoryanalytics.widgets import latestprofile
+from impactstoryanalytics.widgets import itemsbycreateddate
 from impactstoryanalytics.widgets.widget import Widget
 
 from flask import request, abort, make_response, g, redirect, url_for
@@ -18,20 +25,20 @@ logger = logging.getLogger("impactstoryanalytics.views")
 # define dashboards
 dashboards = {
     "main": [
-        widgets.signup_growth.Signup_growth(),
-        widgets.signup_funnel.Signup_funnel(),
-        widgets.monthly_active_users.Monthly_active_users(),
+        signup_growth.Signup_growth(),
+        signup_funnel.Signup_funnel(),
+        monthly_active_users.Monthly_active_users(),
     ],
     "productivity": [
-        widgets.rescuetime.Rescuetime(),
-        widgets.gmail.Gmail(),
-        widgets.github.Github()
+        rescuetime.Rescuetime(),
+        gmail.Gmail(),
+        github.Github()
     ],
     "latest": [
-        widgets.latestprofile.LatestProfile()
+        latestprofile.LatestProfile()
     ],
     "scale":[
-        widgets.itemsbycreateddate.ItemsByCreatedDate()
+        itemsbycreateddate.ItemsByCreatedDate()
     ]
 }
 
