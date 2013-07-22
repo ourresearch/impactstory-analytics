@@ -10,8 +10,7 @@ import logging
 import pytz
 import json
 import cache
-
-from impactstoryanalytics.lib import mixpanel_export
+import external_providers
 
 
 logger = logging.getLogger("impactstoryanalytics.widgets")
@@ -309,73 +308,95 @@ class Monthly_active_users(Widget):
 
         response = [
                     { 
-                                "display": "accounts",
-                                "name": "accounts",
-                                "x": data["timestamp_list"], 
-                                "y": data["total_accounts"]
-                                }, 
+                        "display": "accounts",
+                        "name": "accounts",
+                        "x": data["timestamp_list"], 
+                        "y": data["total_accounts"]
+                        }, 
                     { 
-                                "display": "monthly actives",
-                                "name": "monthly_actives",
-                                "x": data["timestamp_list"], 
-                                "y": data["monthly_active_accounts"]
-                                }, 
+                        "display": "monthly actives",
+                        "name": "monthly_actives",
+                        "x": data["timestamp_list"], 
+                        "y": data["monthly_active_accounts"]
+                        }, 
                     {
-                                "display": "% MAU",
-                                "name": "percent_MAU",
-                                "x": data["timestamp_list"], 
-                                "y": data["percent_monthly_active_users"]
-                                }
+                        "display": "% MAU",
+                        "name": "percent_MAU",
+                        "x": data["timestamp_list"], 
+                        "y": data["percent_monthly_active_users"]
+                        }
                    ]
         return response
 
 
 class Signup_funnel(Widget):
+    def get_data(self):
+        return external_providers.Mixpanel.get_data("omtm")
 
-    def get_funnel_data(self, api, funnel, funnel_params):
-        logger.info("Getting funnel data for " + funnel["name"])
 
-        funnel_params["funnel_id"] = funnel["funnel_id"]
-        funnel_data = api.request(['funnels'], funnel_params)
+class Signup_growth(Widget):
+    total_accounts_query_url = "https://dataclips.heroku.com/brczfyjvdlovipuuukgjselrnilk.json"
 
-        print json.dumps(funnel_data, indent=4)
+    def get_weekly_growth_data(self):
+        data = defaultdict(list)
 
-        logger.info("found data")
+        dataclip_data = get_raw_dataclip_data(self.total_accounts_query_url)
+        dataclip_data_weekly = dataclip_data["values"][0::7]
+        datapoints = []
+        for datapoint in dataclip_data_weekly:
+            (date, IGNORE, total_accounts_string) = datapoint 
+            datapoints.append({
+                "from_date": iso8601.parse_date(date), 
+                "accounts": int(total_accounts_string)
+                })
+        new_accounts_per_week = [i["accounts"]-j["accounts"] for i, j in zip(datapoints[:-1], datapoints[1:])]
 
-        return funnel_data["data"]
+        merged_datapoints = []
+        for datapoint, new_accounts in zip(datapoints[:-1], new_accounts_per_week):
+            datapoint.update({"new_accounts_per_week": new_accounts})
+            merged_datapoints.append(datapoint)
+        merged_datapoints.reverse()
 
-    def get_funnels(self, api):
-        funnels = api.request(['funnels', 'list'], {})
-        return funnels
+        for datapoint in merged_datapoints:
+            print datapoint
+
+            try:
+                percent_growth = (100.0 * datapoint["new_accounts_per_week"]) / (datapoint["accounts"] - datapoint["new_accounts_per_week"])
+
+                data["timestamp_list"].append(int(time.mktime(datapoint["from_date"].timetuple())))
+                data["total_accounts"].append(datapoint["accounts"])
+                data["new_accounts_per_week"].append(datapoint["new_accounts_per_week"])
+                data["percent_growth"].append(round(percent_growth, 1))
+            except TypeError:
+                print "no data"
+        return data
+
 
     def get_data(self):
 
-        api = mixpanel_export.Mixpanel(
-            api_key = os.getenv("MIXPANEL_API_KEY"), 
-            api_secret = os.getenv("MIXPANEL_API_SECRET")
-        )
+        number_of_bins = 7  # eventually make this bins for 30 days
+        data = self.get_weekly_growth_data()
 
-        funnels = self.get_funnels(api)
-
-        funnel_params = {
-            # The first date in yyyy-mm-dd format from which a user can begin the first step in the funnel. This date is inclusive.
-            "to_date": datetime.utcnow().isoformat()[0:10]  # today
-            ,"from_date": (datetime.utcnow() - timedelta(days=7)).isoformat()[0:10]
-
-            # The number of days each user has to complete the funnel, starting from the time they 
-            # triggered the first step in the funnel. May not be greater than 60 days. 
-            # Note that we will query for events past the end of to_date to look for funnel completions.
-            #The default value is 14.
-            ,"length": 1
-
-            # The number of days you want your results bucketed into. The default value is 1
-            ,"interval": 1
-        }
-
-        response = {}
-        for funnel in funnels:
-            response[funnel["name"]] = self.get_funnel_data(api, funnel, funnel_params)
-
+        response = [
+                    { 
+                        "display": "accounts",
+                        "name": "accounts",
+                        "x": data["timestamp_list"], 
+                        "y": data["total_accounts"]
+                        }, 
+                    { 
+                        "display": "new accounts per week",
+                        "name": "new_accounts_per_week",
+                        "x": data["timestamp_list"], 
+                        "y": data["new_accounts_per_week"]
+                        }, 
+                    {
+                        "display": "% growth",
+                        "name": "percent_growth",
+                        "x": data["timestamp_list"], 
+                        "y": data["percent_growth"]
+                        }
+                   ]
         return response
 
 
@@ -388,3 +409,4 @@ class LatestProfile(Widget):
             "date": values[0] + "+00:00",  # dates go out in UTC
             "url": values[1]
         }
+

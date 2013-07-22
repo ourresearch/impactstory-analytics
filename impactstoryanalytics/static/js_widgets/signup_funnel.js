@@ -22,11 +22,12 @@ Signup_funnel.prototype = {
                 var date = new Date(date_string); 
                 return date.getTime()/1000  // return in seconds
             })
-        var sorted_data = _.sortBy(data["omtm"], function(x){return x["date"]})
+        var sorted_data = _.sortBy(data[funnel_name], function(x){return x["date"]})
         var steps_per_date = _.pluck(sorted_data, 'steps')
+        var step_data  // set it up out here so can access it for the last step after the for loop
 
         for (step_number in _.range(step_names.length)) {
-            var step_data = _.map(sorted_data, function(x){ return(x["steps"][step_number]); })
+            step_data = _.map(sorted_data, function(x){ return(x["steps"][step_number]); })
             var step_data_counts = _.pluck(step_data, "count")
 
             // conversions aren't available on the first step
@@ -63,6 +64,24 @@ Signup_funnel.prototype = {
                 step_data_counts)
 
         }
+
+        var step_data_counts_raw = _.pluck(step_data, "overall_conv_ratio")
+        var step_data_conversions = _.map(step_data_conversions_raw, function(x) {
+            return Math.round(100*x) // return percentage 
+        })
+
+        var end_to_end_options = {
+                iaDisplayName: "end to end",
+                iaLabelWidth: "2",
+                iaPrimaryUnit: "%", 
+                iaSecondaryUnit: "%",                
+                }
+        var ss_end_to_end = new SparklineSet($(".widget-signup_funnel"), 
+                end_to_end_options)
+
+        ss_end_to_end.createSparklineLine("signup_funnel_end_to_end", 
+            timestamps, 
+            step_data_counts)
     }
 }
 

@@ -16,8 +16,9 @@ logger = logging.getLogger("impactstoryanalytics.views")
 # define dashboards
 dashboards = {
     "main": [
+        Signup_growth(),
+        Signup_funnel(),
         Monthly_active_users(),
-        Signup_funnel()
     ],
     "productivity": [
         Rescuetime(),
