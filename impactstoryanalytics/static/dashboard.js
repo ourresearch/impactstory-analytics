@@ -28,6 +28,7 @@ var SparklineSet = function(container$, options){
         maxSpotColor: false,
         minSpotColor: false,
         spotColor: false,
+        iaLabelWidth: "1",
         chartRangeMin:0
     }
     this.options = _.extend(defaultOptions, options)

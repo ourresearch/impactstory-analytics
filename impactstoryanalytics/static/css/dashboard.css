@@ -117,10 +117,15 @@ div.dashboard div.widget div.container div.sparkline-with-numbers {
   font-size: 22px;
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers a.sparkline-label {
-  width: 100px;
   text-align: right;
   display: inline-block;
   padding-top: 0;
+}
+div.dashboard div.widget div.container div.sparkline-with-numbers a.sparkline-label.label-width-1 {
+  width: 100px;
+}
+div.dashboard div.widget div.container div.sparkline-with-numbers a.sparkline-label.label-width-2 {
+  width: 200px;
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers a.sparkline-label[href='#'] {
   cursor: default;
