@@ -45,6 +45,9 @@ dashboards = {
     ],
     "totals":[
         itemsbycreateddate.ItemsByCreatedDate()
+    ],
+    "api": [
+
     ]
 }
 
