@@ -11,7 +11,7 @@ import pytz
 import json
 import arrow
 
-from impactstoryanalytics.widgets.widget import Widget, get_raw_dataclip_data
+from impactstoryanalytics.widgets.widget import Widget, get_raw_dataclip_data, get_raw_keenio_data
 import cache
 
 
