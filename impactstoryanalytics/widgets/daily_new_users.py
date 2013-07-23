@@ -22,10 +22,6 @@ class Daily_new_users(Widget):
 
     new_accounts_query_url = "https://dataclips.heroku.com/brczfyjvdlovipuuukgjselrnilk.json"
 
-    def format_date(self, date):
-        date_only = date.isoformat()[0:10]
-        return date_only
-
     def get_raw_data(self, number_of_bins):
         data = defaultdict(list)
 

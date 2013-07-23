@@ -10,6 +10,7 @@ from impactstoryanalytics.widgets import signup_growth
 from impactstoryanalytics.widgets import signup_funnel
 from impactstoryanalytics.widgets import monthly_active_users
 from impactstoryanalytics.widgets import daily_new_users
+from impactstoryanalytics.widgets import daily_api_calls
 from impactstoryanalytics.widgets import rescuetime
 from impactstoryanalytics.widgets import gmail
 from impactstoryanalytics.widgets import github
@@ -28,8 +29,7 @@ dashboards = {
     "main": [
         signup_growth.Signup_growth(),
         signup_funnel.Signup_funnel(),
-        monthly_active_users.Monthly_active_users(),
-        daily_new_users.Daily_new_users(),
+        monthly_active_users.Monthly_active_users()
     ],
     "productivity": [
         rescuetime.Rescuetime(),
@@ -39,7 +39,11 @@ dashboards = {
     "latest": [
         latestprofile.LatestProfile()
     ],
-    "scale":[
+    "scale": [
+        daily_new_users.Daily_new_users(),
+        daily_api_calls.Daily_api_calls()
+    ],
+    "totals":[
         itemsbycreateddate.ItemsByCreatedDate()
     ]
 }
