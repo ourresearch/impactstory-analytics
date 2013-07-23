@@ -22,7 +22,6 @@ logger = logging.getLogger("impactstoryanalytics.widgets.uservoice_tickets")
 
 class Uservoice_tickets(Widget):
 
-    api_calls_query_pattern = "https://api.keen.io/3.0/projects/51d858213843314922000002/queries/count?api_key=69023dd079bdb913522954c0f9bb010766be7e87a543674f8ee5d3a66e9b127f5ee641546858bf2c260af4831cd2f7bba4e37c22efb4b21b57bab2a36b9e8e3eccd57db3c75114ba0f788013a08f404738535e9a7eb8a29a30592095e5347e446cf61d50d5508a624934584e17a436ba&event_collection=Received%20API%20request%20from%20external&filters=%5B%7B%22property_name%22%3A%22api_key%22%2C%22operator%22%3A%22gt%22%2C%22property_value%22%3A%220%22%7D%2C%7B%22property_name%22%3A%22method%22%2C%22operator%22%3A%22eq%22%2C%22property_value%22%3A%22{method}%22%7D%5D&timeframe=last_30_days&target_property=api_key&interval=daily"
 
     def get_timestamp_from_isoformat(self, isodate):
         timestamp = int(time.mktime(iso8601.parse_date(isodate).timetuple()))
@@ -33,34 +32,36 @@ class Uservoice_tickets(Widget):
         return dates
 
     def get_values_from_keenio(self, data):
-        dates = [int(point["value"]) for point in data]
-        return dates
-
-    def get_raw_data(self, number_of_bins):
-        data = defaultdict(list)
-
-        get_calls_query_url = self.api_calls_query_pattern.format(
-            method = "GET")
-        gets_data_from_keenio = get_raw_keenio_data(get_calls_query_url)
-        data["dates"] = self.get_dates_from_keenio(gets_data_from_keenio)
-
-        data["timestamps"] = [self.get_timestamp_from_isoformat(date) for date in data["dates"]]
-        data["gets"] = self.get_values_from_keenio(gets_data_from_keenio)
-
-        post_calls_query_url = self.api_calls_query_pattern.format(
-            method = "POST")
-        posts_data_from_keenio = get_raw_keenio_data(post_calls_query_url)
-        data["posts"] = self.get_values_from_keenio(posts_data_from_keenio)
-
-        return data
-
+        values = [point["value"] if point["value"] else 0 for point in data ]
+        return values
 
     def get_data(self):
+        data = []
 
-        # for now
-        ticket_dict = Uservoice.get_ticket_stats()
-        return ticket_dict
+        interesting_fields = [
+            ("without_response_count", "unanswered"), 
+            ("waiting_for_agent_count", "waiting for us"), 
+            ("total_count", "total"),
+            ("median_open_days", "median open days")
+            ]
 
+        for (name, display) in interesting_fields:
+            chart = {}
+            chart["name"] = name
+            chart["display"] = display
+
+            keenio_query_url_pattern = "https://api.keen.io/3.0/projects/51df37f0897a2c7fcd000000/queries/minimum?api_key=b915f0ca9fcbe1cc4760640adf9f09fa1d330f74c763bfd1aa867d6148f528055a3f97afc6b111e8905ef78bfe7f97d1d2dd2b7ddbb0f9ed8e586fd69d79f12f2215d06298924631d8ccfa7a12845dde94921855ae223c69ad26789dca2ec5fd26296a80af72c3a014df5554948bac8e&event_collection=UserVoice%20ticket%20stats&timeframe=this_30_days&timezone=0&target_property={property}&interval=daily"
+            keenio_query_url = keenio_query_url_pattern.format(property=name)
+
+            keenio_data = get_raw_keenio_data(keenio_query_url)
+            chart["y"] = self.get_values_from_keenio(keenio_data)
+
+            # these overwrite every time, that's ok
+            chart["dates"] = self.get_dates_from_keenio(keenio_data)
+            chart["x"] = [self.get_timestamp_from_isoformat(date) for date in chart["dates"]]
+            data.append(chart)
+
+        return data
 
 
 
