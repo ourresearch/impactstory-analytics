@@ -37,7 +37,10 @@ dashboards = {
     "latest": [
         latestprofile.LatestProfile()
     ],
-    "scale":[
+    # "scale": [
+    #     itemsbycreateddate.ItemsByCreatedDate()
+    # ],
+    "totals": [
         itemsbycreateddate.ItemsByCreatedDate()
     ]
 }

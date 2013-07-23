@@ -2,22 +2,6 @@ import os, logging, sys, analytics
 from flask import Flask
 
 
-# set all the environmental variables defined in the .env list
-try:
-    path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', ".env"))
-    with open(path, "r") as f:
-        str = f.read()
-
-    for line in str.split("\n"):
-        try:
-            key, val = line.split("=")
-            os.environ[key] = val
-        except ValueError:
-            continue  # line wasn't a value assignment, move on
-except IOError:
-    pass  # we're on the server, not local; env vars are already set.
-
-
 # set up logging
 # see http://wiki.pylonshq.com/display/pylonscookbook/Alternative+logging+configuration
 logging.basicConfig(
