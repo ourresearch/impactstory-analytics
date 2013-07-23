@@ -9,6 +9,7 @@ from impactstoryanalytics import widgets
 from impactstoryanalytics.widgets import signup_growth
 from impactstoryanalytics.widgets import signup_funnel
 from impactstoryanalytics.widgets import monthly_active_users
+from impactstoryanalytics.widgets import daily_new_users
 from impactstoryanalytics.widgets import rescuetime
 from impactstoryanalytics.widgets import gmail
 from impactstoryanalytics.widgets import github
@@ -28,6 +29,7 @@ dashboards = {
         signup_growth.Signup_growth(),
         signup_funnel.Signup_funnel(),
         monthly_active_users.Monthly_active_users(),
+        daily_new_users.Daily_new_users(),
     ],
     "productivity": [
         rescuetime.Rescuetime(),
