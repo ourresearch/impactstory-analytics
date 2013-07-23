@@ -12,8 +12,9 @@ import json
 import cache
 
 from impactstoryanalytics.lib import mixpanel_export
+import uservoice
 
-logger = logging.getLogger("impactstoryanalytics.external_providers")
+logger = logging.getLogger("impactstoryanalytics.widget_api_helpers")
 
 
 ## Utility functions
@@ -84,5 +85,77 @@ class Mixpanel():
             response[funnel["name"]] = cls.get_funnel_data(api, funnel, funnel_params)
 
         return response
+
+
+
+class Uservoice():
+    @classmethod
+    def get_uservoice_owner(cls):
+        SUBDOMAIN_NAME = 'impactstory'
+        API_KEY = os.getenv("USERVOICE_API_KEY")
+        API_SECRET = os.getenv("USERVOICE_API_SECRET")
+
+        client = uservoice.Client(SUBDOMAIN_NAME, API_KEY, API_SECRET)
+        owner = client.login_as_owner()
+        return owner
+
+    @classmethod
+    def get_ticket_stats(cls, my_agent_name="Unassigned"):
+        logger.info("Getting uservoice ticket stats")
+
+        owner = cls.get_uservoice_owner()
+
+        api_response = owner.get("/api/v1/reports/queue_backlog.json")
+
+        interesting_fields = [
+            "without_response_count", 
+            "waiting_for_agent_count", 
+            "total_count",
+            "median_open_time"
+            ]
+
+        ticket_dict = {}
+        for agent in api_response["entries"]:
+            if agent["name"] == my_agent_name:
+                for field in interesting_fields:
+                    ticket_dict[field] = agent[field]
+
+        logger.info("Found uservoice tickets: {all} total, {user} where a user answered last".format(
+            all=ticket_dict["total_count"], 
+            user=ticket_dict["waiting_for_agent_count"]))
+
+        return ticket_dict
+
+
+    @classmethod
+    def get_ticket_details(cls):
+        logger.info("Getting uservoice ticket details")
+
+        owner = cls.get_uservoice_owner()
+        tickets = owner.get("/api/v1/tickets?state=open&per_page=100")["tickets"]
+
+        return tickets
+
+
+    @classmethod
+    def get_suggestion_counts(cls):
+        logger.info("Getting uservoice suggestion count")
+
+        owner = cls.get_uservoice_owner()
+        suggestions_active = owner.get("/api/v1/suggestions?filter=active&per_page=1000")["suggestions"]
+        suggestions_inbox = owner.get("/api/v1/suggestions?filter=inbox&per_page=1000")["suggestions"]
+        suggestions = suggestions_active + suggestions_inbox
+
+        suggestion_dict = {}
+        for suggestion in suggestions:
+            status = "inbox"
+            if suggestion["status"]:
+                status = suggestion["status"]["name"]
+            suggestion_dict[status] = 1 + suggestion_dict.get(status, 0)
+
+        logger.info("Found uservoice suggestions: {total} total".format(
+            total=len(suggestions)))
+
+        return(suggestion_dict)
 
        

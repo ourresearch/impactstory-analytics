@@ -16,7 +16,7 @@ import cache
 
 
 
-logger = logging.getLogger("impactstoryanalytics.widgets.monthly_active_users")
+logger = logging.getLogger("impactstoryanalytics.widgets.daily_new_users")
 
 class Daily_new_users(Widget):
 
