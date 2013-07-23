@@ -16,6 +16,7 @@ from impactstoryanalytics.widgets import gmail
 from impactstoryanalytics.widgets import github
 from impactstoryanalytics.widgets import latestprofile
 from impactstoryanalytics.widgets import itemsbycreateddate
+from impactstoryanalytics.widgets import uservoice_tickets
 from impactstoryanalytics.widgets.widget import Widget
 
 from flask import request, abort, make_response, g, redirect, url_for
@@ -32,6 +33,7 @@ dashboards = {
         monthly_active_users.Monthly_active_users()
     ],
     "productivity": [
+        uservoice_tickets.Uservoice_tickets(),
         rescuetime.Rescuetime(),
         gmail.Gmail(),
         github.Github()
