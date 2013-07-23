@@ -43,7 +43,6 @@ class Daily_api_calls(Widget):
         data["dates"] = self.get_dates_from_keenio(gets_data_from_keenio)
 
         data["timestamps"] = [self.get_timestamp_from_isoformat(date) for date in data["dates"]]
-        print data["timestamps"]
         data["gets"] = self.get_values_from_keenio(gets_data_from_keenio)
 
         post_calls_query_url = self.api_calls_query_pattern.format(
