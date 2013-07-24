@@ -5,6 +5,7 @@ import json
 import logging
 import iso8601
 import hashlib
+import analytics
 from impactstoryanalytics import app
 from impactstoryanalytics import widgets
 from impactstoryanalytics.widgets import signup_growth
@@ -113,26 +114,26 @@ def widget_data(widget_name):
 @app.route("/webhook/<source>", methods=['POST'])
 def webhook(source):
     logger.info("got webhook from " + source.upper())
+
     if source == "errorception":
         # example whole post: {"isInline":true,"message":"Uncaught TypeError: Cannot call method 'split' of undefined","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.116 Safari/537.36","when":"before","scriptPath":null,"page":"http://impactstory.org/faq","date":"2013-07-24T03:44:01.611Z","isFirstOccurrence":false,"webUrl":"http://errorception.com/projects/51ef3db2db2bef20770003e2/errors/51ef4d2114fb556e3de3f3d2","apiUrl":"https://api.errorception.com/projects/51ef3db2db2bef20770003e2/errors/51ef4d2114fb556e3de3f3d2"} 
-
         secret = os.getenv("ERRORCEPTION_SECRET", "")
         error_message = request.json.get("message", None)
         error_page = request.json.get("page", None)
-
         m = hashlib.sha1()
         m.update(secret + error_message + error_page)
-        logger.info("ERRORCEPTION sha1 of concat:" + m.hexdigest())
-
         x_signature = request.headers.get("X-Signature")
-        logger.info("ERRORCEPTION x-signature: " + x_signature)
 
-        #x_signature should equal sha1(secret + error_message + error_page)
-        logger.info("ERRORCEPTION whole post: ")
-        logger.info(json.dumps(request.json, indent=4))
+        if x_signature == m.hexdigest():
+            analytics.identify(user_id="WEBAPP")
+            analytics.track("WEBAPP", "Caused a JavaScript error", request.json)
 
     elif source == "papertrail":
         logger.info("PAPERTRAIL whole decyphered post")
+        alert_descriptions = {   
+            "exception": "Threw an Exception", 
+            "unspecified": "Sent a Papertrail alert"
+        }
 
         jsonstr = json.loads(request.form['payload']) #Load the Payload (Papertrail events)
 
@@ -141,6 +142,14 @@ def webhook(source):
             logger.info("Brief version:" + message)
             logger.info("Full event:")
             logger.info(json.dumps(event, indent=4))
+
+            if event["source_name"] in ["ti-core", "ti-webapp"]:
+                app_name = event["source_name"].replace("ti-", "").upper()
+                analytics.identify(user_id=app_name)
+                alert_name = request.args.get("alert_name", "unspecified")
+                analytics.track(app_name, alert_descriptions[alert_name], event)
+            else:
+                logger.info("Unknown event source_name, not sending")
 
     else:
         logger.info("got webhook from a place we didn't expect")
