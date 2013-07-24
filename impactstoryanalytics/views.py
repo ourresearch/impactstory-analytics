@@ -116,7 +116,7 @@ def webhook(source):
     if source == "errorception":
         # example whole post: {"isInline":true,"message":"Uncaught TypeError: Cannot call method 'split' of undefined","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.116 Safari/537.36","when":"before","scriptPath":null,"page":"http://impactstory.org/faq","date":"2013-07-24T03:44:01.611Z","isFirstOccurrence":false,"webUrl":"http://errorception.com/projects/51ef3db2db2bef20770003e2/errors/51ef4d2114fb556e3de3f3d2","apiUrl":"https://api.errorception.com/projects/51ef3db2db2bef20770003e2/errors/51ef4d2114fb556e3de3f3d2"} 
 
-        secret = os.env("ERRORCEPTION_SECRET")
+        secret = os.getenv("ERRORCEPTION_SECRET", "")
         error_message = request.json.get("message", None)
         error_page = request.json.get("page", None)
         m = hashlib.md5()
