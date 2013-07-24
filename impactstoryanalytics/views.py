@@ -5,7 +5,6 @@ import json
 import logging
 import iso8601
 import hashlib
-import urllib
 from impactstoryanalytics import app
 from impactstoryanalytics import widgets
 from impactstoryanalytics.widgets import signup_growth
@@ -133,8 +132,14 @@ def webhook(source):
 
     elif source == "papertrail":
         logger.info("PAPERTRAIL whole decyphered post")
-        json_payload = json.loads(urllib.unquote(request.data))
-        logger.info(json.dumps(json_payload, indent=4))
+
+        jsonstr = json.loads(request.form['payload']) #Load the Payload (Papertrail events)
+
+        for event in jsonstr['events']: #Iterate through events
+            message = "(" + event["display_received_at"] + ")" + " " + event["source_name"] + " " + event["program"] + " | " + event["message"] 
+            logger.info("Brief version:" + message)
+            logger.info("Full event:")
+            logger.info(json.dumps(event, indent=4))
 
     else:
         logger.info("got webhook from a place we didn't expect")
