@@ -19,12 +19,12 @@ def run_uservoice():
     print ticket_dict
     analytics.track(user_id="uservoice", event='UserVoice ticket stats', properties=ticket_dict)
 
-    #suggestion_dict = uservoice_check.get_suggestion_counts()
-    #print suggestion_dict
-    #analytics.track(user_id="uservoice", event='UserVoice Suggestion check', properties=suggestion_dict)
+    suggestion_dict = Uservoice.get_suggestion_counts()
+    print suggestion_dict
+    analytics.track(user_id="uservoice", event='UserVoice suggestions', properties=suggestion_dict)
 
-    #return(ticket_dict, suggestion_dict)
+    return(ticket_dict, suggestion_dict)
 
 run_uservoice()
 
-#analytics.flush(async=False)  # make sure all the data gets sent to segment.io
+analytics.flush(async=False)  # make sure all the data gets sent to segment.io

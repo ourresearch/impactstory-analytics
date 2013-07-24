@@ -4,6 +4,7 @@ import sys
 import json
 import logging
 import iso8601
+import hashlib
 from impactstoryanalytics import app
 from impactstoryanalytics import widgets
 from impactstoryanalytics.widgets import signup_growth
@@ -18,6 +19,7 @@ from impactstoryanalytics.widgets import latestprofile
 from impactstoryanalytics.widgets import itemsbycreateddate
 from impactstoryanalytics.widgets import uservoice_tickets
 from impactstoryanalytics.widgets import embedded_widget_use
+from impactstoryanalytics.widgets import uservoice_suggestions
 from impactstoryanalytics.widgets.widget import Widget
 
 from flask import request, abort, make_response, g, redirect, url_for
@@ -35,6 +37,7 @@ dashboards = {
     ],
     "productivity": [
         uservoice_tickets.Uservoice_tickets(),
+        uservoice_suggestions.Uservoice_suggestions(),
         rescuetime.Rescuetime(),
         gmail.Gmail(),
         github.Github()
@@ -96,90 +99,6 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/inbox-count')
-def inbox_count():
-    count = gmail.count_threads_in_inbox(
-        os.getenv("GMAIL_CLIENT_ID"),
-        os.getenv("GMAIL_CLIENT_SECRET"),
-        os.getenv("GMAIL_REFRESH_TOKEN_HEATHER"),
-        os.getenv("GMAIL_ADDRESS_HEATHER")
-    )
-
-    return make_response(str(count))
-
-
-
-@app.route('/active-users')
-def active_users():
-    active_users_keenio_query = "https://api.keen.io/3.0/projects/51d858213843314922000002/queries/count_unique?api_key=69023dd079bdb913522954c0f9bb010766be7e87a543674f8ee5d3a66e9b127f5ee641546858bf2c260af4831cd2f7bba4e37c22efb4b21b57bab2a36b9e8e3eccd57db3c75114ba0f788013a08f404738535e9a7eb8a29a30592095e5347e446cf61d50d5508a624934584e17a436ba&event_collection=Viewed%20own%20profile&filters=%5B%7B%22property_name%22%3A%22days_since_account_created%22%2C%22operator%22%3A%22gte%22%2C%22property_value%22%3A1%7D%5D&timeframe=this_week&timezone=US%2FPacific&target_property=user.traits.email&interval=daily"
-
-    keenio_data = requests.get(active_users_keenio_query).json()["result"]
-    timepoints = [datapoint["timeframe"]["start"] for datapoint in keenio_data]
-    values = [datapoint["value"] for datapoint in keenio_data]
-
-    date_format = "%b %d"  # Mar 10
-    min_timepoint = iso8601.parse_date(timepoints[0])
-    max_timepoint = iso8601.parse_date(timepoints[len(timepoints)-1])
-
-    gecko_response = {
-        "item": values,
-        "settings": {
-         "axisx": [min_timepoint.strftime(date_format), max_timepoint.strftime(date_format)],
-         "axisy": [min(values), max(values)],
-         "colour": "ff9900"
-        }
-    }
-
-    resp = make_response(json.dumps(gecko_response, indent=4), 200)
-    resp.mimetype = "application/json"
-    return resp
-
-
-
-
-@app.route("/rescuetime/<first_name>")
-def rescuetime_endpoint(first_name):
-    data = rescuetime.get_data(first_name)
-    dayslist = rescuetime.list_activity_by_day(data)
-
-    chart = highcharts.streamgraph()
-    chart["xAxis"] = {
-        "categories": [day["name"] for day in dayslist]
-    }
-    chart["yAxis"]["max"] = 15
-    colors = [  # these will stack in this same order on the graph
-        ("other", "#666666"),
-        ("email", "#D7191C"),
-        ("code", "#1A9641")
-    ]
-    for series_name, color in colors:
-        this_series = {
-            "data": [round(day[series_name], 1) for day in dayslist],
-            "name": series_name,
-            "color": color
-        }
-        chart["series"].append(this_series)
-
-    resp = make_response(highcharts.as_js(chart), 200)
-    resp.mimetype = "application/x-javascript"
-
-    return resp
-
-
-@app.route("/uservoice-tickets")
-def uservoice_tickets():
-    from impactstoryanalytics import uservoice_check
-    (num_all_tickets, num_last_response_was_a_user) = uservoice_check.get_ticket_counts()
-
-    gecko_response = {"item":[
-        {"text":"","value":num_all_tickets},
-        {"text":"","value":num_last_response_was_a_user}]}
-
-    resp = make_response(json.dumps(gecko_response, indent=4), 200)
-    resp.mimetype = "application/json"
-    return resp
-
-
 @app.route("/widget_data/<widget_name>")
 def widget_data(widget_name):
     module = sys.modules["impactstoryanalytics.widgets." + widget_name.lower()]  # hack, ick
@@ -187,6 +106,50 @@ def widget_data(widget_name):
     widget = getattr(module, class_name)()
 
     resp = make_response(json.dumps(widget.get_data(), indent=4), 200)
+    resp.mimetype = "application/json"
+    return resp
+
+
+@app.route("/webhook/<source>", methods=['POST'])
+def webhook(source):
+    logger.info("got webhook from " + source.upper())
+    if source == "errorception":
+        # example whole post: {"isInline":true,"message":"Uncaught TypeError: Cannot call method 'split' of undefined","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.116 Safari/537.36","when":"before","scriptPath":null,"page":"http://impactstory.org/faq","date":"2013-07-24T03:44:01.611Z","isFirstOccurrence":false,"webUrl":"http://errorception.com/projects/51ef3db2db2bef20770003e2/errors/51ef4d2114fb556e3de3f3d2","apiUrl":"https://api.errorception.com/projects/51ef3db2db2bef20770003e2/errors/51ef4d2114fb556e3de3f3d2"} 
+
+        secret = os.env("ERRORCEPTION_SECRET")
+        error_message = request.json.get("message", None)
+        error_page = request.json.get("page", None)
+        m = hashlib.md5()
+        m.update(secret)
+        m.update(error_message)
+        m.update(error_page)
+        logger.info("ERRORCEPTION secret:" + secret)
+        logger.info("ERRORCEPTION error_message:" + secret)
+        logger.info("ERRORCEPTION error_page:" + error_page)
+        logger.info("ERRORCEPTION md5:" + m.hexdigest())
+
+        x_signature = request.headers.get("X-Signature")
+        logger.info("ERRORCEPTION x-signature: " + x_signature)
+
+        #x_signature should equal sha1(secret + error_message + error_page)
+        logger.info("ERRORCEPTION whole post: " + request.json)
+
+    elif source == "papertrail":
+        logger.info("PAPERTRAIL whole decyphered post")
+
+        jsonstr = json.loads(request.form['payload']) #Load the Payload (Papertrail events)
+
+        for event in jsonstr['events']: #Iterate through events
+            message = "(" + event["display_received_at"] + ")" + " " + event["source_name"] + " " + event["program"] + " | " + event["message"] 
+            logger.info("Brief version:" + message)
+            logger.info("Full event:")
+            logger.info(json.dumps(event, indent=4))
+
+    else:
+        logger.info("got webhook from a place we didn't expect")
+        logger.info(source + " whole post: " + request.data)
+
+    resp = make_response(json.dumps({"source": source}, indent=4), 200)
     resp.mimetype = "application/json"
     return resp
 

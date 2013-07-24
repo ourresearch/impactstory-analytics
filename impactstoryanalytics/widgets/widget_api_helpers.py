@@ -154,7 +154,10 @@ class Uservoice():
         for agent in api_response["entries"]:
             if agent["name"] == my_agent_name:
                 for field in interesting_fields:
-                    ticket_dict[field] = agent[field]
+                    if field == "median_open_time":
+                        ticket_dict["median_open_days"] = round(agent[field]/(60.0*60*24), 1)
+                    else:
+                        ticket_dict[field] = agent[field]
 
         logger.info("Found uservoice tickets: {all} total, {user} where a user answered last".format(
             all=ticket_dict["total_count"], 
