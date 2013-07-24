@@ -129,7 +129,6 @@ def webhook(source):
             analytics.track("WEBAPP", "Caused a JavaScript error", request.json)
 
     elif source == "papertrail":
-        logger.info("PAPERTRAIL whole decyphered post")
         alert_descriptions = {   
             "exception": "Threw an Exception", 
             "unspecified": "Sent a Papertrail alert"
@@ -150,6 +149,11 @@ def webhook(source):
                 analytics.track(app_name, alert_descriptions[alert_name], event)
             else:
                 logger.info("Unknown event source_name, not sending")
+
+    elif source == "email":
+        # right now these are all from PAGERDUTY.  Do something smarter later.
+        analytics.identify(user_id="PAGERDUTY")
+        analytics.track("PAGERDUTY", "Alert from PagerDuty", request.json)
 
     else:
         logger.info("got webhook from a place we didn't expect")
