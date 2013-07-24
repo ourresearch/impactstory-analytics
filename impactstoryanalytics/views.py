@@ -17,6 +17,7 @@ from impactstoryanalytics.widgets import github
 from impactstoryanalytics.widgets import latestprofile
 from impactstoryanalytics.widgets import itemsbycreateddate
 from impactstoryanalytics.widgets import uservoice_tickets
+from impactstoryanalytics.widgets import embedded_widget_use
 from impactstoryanalytics.widgets.widget import Widget
 
 from flask import request, abort, make_response, g, redirect, url_for
@@ -49,7 +50,7 @@ dashboards = {
         itemsbycreateddate.ItemsByCreatedDate()
     ],
     "api": [
-
+        embedded_widget_use.Embedded_widget_use()
     ]
 }
 

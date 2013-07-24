@@ -1,15 +1,9 @@
-import time
 from datetime import timedelta
-from datetime import date
 from datetime import datetime
 from collections import defaultdict
 import requests
-import iso8601
 import os
 import logging
-import pytz
-import json
-import cache
 
 from impactstoryanalytics.lib import mixpanel_export
 import uservoice
@@ -27,6 +21,48 @@ def get_raw_dataclip_data(query_url):
 def get_raw_keenio_data(query_url):
     raw_data = requests.get(query_url).json()["result"]
     return raw_data
+
+
+class Keenio():
+    queries = {}
+    timebins = defaultdict(dict)
+    params = {
+        "timeframe": "last_30_days",
+        "interval": "daily"
+    }
+    timeframe = "last_30_days"
+    interval = "day"
+
+    def __init__(self, queries):
+        for q_name, q_url in queries.iteritems():
+            self.queries[q_name] = q_url
+
+    def get_raw_data(self):
+        for q_name, q_url in self.queries.iteritems():
+            r = requests.get(q_url, params=self.params)
+            print r.text
+
+            raw_data = r.json()["result"]
+
+            for row_from_keen in raw_data:
+                new_row = self.create_row(row_from_keen, q_name)
+                self.timebins[new_row["start_iso"]].update(new_row)
+
+        return self.timebins_as_list()
+
+    def create_row(self, row_from_keen, value_name):
+        return {
+            "start_iso": row_from_keen["timeframe"]["start"],
+            "end_iso": row_from_keen["timeframe"]["end"],
+            value_name: row_from_keen["value"]
+        }
+
+    def timebins_as_list(self):
+        ret = []
+        for k in sorted(self.timebins.keys()):
+            ret.append(self.timebins[k])
+
+        return ret
 
 
 
