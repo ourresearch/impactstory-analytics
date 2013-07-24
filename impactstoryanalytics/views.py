@@ -107,6 +107,18 @@ def widget_data(widget_name):
 
 @app.route("/webhook/<source>", methods=['POST'])
 def webhook(source):
+    if source == "errorception":
+        #secret = os.env("ERRORCEPTION_SECRET")
+        #error_message = request.json.get("error.message", None)
+        #error_page = request.json.get("error.page", None)
+        x_signature = request.headers.get("X-Signature")
+        logger.info("ERRORCEPTION x-signature: " + x_signature)
+        #x_signature should equal sha1(secret + error_message + error_page)
+        logger.info("ERRORCEPTION whole post: " + request.data)
+    else:
+        logger.info("got webhook from a place we didn't expect")
+        logger.info(source + " whole post: " + request.data)
+
     resp = make_response(json.dumps({"source": source}, indent=4), 200)
     resp.mimetype = "application/json"
     return resp
