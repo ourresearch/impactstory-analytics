@@ -5,6 +5,7 @@ import json
 import logging
 import iso8601
 import hashlib
+import urllib
 from impactstoryanalytics import app
 from impactstoryanalytics import widgets
 from impactstoryanalytics.widgets import signup_growth
