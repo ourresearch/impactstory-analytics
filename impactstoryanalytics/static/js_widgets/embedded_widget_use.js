@@ -9,29 +9,41 @@ Embedded_widget_use.prototype = {
         console.log(data)
         var overallMax = this.findOverallMax(data)
 
-        var ss = new SparklineSet(
-            $(".embedded-widget-use"),
-            {chartRangeMax: overallMax}
-        )
         var xValues = _.map(_.pluck(data, "start_iso"), function(iso){
             return moment(iso).format("X")
         })
 
-        var conversionRate = _.map(data, function(row){
-            if (!row.pageviews) {
-                return null
-            }
-            else {
-                return Math.round(100 * row.clickthroughs / row.pageviews)
-            }
+        var baseOptions = {
+            chartRangeMax: overallMax,
+            xvalues: xValues
+        }
+        ss = new SparklineSet(baseOptions)
+        ss.addSparkline(_.pluck(data, "clickthroughs"), {
+            isClassName: "clickthroughs",
+            iaDisplayName: "clicking through",
+            type: "line"
         })
-        console.log("conversion rate", conversionRate)
+        ss.render($(".embedded-widget-use"))
 
 
-        ss.createSparklineLine("clickthroughs", xValues, _.pluck(data, "clickthroughs"))
-        ss.createSparklineLine("pageviews", xValues, _.pluck(data, "pageviews"))
-        ss.options.iaPrimaryUnit = "%"
-        ss.createSparklineLine("conversion-rate", xValues, conversionRate)
+
+//        var pageviews = new Sparkline()
+//
+//        var conversionRate = _.map(data, function(row){
+//            if (!row.pageviews) {
+//                return null
+//            }
+//            else {
+//                return Math.round(100 * row.clickthroughs / row.pageviews)
+//            }
+//        })
+//        console.log("conversion rate", conversionRate)
+//
+//
+//        ss.createSparklineLine("clickthroughs", xValues, _.pluck(data, "clickthroughs"))
+//        ss.createSparklineLine("pageviews", xValues, _.pluck(data, "pageviews"))
+//        ss.options.iaPrimaryUnit = "%"
+//        ss.createSparklineLine("conversion-rate", xValues, conversionRate)
 
     }
     ,findOverallMax: function(data){

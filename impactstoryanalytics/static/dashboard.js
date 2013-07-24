@@ -29,73 +29,99 @@ function load_widget(widget, dataUrl) {
 }
 
 // OBJECTS
+var SparklineSet = function(baseOptions){
+    this.baseOptions = baseOptions
+    this.init()
+    this.sparklines = []
+}
+SparklineSet.prototype = {
+    init: function(){
+        console.debug("SparklineSet init")
+    }
+    ,addSparkline: function(values, newOptions){
+        var options = _.extend(this.baseOptions, newOptions)
+        this.sparklines.push(new Sparkline(values, options))
+    }
+    ,render: function(loc$) {
+        _.each(this.sparklines, function(sparkline){
+            console.debug("rendering sparkline now: ", sparkline.options.iaDisplayName)
+            sparkline.render(loc$)
+        })
+    },
+    findOverallMax: function(){
 
-var SparklineSet = function(container$, options){
+    }
+}
+
+
+var Sparkline = function(yValues, options){
     var defaultOptions = {
+        iaClassName: "generic",
+        iaHref: "#",
+        iaDisplayName: "Generic widget",
         iaPrimaryValueLabel:'',
         iaSecondaryValueLabel: "max",
-        iaHref: "#",
         maxSpotColor: false,
         minSpotColor: false,
         spotColor: false,
         iaLabelWidth: "1",
-        chartRangeMin:0
+        chartRangeMin:0,
+        type: "line"
     }
     this.options = _.extend(defaultOptions, options)
-    this.container$ = container$
+    this.yValues = yValues
     this.init()
 }
-SparklineSet.prototype = {
+Sparkline.prototype = {
     init: function(){
-        console.log("init IsaSparkline")
+        console.log("init sparkline")
     }
-    ,createSparklineBar: function(name, values){
+    ,defaultOptionsByType: function(type){
         var reduce = function(values){
             return _.reduce(values, function(memo, num) { return memo + num})
         }
         var defaultOptions = {
-            iaPrimaryValue: reduce,
-            iaSecondaryValue: function(values) {return _.max(values)},
-            tooltipFomatter: function(sparkline, options, fields) {
-                return "still working on it..."
+            bar:{
+                iaPrimaryValue: reduce,
+                iaSecondaryValue: function(values) {return _.max(values)},
+                tooltipFormatter: function(sparkline, options, fields) {
+                    return "still working on it..."
+                },
+                type:"bar",
+                barWidth: 2
             },
-            type:"bar",
-            iaName: name,
-            iaDisplayName: name,
-            barWidth: 2
-        }
-        var options = this.optionsForDisplay(defaultOptions, this.options, [values])
-        this.renderSparkline(name, values, options)
-
-    }
-    ,createSparklineLine: function(name, xValues, yValues){
-        var defaultOptions = {
-            iaPrimaryValue: function(xValues, yValues) {return _.last(yValues)},
-            iaSecondaryValue: function(xValues, yValues) {return _.max(yValues)},
-            iaName: name,
-            iaDisplayName: name,
-            type:"line",
-            xvalues: xValues,
-            tooltipFormatter:function(sparkline, options, fields){
-                var dateStr = moment(fields.x*1000).format("MMM D")
-                return "<span>" + fields.y + '</span>' + ', ' + dateStr
+            line: {
+                iaPrimaryValue: function(yValues) {return _.last(yValues)},
+                iaSecondaryValue: function(yValues) {return _.max(yValues)},
+                type:"line",
+                tooltipFormatter:function(sparkline, options, fields){
+                    var dateStr = moment(fields.x*1000).format("MMM D")
+                    return "<span>" + fields.y + '</span>' + ', ' + dateStr
+                }
             }
         }
-        var options = this.optionsForDisplay(defaultOptions, this.options, [xValues, yValues])
-        this.renderSparkline(name, yValues, options)
+        return defaultOptions[type]
+    }
+    ,render: function(container$){
+        var typeAwareOptions = _.extend(
+            this.defaultOptionsByType(this.options.type),
+            this.options
+        )
+        console.log("set type-aware options: ", typeAwareOptions)
 
-    }
-    ,renderSparkline: function(name, values, options) {
+        var options = this.optionsForDisplay(typeAwareOptions)
+        console.log("set options for display: ", options)
+
         var elem$ = ich.sparklineWithNumbers(options)
-        this.container$.find("div.container").append(elem$)
-        this.container$.find(".sparkline."+name).sparkline(values, options)
+        container$.find("div.container").append(elem$)
+        container$.find(".sparkline."+options.iaClassName).sparkline(this.yValues, options)
+        return container$
     }
-    ,optionsForDisplay: function(defaultOptions, newOptions, args){
-        var options = _.extend(defaultOptions, newOptions)
+    ,optionsForDisplay: function(options){
 
         // run the functions defined here, and replace them with their values.
-        var primaryValue = options.iaPrimaryValue.apply(this, args)
-        var secondaryValue = options.iaSecondaryValue.apply(this, args)
+        var primaryValue = options.iaPrimaryValue.call(this, this.yValues)
+        var secondaryValue = options.iaSecondaryValue.call(this, this.yValues)
 
         options.iaPrimaryValue = primaryValue
         options.iaSecondaryValue = secondaryValue

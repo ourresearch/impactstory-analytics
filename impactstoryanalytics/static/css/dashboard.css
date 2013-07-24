@@ -116,6 +116,12 @@ div.dashboard div.widget div.container div.sparkline-with-numbers {
   margin-bottom: 20px;
   font-size: 22px;
 }
+div.dashboard div.widget div.container div.sparkline-with-numbers.percent a.sparkline-label {
+  color: steelblue;
+}
+div.dashboard div.widget div.container div.sparkline-with-numbers.percent a.sparkline-label[href='#'] {
+  color: indianred;
+}
 div.dashboard div.widget div.container div.sparkline-with-numbers a.sparkline-label {
   text-align: right;
   display: inline-block;

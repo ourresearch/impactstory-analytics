@@ -54,7 +54,7 @@ Signup_funnel.prototype = {
 
             var step_options = {
                     iaDisplayName: step_names[step_number],
-                    iaLabelWidth: "2",
+                    iaLabelWidth: "2"
                     }
             var ss = new SparklineSet($(".widget-signup_funnel"), 
                     step_options)

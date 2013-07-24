@@ -131,6 +131,14 @@ div.dashboard {
          div.sparkline-with-numbers {
             margin-bottom: 20px;
             font-size: 22px;
+            &.percent {
+               a.sparkline-label {
+                  color: steelblue;
+                  &[href='#'] {
+                     color: indianred;
+                  }
+               }
+            }
             a.sparkline-label{
                text-align: right;
                display: inline-block;
