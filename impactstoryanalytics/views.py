@@ -131,6 +131,8 @@ def webhook(source):
     elif source == "papertrail":
         alert_descriptions = {   
             "exception": "Threw an Exception", 
+            "cant_start_new_thread": "Couldn't start a new thread", 
+            "api_status_500": "Returned a server error from our API", 
             "unspecified": "Sent a Papertrail alert"
         }
 
