@@ -130,11 +130,11 @@ def webhook(source):
         #x_signature should equal sha1(secret + error_message + error_page)
         logger.info("ERRORCEPTION whole post: " + request.json)
 
-    elif source == "heroku":
-        logger.info("HEROKU whole post")
+    elif source == "papertrail":
+        logger.info("PAPERTRAIL whole decyphered post")
         json_payload = json.loads(urllib.unquote(request.data))
         logger.info(json.dumps(json_payload, indent=4))
-        
+
     else:
         logger.info("got webhook from a place we didn't expect")
         logger.info(source + " whole post: " + request.data)
