@@ -124,9 +124,13 @@ def webhook(source):
         m.update(error_message)
         m.update(error_page)
         logger.info("ERRORCEPTION secret:" + secret)
-        logger.info("ERRORCEPTION error_message:" + secret)
+        logger.info("ERRORCEPTION error_message:" + error_message)
         logger.info("ERRORCEPTION error_page:" + error_page)
         logger.info("ERRORCEPTION md5:" + m.hexdigest())
+
+        m = hashlib.md5()
+        m.update(secret + error_message + error_page)
+        logger.info("ERRORCEPTION md5 of concat:" + m.hexdigest())
 
         x_signature = request.headers.get("X-Signature")
         logger.info("ERRORCEPTION x-signature: " + x_signature)
