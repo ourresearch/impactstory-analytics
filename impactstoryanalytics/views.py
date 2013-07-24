@@ -132,7 +132,8 @@ def webhook(source):
         logger.info("ERRORCEPTION x-signature: " + x_signature)
 
         #x_signature should equal sha1(secret + error_message + error_page)
-        logger.info("ERRORCEPTION whole post: " + request.json)
+        logger.info("ERRORCEPTION whole post: ")
+        logger.info(request.json)
 
     elif source == "papertrail":
         logger.info("PAPERTRAIL whole decyphered post")
