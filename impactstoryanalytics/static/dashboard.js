@@ -41,10 +41,9 @@ function load_widget(widget, dataUrl) {
 
 
 var SparklineSet = function(rows, baseOptions){
-    this.baseOptions = baseOptions
     this.rows = rows
+    this.baseOptions = this.loadBaseOptions(baseOptions)
     this.sparklines = []
-    this.init()
 }
 // static method
 SparklineSet.conversionRate = function(rows, numeratorKey, denominatorKey){
@@ -58,19 +57,20 @@ SparklineSet.conversionRate = function(rows, numeratorKey, denominatorKey){
     })
 }
 SparklineSet.prototype = {
-    init: function(){
-        console.debug("SparklineSet init")
-        this.baseOptions.xvalues = _.map(_.pluck(this.rows, "start_iso"), function(iso){
+    loadBaseOptions: function(baseOptions){
+        baseOptions.xvalues = _.map(_.pluck(this.rows, "start_iso"), function(iso){
             return moment(iso).format("X")
         })
+        return baseOptions
     }
     ,addSparkline: function(sparkline){
-        _.extend(sparkline.options, this.baseOptions)
+        sparkline.options = _.extend(sparkline.options, this.baseOptions)
 
-        var yValues = _.pluck(this.rows, sparkline.options.iaClassName)
-
-        if (!sparkline.options.iaYvalues.length) {
-            sparkline.options.iaYvalues = yValues
+        if (!sparkline.yValues.length) {
+            /* if the user hasn't set their own y values, pluck them from the
+            *  supplied rows, using the iaClassName option for the key
+            */
+            sparkline.yValues = _.pluck(this.rows, sparkline.options.iaClassName)
         }
         this.sparklines.push(sparkline)
     }
@@ -82,20 +82,22 @@ SparklineSet.prototype = {
         })
     },
     setOverallMax: function(){
-        this.overallMax = 0
+        var overallMax = 0
         _.each(this.sparklines, function(s){
-            if (s.iaShareYAxis) {
-                var thisSparklineMax = _.max(s.iaYvalues)
-                this.overallMax = _.max(thisSparklineMax, this.overallMax)
+            if (s.options.iaShareYAxis) {
+                var thisSparklineMax = _.max(s.yValues)
+
+                overallMax = _.max([thisSparklineMax, overallMax])
             }
         })
+        this.overallMax = overallMax
         return this.overallMax
     }
 }
 
 
 var Sparkline = function(userSuppliedOptions){
-    this.defaultOptions = {
+    var defaultOptions = {
         iaClassName: false,
         iaHref: "#",
         iaDisplayName: false,
@@ -106,24 +108,27 @@ var Sparkline = function(userSuppliedOptions){
         spotColor: false,
         iaLabelWidth: "1",
         chartRangeMin:0,
-        sharedYAxis: false,
-        type: "line",
-        iaYvalues: []
+        iaShareYAxis: false,
+        type: "line"
     }
-    this.options = false
-    this.init(userSuppliedOptions)
+    this.options = this.setOptions(defaultOptions, userSuppliedOptions)
+    this.yValues = userSuppliedOptions.iaYvalues || []
+
 }
 Sparkline.prototype = {
-    init: function(userSuppliedOptions){
+    setOptions: function(defaultOptions, userSuppliedOptions){
+
+        // first extend with type-specific options, using type supplied by user
+        var type  = userSuppliedOptions.type || defaultOptions.type
         var typeAwareOptions = _.extend(
-            this.defaultOptions,
-            this.typeSpecificDefaultOptions(userSuppliedOptions.type)
+            defaultOptions,
+            this.typeSpecificDefaultOptions(type)
         )
-        this.options = _.extend(typeAwareOptions, userSuppliedOptions)
+
+        // then apply whatever options the user supplied
+        return _.extend(typeAwareOptions, userSuppliedOptions)
     }
     ,typeSpecificDefaultOptions: function(userDefinedType){
-        var type = userDefinedType || this.defaultOptions.type
-
         var reduce = function(values){
             return _.reduce(values, function(memo, num) { return memo + num})
         }
@@ -147,7 +152,7 @@ Sparkline.prototype = {
                 }
             }
         }
-        return defaultOptions[type]
+        return defaultOptions[userDefinedType]
     }
     ,render: function(container$){
 
@@ -155,14 +160,14 @@ Sparkline.prototype = {
 
         var elem$ = ich.sparklineWithNumbers(options)
         container$.find("div.container").append(elem$)
-        container$.find(".sparkline."+options.iaClassName).sparkline(this.options.iaYvalues, options)
+        container$.find(".sparkline."+options.iaClassName).sparkline(this.yValues, options)
         return container$
     }
     ,optionsForDisplay: function(options){
 
-        // run the functions defined here, and replace them with their values.
-        var primaryValue = options.iaPrimaryValue.call(this, this.options.iaYvalues)
-        var secondaryValue = options.iaSecondaryValue.call(this, this.options.iaYvalues)
+        // run the functions defined in options, and replace them with their values.
+        var primaryValue = options.iaPrimaryValue.call(this, this.yValues)
+        var secondaryValue = options.iaSecondaryValue.call(this, this.yValues)
 
         options.iaPrimaryValue = primaryValue
         options.iaSecondaryValue = secondaryValue
@@ -178,7 +183,7 @@ Sparkline.prototype = {
         return options
     }
     ,setYAxisIfShared: function(max){
-        if (this.sharedYAxis){
+        if (this.options.iaShareYAxis){
             this.options.chartRangeMax = max
             return true
         }

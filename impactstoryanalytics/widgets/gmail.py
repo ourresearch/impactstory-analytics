@@ -25,7 +25,6 @@ class Gmail(Widget):
         keenio.params.update(self.params)
         raw_data = keenio.get_raw_data()
 
-
         return self.ungroup(raw_data)
 
 

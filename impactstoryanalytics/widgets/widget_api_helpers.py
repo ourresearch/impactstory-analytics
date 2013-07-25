@@ -24,21 +24,23 @@ def get_raw_keenio_data(query_url):
 
 
 class Keenio():
-    queries = {}
-    timebins = defaultdict(dict)
-    params = {
-        "timeframe": "last_30_days",
-        "interval": "daily"
-    }
-    timeframe = "last_30_days"
-    interval = "day"
 
     def __init__(self, queries):
+        self.queries = {}
+        self.timebins = defaultdict(dict)
+        self.params = {
+            "timeframe": "last_30_days",
+            "interval": "daily"
+        }
+        self.timeframe = "last_30_days"
+        self.interval = "day"
+
         for q_name, q_url in queries.iteritems():
             self.queries[q_name] = q_url
 
     def get_raw_data(self):
         for q_name, q_url in self.queries.iteritems():
+            print "sending a query to keenio: " + q_name
             r = requests.get(q_url, params=self.params)
             print r.text
 
