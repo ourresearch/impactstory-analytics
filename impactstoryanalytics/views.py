@@ -5,6 +5,7 @@ import json
 import logging
 import iso8601
 import hashlib
+import analytics
 from impactstoryanalytics import app
 from impactstoryanalytics import widgets
 from impactstoryanalytics.widgets import signup_growth
@@ -117,29 +118,27 @@ def widget_data(widget_name):
 @app.route("/webhook/<source>", methods=['POST'])
 def webhook(source):
     logger.info("got webhook from " + source.upper())
+
     if source == "errorception":
         # example whole post: {"isInline":true,"message":"Uncaught TypeError: Cannot call method 'split' of undefined","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.116 Safari/537.36","when":"before","scriptPath":null,"page":"http://impactstory.org/faq","date":"2013-07-24T03:44:01.611Z","isFirstOccurrence":false,"webUrl":"http://errorception.com/projects/51ef3db2db2bef20770003e2/errors/51ef4d2114fb556e3de3f3d2","apiUrl":"https://api.errorception.com/projects/51ef3db2db2bef20770003e2/errors/51ef4d2114fb556e3de3f3d2"} 
-
-        secret = os.env("ERRORCEPTION_SECRET")
+        secret = os.getenv("ERRORCEPTION_SECRET", "")
         error_message = request.json.get("message", None)
         error_page = request.json.get("page", None)
-        m = hashlib.md5()
-        m.update(secret)
-        m.update(error_message)
-        m.update(error_page)
-        logger.info("ERRORCEPTION secret:" + secret)
-        logger.info("ERRORCEPTION error_message:" + secret)
-        logger.info("ERRORCEPTION error_page:" + error_page)
-        logger.info("ERRORCEPTION md5:" + m.hexdigest())
-
+        m = hashlib.sha1()
+        m.update(secret + error_message + error_page)
         x_signature = request.headers.get("X-Signature")
-        logger.info("ERRORCEPTION x-signature: " + x_signature)
 
-        #x_signature should equal sha1(secret + error_message + error_page)
-        logger.info("ERRORCEPTION whole post: " + request.json)
+        if x_signature == m.hexdigest():
+            analytics.identify(user_id="WEBAPP")
+            analytics.track("WEBAPP", "Caused a JavaScript error", request.json)
 
     elif source == "papertrail":
-        logger.info("PAPERTRAIL whole decyphered post")
+        alert_descriptions = {   
+            "exception": "Threw an Exception", 
+            "cant_start_new_thread": "Couldn't start a new thread", 
+            "api_status_500": "Returned a server error from our API", 
+            "unspecified": "Sent a Papertrail alert"
+        }
 
         jsonstr = json.loads(request.form['payload']) #Load the Payload (Papertrail events)
 
@@ -149,9 +148,23 @@ def webhook(source):
             logger.info("Full event:")
             logger.info(json.dumps(event, indent=4))
 
+            if event["source_name"] in ["ti-core", "ti-webapp"]:
+                app_name = event["source_name"].replace("ti-", "").upper()
+                analytics.identify(user_id=app_name)
+                alert_name = request.args.get("alert_name", "unspecified")
+                analytics.track(app_name, alert_descriptions[alert_name], event)
+            else:
+                logger.info("Unknown event source_name, not sending")
+
+    elif source == "email":
+        # right now these are all from PAGERDUTY.  Do something smarter later.
+        analytics.identify(user_id="PAGERDUTY")
+        analytics.track("PAGERDUTY", "Alert from PagerDuty", request.json)
+
     else:
         logger.info("got webhook from a place we didn't expect")
-        logger.info(source + " whole post: " + request.data)
+        logger.info(source + " whole post: ")
+        logger.info(request.data)
 
     resp = make_response(json.dumps({"source": source}, indent=4), 200)
     resp.mimetype = "application/json"
