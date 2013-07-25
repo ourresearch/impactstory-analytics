@@ -1,18 +1,11 @@
 import time
-from datetime import timedelta
-from datetime import date
-from datetime import datetime
-from collections import defaultdict
 import requests
 import iso8601
-import os
 import logging
-import pytz
-import json
-import arrow
 
 from impactstoryanalytics.widgets.widget import Widget
-import cache
+from impactstoryanalytics.widgets.widget_api_helpers import Keenio
+
 
 
 
@@ -21,44 +14,47 @@ logger = logging.getLogger("impactstoryanalytics.widgets.gmail")
 
 class Gmail(Widget):
 
-    query_url = "https://api.keen.io/3.0/projects/51df37f0897a2c7fcd000000/queries/minimum?api_key=b915f0ca9fcbe1cc4760640adf9f09fa1d330f74c763bfd1aa867d6148f528055a3f97afc6b111e8905ef78bfe7f97d1d2dd2b7ddbb0f9ed8e586fd69d79f12f2215d06298924631d8ccfa7a12845dde94921855ae223c69ad26789dca2ec5fd26296a80af72c3a014df5554948bac8e&event_collection=Inbox%20check&timeframe=this_48_hours&timezone=-25200&target_property=thread_count&group_by=userId&interval=hourly"
+    query_urls = {"both": "https://api.keen.io/3.0/projects/51df37f0897a2c7fcd000000/queries/minimum?api_key=b915f0ca9fcbe1cc4760640adf9f09fa1d330f74c763bfd1aa867d6148f528055a3f97afc6b111e8905ef78bfe7f97d1d2dd2b7ddbb0f9ed8e586fd69d79f12f2215d06298924631d8ccfa7a12845dde94921855ae223c69ad26789dca2ec5fd26296a80af72c3a014df5554948bac8e&event_collection=Inbox%20check&timezone=-25200&target_property=thread_count&group_by=userId"}
+    params = {
+        "timeframe": "this_48_hours",
+        "interval": "hourly"
+    }
 
     def get_data(self):
-        return self.inbox_threads()
+        keenio = Keenio(self.query_urls)
+        keenio.params.update(self.params)
+        raw_data = keenio.get_raw_data()
 
 
-    def get_raw_data(self):
-        raw_data = requests.get(self.query_url).json()["result"]
-        return raw_data
+        return self.ungroup(raw_data)
 
 
-    def inbox_threads(self):
 
-        raw_data = self.get_raw_data()
-        lines = {
-            "Heather": [],
-            "Jason": []
+
+    def ungroup(self, rows):
+        """
+        Tranform from Keenio's GroupBy format to our normal flat return format.
+        here's what Keenio sends back (one row):
+        {
+            "both": [
+                {
+                    "userId": "Heather",
+                    "result": 30
+                },
+                {
+                    "userId": "Jason",
+                    "result": 89
+                }
+            ],
+            "end_iso": "2013-07-22T19:00:00-07:00",
+            "start_iso": "2013-07-22T18:00:00-07:00"
         }
+        """
 
-        for this_bin in raw_data:
-            bin_start_time = iso8601.parse_date(this_bin["timeframe"]["start"])
-            adj_start_time = bin_start_time
-
-            for val in this_bin["value"]:
-                if val["result"] is not None:
-                    datapoint = {
-                        "x": int(time.mktime(adj_start_time.timetuple())),
-                        "y": val["result"]
-                    }
-
-                    lines[val["userId"]].append(datapoint)
-
-
-        return lines
-
-
-
-
-
-
-
+        for row in rows:
+            for userDict in row["both"]:
+                key = userDict["userId"]
+                val = userDict["result"]
+                row[key] = val
+            del row["both"]
+        return rows

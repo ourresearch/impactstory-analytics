@@ -6,52 +6,27 @@ Embedded_widget_use.prototype = {
     }
     ,create:function(data){
         console.log("creating embedded_widget_use widget")
-        console.log(data)
-        var overallMax = this.findOverallMax(data)
-
-        var xValues = _.map(_.pluck(data, "start_iso"), function(iso){
-            return moment(iso).format("X")
-        })
 
         var baseOptions = {
-            chartRangeMax: overallMax,
-            xvalues: xValues
+            iaLabelWidth: "2"
         }
-        ss = new SparklineSet(baseOptions)
-        ss.addSparkline(_.pluck(data, "clickthroughs"), {
-            isClassName: "clickthroughs",
-            iaDisplayName: "clicking through",
-            type: "line"
+        var sparklineOptions = [
+            {
+                iaClassName:"clickthroughs"
+            },
+            {
+                iaClassName:"conversion-rate",
+                iaYvalues: SparklineSet.conversionRate(data, "clickthroughs", "pageviews"),
+            },
+            {
+                iaClassName:"pageviews"
+            }
+        ]
+        var ss = new SparklineSet(data, baseOptions)
+        _.each(sparklineOptions, function(options){
+            var sparkline = new Sparkline(options)
+            ss.addSparkline(sparkline)
         })
         ss.render($(".embedded-widget-use"))
-
-
-
-//        var pageviews = new Sparkline()
-//
-//        var conversionRate = _.map(data, function(row){
-//            if (!row.pageviews) {
-//                return null
-//            }
-//            else {
-//                return Math.round(100 * row.clickthroughs / row.pageviews)
-//            }
-//        })
-//        console.log("conversion rate", conversionRate)
-//
-//
-//        ss.createSparklineLine("clickthroughs", xValues, _.pluck(data, "clickthroughs"))
-//        ss.createSparklineLine("pageviews", xValues, _.pluck(data, "pageviews"))
-//        ss.options.iaPrimaryUnit = "%"
-//        ss.createSparklineLine("conversion-rate", xValues, conversionRate)
-
-    }
-    ,findOverallMax: function(data){
-        var overallMax = 0
-        for (var timeslice in data) {
-            var thisTimeSliceMax = _.max([timeslice.clickthroughs, timeslice.pageviews])
-            overallMax = _.max([overallMax, thisTimeSliceMax])
-        }
-        return overallMax
     }
 }
