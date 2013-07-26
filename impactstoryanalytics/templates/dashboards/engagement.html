@@ -1,0 +1,24 @@
+{% extends "dashboard.html" %}
+
+{% block dashboard_content %}
+<div class="dashboard dashboard-main">
+
+   <div class="widget widget-signup_growth sparkline-set">
+      <h2>signup growth<span>last 7 days</span></h2>
+      <div class="container"></div>
+   </div>
+
+   <div class="widget widget-signup_funnel sparkline-set">
+      <h2>signup funnel<span>last 7 days</span></h2>
+      <div class="container"></div>
+   </div>
+
+   <div class="widget widget-monthly_active_users sparkline-set">
+      <h2>MAU<span>last 7 days<br>MONTHLY ACTIVES NOT YET ACCURATE</span></h2>
+      <div class="container"></div>
+   </div>
+
+</div>
+
+
+{% endblock %}
