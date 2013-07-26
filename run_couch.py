@@ -14,12 +14,19 @@ logger = logging.getLogger("analytics.run_couch")
 
 def run_couch():
 
-    #analytics.identify(user_id="couchdb")
+    analytics.identify(user_id="couchdb")
 
     rows = Couchdb.get_view("collections_per_genre/collections_per_genre", True)
+    products_per_pseudogenre = {}
     for row in rows:
-    	print row
-    #analytics.track(user_id="uservoice", event='UserVoice ticket stats', properties=ticket_dict)
+        products_per_pseudogenre[row["key"]] = row["value"]
+
+    products_per_pseudogenre["total"] = products_per_pseudogenre[":"]
+    del products_per_pseudogenre[":"]
+
+    print products_per_pseudogenre
+
+    analytics.track(user_id="couchdb", event='Profiles per pseudogenre', properties=products_per_pseudogenre)
 
     return(rows)
 
