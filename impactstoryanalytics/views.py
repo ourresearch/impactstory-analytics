@@ -21,6 +21,7 @@ from impactstoryanalytics.widgets import itemsbycreateddate
 from impactstoryanalytics.widgets import uservoice_tickets
 from impactstoryanalytics.widgets import embedded_widget_use
 from impactstoryanalytics.widgets import uservoice_suggestions
+from impactstoryanalytics.widgets import javascript_errors
 from impactstoryanalytics.widgets.widget import Widget
 
 from flask import request, abort, make_response, g, redirect, url_for
@@ -31,7 +32,7 @@ logger = logging.getLogger("impactstoryanalytics.views")
 
 # define dashboards
 dashboards = {
-    "main": [
+    "engagement": [
         signup_growth.Signup_growth(),
         signup_funnel.Signup_funnel(),
         monthly_active_users.Monthly_active_users()
@@ -55,6 +56,9 @@ dashboards = {
     ],
     "api": [
         embedded_widget_use.Embedded_widget_use()
+    ],
+    "health": [
+        javascript_errors.Javascript_errors()
     ]
 }
 
