@@ -45,6 +45,12 @@ class TimePansList:
                 pan.dict[k] += v
                 return True
 
+    def stomp_to_pan(self, time, k, v):
+        for pan in self.pans:
+            if pan.start <= time < pan.end:
+                pan.dict[k] = v
+                return True
+
     def replace_NAs_with_zeroes(self):
         keys = self.list_all_pan_keys()
         for pan in self.pans:

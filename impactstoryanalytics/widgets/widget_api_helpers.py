@@ -64,12 +64,13 @@ class Keenio():
             time = arrow.get(str(iso_time), 'YYYY-MM-DDTHH:mm:ss')
             for key in row_from_keen.keys():
                 if key not in ["keen", "userId"]:
-                    pans.add_to_pan(time, key, row_from_keen[key])
+                    pans.stomp_to_pan(time, key, row_from_keen[key])
 
         return pans.replace_NAs_with_zeroes().as_list()
 
 
     def get_raw_data(self):
+        response = []
         for query_name in self.queries:
             print "sending a query to keenio: " + query_name
             r = requests.get(self.queries[query_name]["url"])
@@ -78,15 +79,16 @@ class Keenio():
             raw_data = r.json()["result"]
 
             if self.queries[query_name]["analysis"] == "extraction":
-                binned = self.timebin_extraction_data(raw_data)
-                return binned
+                response = self.timebin_extraction_data(raw_data)
 
             else:
                 for row_from_keen in raw_data:
                     new_row = self.create_row(row_from_keen, query_name)
                     self.timebins[new_row["start_iso"]].update(new_row)
 
-                return self.timebins_as_list()
+        if not response:
+            response = self.timebins_as_list()
+        return response
 
 
     def create_row(self, row_from_keen, value_name):
