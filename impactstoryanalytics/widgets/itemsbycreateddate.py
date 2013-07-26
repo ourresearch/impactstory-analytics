@@ -102,7 +102,7 @@ class ItemsByCreatedDate(Widget):
 
 
     def get_total_items_by_day(self):
-            items_by_day = Couchdb.get_view(couch_view, True, True)
+            items_by_day = Couchdb.get_view(self.couch_view, True, True)
             ret = {}
             for day in items_by_day:
                 ret[day["key"]] = day["value"]
