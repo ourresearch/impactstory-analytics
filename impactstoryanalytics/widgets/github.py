@@ -1,18 +1,13 @@
-import time
 from datetime import timedelta
-from datetime import date
 from datetime import datetime
-from collections import defaultdict
 import requests
 import iso8601
 import os
 import logging
 import pytz
-import json
 import arrow
 
 from impactstoryanalytics.widgets.widget import Widget
-import cache
 
 
 
@@ -20,23 +15,32 @@ logger = logging.getLogger("impactstoryanalytics.widgets.github")
 
 
 class Github(Widget):
-    issue_q_url_template = "https://api.github.com/repos/total-impact/total-impact-{NAME}/issues"
-    num_days = 31
-    repo_names = ["webapp", "core"]
+
+    def __init__(self):
+        self.issue_q_url_template = "https://api.github.com/repos/total-impact/total-impact-{NAME}/issues"
+        self.num_days = 31
+        self.repo_names = ["webapp", "core"]
 
     def get_data(self):
-        lines = {}
-        for repo_name in self.repo_names:
-            issues_list = self.get_raw_data_repo(repo_name)
-            line = self.make_line(issues_list)
-            lines[repo_name] = line.values()
+        pans = self.get_time_pan_list(30)
 
-        # zipped = zip(*lines.values())
-        return lines
+        return pans.as_list()
 
 
-    def get_both_closed_and_open_issues(self, q_url):
-        issues = []
+        # lines = {}
+        # for repo_name in self.repo_names:
+        #     issues_list = self.get_raw_data_repo(repo_name)
+        #     line = self.make_line(issues_list)
+        #     lines[repo_name] = line.values()
+        #
+        # # zipped = zip(*lines.values())
+        # return lines
+
+
+
+
+    def get_raw_data_repo(self, repo_name):
+        q_url = self.issue_q_url_template.format(NAME=repo_name)
         tz = pytz.timezone(os.getenv("TZ"))
         begin = (datetime.now(tz) - timedelta(days=self.num_days))
         params = {
@@ -48,9 +52,7 @@ class Github(Widget):
 
         return issues
 
-    def get_raw_data_repo(self, repo_name):
-        q_url = self.issue_q_url_template.format(NAME=repo_name)
-        return self.get_both_closed_and_open_issues(q_url)
+
 
     def beginning_of_day_ts(self, datetime_obj):
         d = datetime_obj.replace(hour=0, minute=0, second=0)
