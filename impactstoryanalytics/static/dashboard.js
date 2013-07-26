@@ -156,7 +156,7 @@ Sparkline.prototype = {
                 barWidth: 2
             },
             line: {
-                iaPrimaryValue: function(yValues) {return _.last(_.compact(yValues))},
+                iaPrimaryValue: function(yValues) {return _.last(_.without(yValues, null))},
                 iaSecondaryValue: function(yValues) {return _.max(yValues)},
                 type:"line",
                 tooltipFormatter:function(sparkline, options, fields){
