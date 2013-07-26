@@ -24,7 +24,7 @@ def run_couch():
     products_per_quasigenre["total"] = products_per_quasigenre[":"]
     del products_per_quasigenre[":"]
 
-    print products_per_quasigenre
+    logger.info("products_per_quasigenre:" + str(products_per_quasigenre))
 
     analytics.track(user_id="stats", event='Profiles per quasigenre', properties=products_per_quasigenre)
 
@@ -32,4 +32,4 @@ def run_couch():
 
 run_couch()
 
-#analytics.flush(async=False)  # make sure all the data gets sent to segment.io
+analytics.flush(async=False)  # make sure all the data gets sent to segment.io
