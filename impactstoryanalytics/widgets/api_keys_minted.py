@@ -14,7 +14,7 @@ class Api_keys_minted(Widget):
 
     def get_data(self):
         datapoints = get_raw_dataclip_data(self.new_accounts_query_url)["values"]
-        pans = self.get_time_pan_list(100)
+        pans = Widget.get_time_pan_list(100)
 
         for datapoint in datapoints:
             (iso_time, api_keys_minted) = datapoint

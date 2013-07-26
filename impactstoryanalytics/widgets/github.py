@@ -15,7 +15,7 @@ class Github(Widget):
         self.repo_names = ["webapp", "core"]
 
     def get_data(self):
-        pans = self.get_time_pan_list(30)
+        pans = Widget.get_time_pan_list(30)
 
         for repo_name in self.repo_names:
             for open_issue in self.get_issues_list(repo_name, "open"):

@@ -13,27 +13,20 @@ logger = logging.getLogger("impactstoryanalytics.widgets.profiles_per_genre")
 class Profiles_per_genre(Widget):
 
     def get_data(self):
-        target_properies = [
-                    "without_response_count", 
-                    "waiting_for_agent_count",
-                    "total_count",
-                    "median_open_days"
-                ]
-        queries = {}
-        for target_property in target_properies:
-            queries[target_property] = {
-                    "project": "context",
-                    "analysis": "minimum",
-                    "params": {"target_property": target_property}
-                }
-
         shared_params = {
-                    "event_collection" : "UserVoice ticket stats",
+                    "event_collection" : "Profiles per quasigenre",
                     "timeframe": "this_30_days",
                     "interval": "daily"
                 }
 
-        keenio = Keenio(queries, shared_params)
+        queries = {}
+        queries["all"] = {
+                "project": "context",
+                "analysis": "extraction",
+                "params": shared_params
+            }
+
+        keenio = Keenio(queries)
         raw_data = keenio.get_raw_data()
         return raw_data
 
