@@ -39,12 +39,30 @@ function load_widget(widget, dataUrl) {
 *
 ******************************************************************************/
 
+/*******************************************************************************
+ *
+ *  ok, option precedence goes like this, from least to greatest precedence:
+ *  Sparkline.defaultOptions
+ *  Sparkline.typeSpecificOptions
+ *  Sparkline.unitSpecificOptions
+ *  SparklineSet.userSuppliedOptions
+ *  SparklineSet.calculatedOptions (including yValues from rows + sparkline classNames)
+ *  Sparkline.userSuppliedOptions
+ *  Sparkline.calculatedOptions
+ *
+ ******************************************************************************/
 
-var SparklineSet = function(rows, baseOptions){
+
+
+
+
+var SparklineSet = function(rows, userSuppliedOptions){
     this.rows = rows
-    this.baseOptions = this.loadBaseOptions(baseOptions)
+    this.userSuppliedOptions = userSuppliedOptions
+    this.calculatedOptions = this.calculateOptions(userSuppliedOptions)
     this.sparklines = []
 }
+
 // static method
 SparklineSet.conversionRate = function(rows, numeratorKey, denominatorKey){
     return _.map(rows, function(row){
@@ -56,48 +74,44 @@ SparklineSet.conversionRate = function(rows, numeratorKey, denominatorKey){
         }
     })
 }
+
 SparklineSet.prototype = {
-    loadBaseOptions: function(baseOptions){
-        baseOptions.xvalues = _.map(_.pluck(this.rows, "start_iso"), function(iso){
+    calculateOptions: function(userSuppliedOptions){
+        var calculatedOptions = _.extend(userSuppliedOptions, {})
+        calculatedOptions.xvalues = _.map(_.pluck(this.rows, "start_iso"), function(iso){
             return moment(iso).format("X")
         })
-        return baseOptions
+        calculatedOptions.iaShareYAxisMax = this.findOverallMax()
+        return calculatedOptions
     }
     ,addSparkline: function(sparkline){
-        sparkline.options = _.extend(sparkline.options, this.baseOptions)
-
-        if (!sparkline.yValues.length) {
-            /* if the user hasn't set their own y values, pluck them from the
-            *  supplied rows, using the iaClassName option for the key
-            */
-            sparkline.yValues = _.pluck(this.rows, sparkline.options.iaClassName)
-        }
+        sparkline.setOptions(this.calculatedOptions, this.rows)
         this.sparklines.push(sparkline)
     }
-    ,render: function(loc$) {
-        var max = this.setOverallMax()
-        _.each(this.sparklines, function(sparkline){
-            sparkline.setYAxisIfShared.call(sparkline, max)
-            sparkline.render(loc$)
-        })
-    },
-    setOverallMax: function(){
+    ,findOverallMax: function(){
         var overallMax = 0
         _.each(this.sparklines, function(s){
             if (s.options.iaShareYAxis) {
-                var thisSparklineMax = _.max(s.yValues)
+                var thisSparklineMax = _.max(s.options.iaYvalues)
 
                 overallMax = _.max([thisSparklineMax, overallMax])
             }
         })
-        this.overallMax = overallMax
-        return this.overallMax
+        return overallMax
+    }
+    ,render: function(loc$) {
+        var that = this
+        var max = this.findOverallMax()
+        _.each(this.sparklines, function(sparkline){
+            sparkline.setYAxisMaxIfShared(max)
+            sparkline.render(loc$, that.calculatedOptions, that.rows)
+        })
     }
 }
 
 
 var Sparkline = function(userSuppliedOptions){
-    var defaultOptions = {
+    this.defaultOptions = {
         iaClassName: false,
         iaHref: "#",
         iaDisplayName: false,
@@ -112,40 +126,19 @@ var Sparkline = function(userSuppliedOptions){
         iaUnit: "default",
         type: "line"
     }
-    this.options = this.setOptions(defaultOptions, userSuppliedOptions)
-    this.yValues = userSuppliedOptions.iaYvalues || []
+    this.userSuppliedOptions = userSuppliedOptions
+    this.options = {}
 
 }
 Sparkline.prototype = {
-    setOptions: function(defaultOptions, userSuppliedOptions){
-
-        // this is ugly, should be fixed:
-        var type  = userSuppliedOptions.type || defaultOptions.type
-        var unit = userSuppliedOptions.iaUnit || defaultOptions.iaUnit
-
-
-        // first extend with type-specific options, using type supplied by user
-        var options = _.extend(
-            defaultOptions,
-            this.typeSpecificDefaultOptions(type)
-        )
-
-        // extend with unit-specific options (mostly colors)
-        options = _.extend(
-            options,
-            this.unitSpecificDefaultOptions(unit)
-        )
-
-        // finally, apply whatever options the user supplied
-        return _.extend(options, userSuppliedOptions)
-    }
-    ,typeSpecificDefaultOptions: function(userDefinedType){
-        var reduce = function(values){
-            return _.reduce(values, function(memo, num) { return memo + num})
-        }
+    typeSpecificDefaultOptions: function(type){
+        type = type || "line"
         var defaultOptions = {
             bar:{
-                iaPrimaryValue: reduce,
+                iaPrimaryValue: function(values){
+                    console.log("reducing values, got these: ", values)
+                    return _.reduce(values, function(memo, num) { return memo + num})
+                },
                 iaSecondaryValue: function(values) {return _.max(values)},
                 tooltipFormatter: function(sparkline, options, fields) {
                     return "still working on it..."
@@ -163,9 +156,11 @@ Sparkline.prototype = {
                 }
             }
         }
-        return defaultOptions[userDefinedType]
+        return defaultOptions[type]
     }
     ,unitSpecificDefaultOptions: function(unit){
+        unit = unit || "default"
+
         return {
             percent: {
                 lineColor: "indianred",
@@ -177,20 +172,56 @@ Sparkline.prototype = {
         }[unit]
     }
     ,render: function(container$){
-
-        var options = this.optionsForDisplay(this.options)
-
-        var elem$ = ich.sparklineWithNumbers(options)
+        var elem$ = ich.sparklineWithNumbers(this.options)
         container$.find("div.container").append(elem$)
-        container$.find(".sparkline."+options.iaClassName).sparkline(this.yValues, options)
+        container$.find(".sparkline."+this.options.iaClassName)
+            .sparkline(this.options.iaYvalues, this.options)
         return container$
     }
-    ,optionsForDisplay: function(options){
+    ,setOptions: function(extraOptions, dataRows){
+
+        // start with the custom user options handed to us at instantiation
+        var options = this.userSuppliedOptions
+
+
+        // apply extra options handed in to us at render time (likely from a SparklineSet)
+        options = _.extend(extraOptions, options)
+
+
+        // layer on type-specific options
+        options = _.extend(
+            this.typeSpecificDefaultOptions(options.type), // gets overwritten if conflicts
+            options
+        )
+
+        // layer on with unit-specific options
+        options = _.extend(
+            this.unitSpecificDefaultOptions(options.unit), // gets overwritten if conflicts
+            options
+        )
+
+        // layer on any default options not covered yet:
+        // start with the default options
+        options = _.extend(this.defaultOptions, options)
+
+
+        // finally, calculate new values based on stuff we've put in the options
+        options = this.calculateOptions(options, dataRows)
+
+        // done!
+        this.options = options
+
+
+    }
+    ,calculateOptions: function(options, dataRows) {
+        // calculate yvalues
+        if (!options.iaYvalues) {
+            options.iaYvalues = _.pluck(dataRows, options.iaClassName)
+        }
 
         // run the functions defined in options, and replace them with their values.
-        var primaryValue = options.iaPrimaryValue.call(this, this.yValues)
-        var secondaryValue = options.iaSecondaryValue.call(this, this.yValues)
-
+        var primaryValue = options.iaPrimaryValue.call(this, options.iaYvalues)
+        var secondaryValue = options.iaSecondaryValue.call(this, options.iaYvalues)
 
         options.iaPrimaryValue = primaryValue
         options.iaSecondaryValue = secondaryValue
@@ -205,8 +236,8 @@ Sparkline.prototype = {
 
         return options
     }
-    ,setYAxisIfShared: function(max){
-        if (this.options.iaShareYAxis){
+    ,setYAxisMaxIfShared: function(max){
+        if (this.options.iaShareYAxis) {
             this.options.chartRangeMax = max
             return true
         }

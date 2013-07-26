@@ -132,6 +132,11 @@ div.dashboard {
          div.sparkline-with-numbers {
             margin-bottom: 20px;
             font-size: 24px;
+            &.type-bar {
+               canvas {
+                  margin-top: -3px;
+               }
+            }
             &.unit-default {
                span.unit {
                   display: none;
@@ -163,7 +168,7 @@ div.dashboard {
                }
                &[href='#'] {
                   cursor: default;
-                  color: #333;
+                  color: #555;
                   &:hover{
                      text-decoration: none;
                   }

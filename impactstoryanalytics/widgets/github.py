@@ -1,15 +1,9 @@
 from datetime import timedelta
 from datetime import datetime
 import requests
-import iso8601
-import os
 import logging
-import pytz
 import arrow
-
 from impactstoryanalytics.widgets.widget import Widget
-
-
 
 logger = logging.getLogger("impactstoryanalytics.widgets.github")
 
@@ -26,7 +20,7 @@ class Github(Widget):
         for repo_name in self.repo_names:
             for open_issue in self.get_issues_list(repo_name, "open"):
                 opened_time = arrow.get(str(open_issue["created_at"]), 'YYYY-MM-DDTHH:mm:ss')
-                opened_name = repo_name + "_issues_opened"
+                opened_name = repo_name + "_issues_open"
                 pans.add_to_pan(opened_time, opened_name, 1)
 
             for closed_issue in self.get_issues_list(repo_name, "closed"):

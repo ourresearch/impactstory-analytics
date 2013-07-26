@@ -37,11 +37,11 @@ dashboards = {
         monthly_active_users.Monthly_active_users()
     ],
     "productivity": [
-        uservoice_tickets.Uservoice_tickets(),
-        uservoice_suggestions.Uservoice_suggestions(),
-        rescuetime.Rescuetime(),
-        gmail.Gmail(),
-        github.Github()
+        # uservoice_tickets.Uservoice_tickets(),
+        # uservoice_suggestions.Uservoice_suggestions(),
+        # rescuetime.Rescuetime(),
+        github.Github(),
+        gmail.Gmail()
     ],
     "latest": [
         latestprofile.LatestProfile()

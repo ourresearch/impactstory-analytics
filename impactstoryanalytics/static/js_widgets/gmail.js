@@ -2,9 +2,7 @@ var Gmail = function() {
 }
 
 Gmail.prototype = {
-    init: function(){
-    }
-    ,create:function(data){
+    create:function(data){
         var baseOptions = {
             tooltipFormatter:function(sparkline, options, fields){
                 var dateStr = moment(fields.x*1000).format("ddd h:mm a")

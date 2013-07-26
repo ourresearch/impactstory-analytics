@@ -116,6 +116,9 @@ div.dashboard div.widget div.container div.sparkline-with-numbers {
   margin-bottom: 20px;
   font-size: 24px;
 }
+div.dashboard div.widget div.container div.sparkline-with-numbers.type-bar canvas {
+  margin-top: -3px;
+}
 div.dashboard div.widget div.container div.sparkline-with-numbers.unit-default span.unit {
   display: none;
 }
@@ -142,7 +145,7 @@ div.dashboard div.widget div.container div.sparkline-with-numbers a.sparkline-la
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers a.sparkline-label[href='#'] {
   cursor: default;
-  color: #333;
+  color: #555;
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers a.sparkline-label[href='#']:hover {
   text-decoration: none;
