@@ -47,13 +47,30 @@ class TimePansList:
         self.pans.append(pan)
 
     def add_to_pan(self, time, k, v):
-        pan = self.find_pan_from_time(time)
-        pan.dict[k] += v
-
-    def find_pan_from_time(self, time):
         for pan in self.pans:
-            if time > pan.start and time < pan.end:
-                return pan
+            if pan.start < time < pan.end:
+                pan.dict[k] += v
+                return True
+
+    def replace_NAs_with_zeroes(self):
+        keys = self.list_all_pan_keys()
+        for pan in self.pans:
+            pan.pad_keys(keys)
+
+        return self
+
+
+    def list_all_pan_keys(self):
+        extant_keys = []
+        for pan in self.pans:
+            extant_keys += pan.dict.keys()
+
+        return list(set(extant_keys))
+
+
+
+
+
 
 
 
@@ -68,6 +85,15 @@ class TimePan:
         dict["start_iso"] = self.start.isoformat(" ")
         dict["end_iso"] = self.end.isoformat(" ")
         return dict
+
+    def pad_keys(self, keys):
+        """
+        Add keys with zero values if they don't exist in the dict
+        """
+        for key in keys:
+            self.dict.setdefault(key, 0)
+
+
 
 
 class Widget:
