@@ -2,22 +2,26 @@ var Daily_new_users = function() {
 }
 
 Daily_new_users.prototype = {
-    init: function(){
-    }
-    ,create:function(data){
-        for (chart_index in data) {
-            var ss = new SparklineSet(
-                        $(".widget-daily_new_users"), 
-                        {iaDisplayName: data[chart_index]["display"]})
-
-            if (data[chart_index]["name"].indexOf("percent") >= 0) {
-                var ss_percent = {iaPrimaryUnit: "%", iaSecondaryUnit: "%"}
-                ss["options"] = _.extend(ss["options"], ss_percent)
+    create:function(data){
+        var baseOptions = {
+            tooltipFormatter:function(sparkline, options, fields){
+                var dateStr = moment(fields.x*1000).format("ddd MMM Do")
+                return "<span>" + fields.y + '</span>' + ', ' + dateStr
             }
-            ss.createSparklineBar(data[chart_index]["name"], 
-                //data[chart_index]["x"], 
-                data[chart_index]["y"])
         }
+        var sparklineOptions = [
+            {
+                iaClassName: "new_accounts",
+            },
+            {
+                iaClassName: "total_accounts",
+            }
+        ]
+        var ss = new SparklineSet(data, baseOptions)
+        _.each(sparklineOptions, function(options){
+            var sparkline = new Sparkline(options)
+            ss.addSparkline(sparkline)
+        })
+        ss.render($(".widget-daily_new_users"))
     }
 }
-

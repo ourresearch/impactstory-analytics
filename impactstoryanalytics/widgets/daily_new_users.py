@@ -14,9 +14,8 @@ import arrow
 from impactstoryanalytics.widgets.widget import Widget, get_raw_dataclip_data
 import cache
 
-
-
 logger = logging.getLogger("impactstoryanalytics.widgets.daily_new_users")
+
 
 class Daily_new_users(Widget):
 
@@ -27,28 +26,25 @@ class Daily_new_users(Widget):
 
         accounts_data = get_raw_dataclip_data(self.new_accounts_query_url)
 
-        datapoints = accounts_data["values"][0:number_of_bins]
-        # javascript currently expects data with most recent data last
-        datapoints.reverse()
+        dataclip_datapoints = accounts_data["values"][0:number_of_bins]
 
-        for datapoint in datapoints:
+        response = []
+        for datapoint in dataclip_datapoints:
             (date, new_accounts, total_accounts) = datapoint
-            from_date = iso8601.parse_date(date)
+            response.append({
+                "start_iso": iso8601.parse_date(date).isoformat(),
+                "new_accounts": int(new_accounts),
+                "total_accounts": int(total_accounts)
+                })
 
-            data["timestamp_list"].append(int(time.mktime(from_date.timetuple())))
-            data["new_accounts"].append(int(new_accounts))
-
-        return data
+        return response
 
 
     def get_data(self):
         number_of_bins = 30  #show 30 days worth
         data = self.get_raw_data(number_of_bins)
 
-        response = [{ 
-                        "display": "new accounts",
-                        "name": "new_accounts",
-                        "x": data["timestamp_list"], 
-                        "y": data["new_accounts"]
-                        }]
-        return response
+        # javascript currently expects data with most recent data last
+        data.reverse()
+
+        return data
