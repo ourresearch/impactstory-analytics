@@ -1,4 +1,5 @@
 @linkColor: #FF4E00;
+@percentColor: indianred;
 
 body {
    padding: 0;
@@ -130,18 +131,29 @@ div.dashboard {
 
          div.sparkline-with-numbers {
             margin-bottom: 20px;
-            font-size: 22px;
-            &.percent {
+            font-size: 24px;
+            &.unit-default {
+               span.unit {
+                  display: none;
+               }
+            }
+            &.unit-percent {
+               color: @percentColor;
                a.sparkline-label {
-                  color: steelblue;
                   &[href='#'] {
-                     color: indianred;
+                     color: @percentColor;
+                  }
+               }
+               span.secondary {
+                  span.value {
+                     color:  @percentColor;
                   }
                }
             }
             a.sparkline-label{
                text-align: right;
                display: inline-block;
+               font-size: 18px;
                padding-top:0;
                &.label-width-1 {
                   width: 100px;
@@ -160,31 +172,27 @@ div.dashboard {
             }
             span.sparkline {
                canvas {
-                  margin-top: 4px;
                }
             }
             span.primary {
                span.value{
                   font-weight: bolder;
-                  font-size: 28px;
+                  font-size: 24px;
                }
                span.unit {
                   margin-left: -8px;
-                  margin-right: 8px;
                }
             }
             span.secondary {
                font-size: 10px;
                font-weight: normal;
-               color:  #bbb;
                span.value{
                   color:  #333;
                   font-weight: normal;
-                  font-size: 15px;
+                  font-size: 14px;
                }
                span.unit {
                   margin-left: -4px;
-                  margin-right: 4px;
                }
             }
          }

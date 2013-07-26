@@ -109,6 +109,7 @@ var Sparkline = function(userSuppliedOptions){
         iaLabelWidth: "1",
         chartRangeMin:0,
         iaShareYAxis: false,
+        iaUnit: "default",
         type: "line"
     }
     this.options = this.setOptions(defaultOptions, userSuppliedOptions)
@@ -118,15 +119,25 @@ var Sparkline = function(userSuppliedOptions){
 Sparkline.prototype = {
     setOptions: function(defaultOptions, userSuppliedOptions){
 
-        // first extend with type-specific options, using type supplied by user
+        // this is ugly, should be fixed:
         var type  = userSuppliedOptions.type || defaultOptions.type
-        var typeAwareOptions = _.extend(
+        var unit = userSuppliedOptions.iaUnit || defaultOptions.iaUnit
+
+
+        // first extend with type-specific options, using type supplied by user
+        var options = _.extend(
             defaultOptions,
             this.typeSpecificDefaultOptions(type)
         )
 
-        // then apply whatever options the user supplied
-        return _.extend(typeAwareOptions, userSuppliedOptions)
+        // extend with unit-specific options (mostly colors)
+        options = _.extend(
+            options,
+            this.unitSpecificDefaultOptions(unit)
+        )
+
+        // finally, apply whatever options the user supplied
+        return _.extend(options, userSuppliedOptions)
     }
     ,typeSpecificDefaultOptions: function(userDefinedType){
         var reduce = function(values){
@@ -153,6 +164,17 @@ Sparkline.prototype = {
             }
         }
         return defaultOptions[userDefinedType]
+    }
+    ,unitSpecificDefaultOptions: function(unit){
+        return {
+            percent: {
+                lineColor: "indianred",
+                fillColor: "pink",
+                iaPrimaryUnit: "%",
+                iaSecondaryUnit: "%"
+            },
+            default: {}
+        }[unit]
     }
     ,render: function(container$){
 

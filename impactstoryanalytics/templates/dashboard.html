@@ -20,7 +20,7 @@ These are for rendering items with javascript using Mustache
 {% raw %}
 <div id="templates">
    <script id="sparklineWithNumbers" type="text/html">
-      <div class="sparkline-with-numbers {{ iaClassName }} ">
+      <div class="sparkline-with-numbers {{ iaClassName }} unit-{{ iaUnit }}">
          <a class="sparkline-label label-width-{{ iaLabelWidth }}" href="{{ iaHref }}">{{ iaDisplayName }}</a>
          <span class="sparkline graphic {{ iaClassName }}"></span>
          <span class="primary number">

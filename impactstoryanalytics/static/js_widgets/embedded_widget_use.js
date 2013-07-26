@@ -13,7 +13,7 @@ Embedded_widget_use.prototype = {
             {
                 iaClassName:"conversion-rate", // note hyphen gets removed automatically for display name...
                 iaYvalues: SparklineSet.conversionRate(data, "clickthroughs", "pageviews"),
-                iaUnits: "percent" // still working on this...
+                iaUnit: "percent"
             },
             {
                 iaClassName:"pageviews"

@@ -114,17 +114,24 @@ div.dashboard div.widget div.container div.graphic.rickshaw_graph.bar div.x_tick
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers {
   margin-bottom: 20px;
-  font-size: 22px;
+  font-size: 24px;
 }
-div.dashboard div.widget div.container div.sparkline-with-numbers.percent a.sparkline-label {
-  color: steelblue;
+div.dashboard div.widget div.container div.sparkline-with-numbers.unit-default span.unit {
+  display: none;
 }
-div.dashboard div.widget div.container div.sparkline-with-numbers.percent a.sparkline-label[href='#'] {
-  color: indianred;
+div.dashboard div.widget div.container div.sparkline-with-numbers.unit-percent {
+  color: #cd5c5c;
+}
+div.dashboard div.widget div.container div.sparkline-with-numbers.unit-percent a.sparkline-label[href='#'] {
+  color: #cd5c5c;
+}
+div.dashboard div.widget div.container div.sparkline-with-numbers.unit-percent span.secondary span.value {
+  color: #cd5c5c;
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers a.sparkline-label {
   text-align: right;
   display: inline-block;
+  font-size: 18px;
   padding-top: 0;
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers a.sparkline-label.label-width-1 {
@@ -140,30 +147,24 @@ div.dashboard div.widget div.container div.sparkline-with-numbers a.sparkline-la
 div.dashboard div.widget div.container div.sparkline-with-numbers a.sparkline-label[href='#']:hover {
   text-decoration: none;
 }
-div.dashboard div.widget div.container div.sparkline-with-numbers span.sparkline canvas {
-  margin-top: 4px;
-}
 div.dashboard div.widget div.container div.sparkline-with-numbers span.primary span.value {
   font-weight: bolder;
-  font-size: 28px;
+  font-size: 24px;
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers span.primary span.unit {
   margin-left: -8px;
-  margin-right: 8px;
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers span.secondary {
   font-size: 10px;
   font-weight: normal;
-  color: #bbb;
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers span.secondary span.value {
   color: #333;
   font-weight: normal;
-  font-size: 15px;
+  font-size: 14px;
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers span.secondary span.unit {
   margin-left: -4px;
-  margin-right: 4px;
 }
 div#jqstooltip {
   display: block;
