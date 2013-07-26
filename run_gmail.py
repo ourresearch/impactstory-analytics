@@ -1,11 +1,18 @@
 #!/usr/bin/env python
 
+# set configs before imports:
+import config
+config.set_env_vars_from_dot_env()
+
+
+
 import os
 import analytics
 import logging
 from impactstoryanalytics.lib import gmail_oauth2
 import imaplib
 import re
+
 
 logger = logging.getLogger("analytics.run_gmail")
 
@@ -78,6 +85,7 @@ def check_inbox(name):
 #    script
 #
 ###############################################################################
+
 
 for name in ["Heather", "Jason"]:
     check_inbox(name)

@@ -11,7 +11,6 @@ Rescuetime.prototype = {
         that.makeRickshawGraph(div$.filter(".Jason"), data.Jason)
     }
     ,makeRickshawGraph:function(div$, data){
-        console.log("calling Rescuetime widget w this data: ", data)
         var graphOptions = {
             element: div$.find(".graphic")[0],
             renderer: "stack",

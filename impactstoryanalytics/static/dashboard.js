@@ -143,7 +143,7 @@ Sparkline.prototype = {
                 barWidth: 2
             },
             line: {
-                iaPrimaryValue: function(yValues) {return _.last(yValues)},
+                iaPrimaryValue: function(yValues) {return _.last(_.compact(yValues))},
                 iaSecondaryValue: function(yValues) {return _.max(yValues)},
                 type:"line",
                 tooltipFormatter:function(sparkline, options, fields){
@@ -168,6 +168,7 @@ Sparkline.prototype = {
         // run the functions defined in options, and replace them with their values.
         var primaryValue = options.iaPrimaryValue.call(this, this.yValues)
         var secondaryValue = options.iaSecondaryValue.call(this, this.yValues)
+
 
         options.iaPrimaryValue = primaryValue
         options.iaSecondaryValue = secondaryValue
