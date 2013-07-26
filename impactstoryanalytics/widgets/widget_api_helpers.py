@@ -26,18 +26,20 @@ def get_raw_keenio_data(query_url):
 
 class Keenio():
 
-    def __init__(self, queries):
-        self.queries = {}
-        self.timebins = defaultdict(dict)
-        self.params = {
-            "timeframe": "last_30_days",
-            "interval": "daily"
-        }
-        self.timeframe = "last_30_days"
-        self.interval = "day"
+    def __init__(self, queries, overrride_params={}):
+        self.queries = queries
 
-        for q_name, q_url in queries.iteritems():
-            self.queries[q_name] = q_url
+        default_params = {
+            "api_key": "b915f0ca9fcbe1cc4760640adf9f09fa1d330f74c763bfd1aa867d6148f528055a3f97afc6b111e8905ef78bfe7f97d1d2dd2b7ddbb0f9ed8e586fd69d79f12f2215d06298924631d8ccfa7a12845dde94921855ae223c69ad26789dca2ec5fd26296a80af72c3a014df5554948bac8e",
+            "timeframe": "last_30_days",
+            "interval": "daily",
+            "timezone": 0            
+        }
+        self.params = default_params
+        self.params.update(overrride_params)
+
+        self.timebins = defaultdict(dict)
+
 
     def get_raw_data(self):
         for q_name, q_url in self.queries.iteritems():
@@ -52,9 +54,6 @@ class Keenio():
                 self.timebins[new_row["start_iso"]].update(new_row)
 
         return self.timebins_as_list()
-
-
-
 
     def create_row(self, row_from_keen, value_name):
         return {
