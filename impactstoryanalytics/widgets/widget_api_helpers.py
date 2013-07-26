@@ -64,7 +64,7 @@ class Keenio():
             time = arrow.get(str(iso_time), 'YYYY-MM-DDTHH:mm:ss')
             for key in row_from_keen.keys():
                 if key not in ["keen", "userId"]:
-                    pans.add_to_pan(time, key, row_from_keen[key])
+                    pans.stomp_to_pan(time, key, row_from_keen[key])
 
         return pans.replace_NAs_with_zeroes().as_list()
 
