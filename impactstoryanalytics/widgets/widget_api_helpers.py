@@ -240,6 +240,8 @@ class Couchdb():
 
         (design_doc_name, view_name) = full_view_name.split("/")
 
+        logger.info("full_view_name: " + full_view_name)
+
         if reduce_state:
             couch_query = "_design/{design_doc_name}/_view/{view_name}?reduce=true&group=true".format(
                 design_doc_name=design_doc_name,
@@ -248,6 +250,8 @@ class Couchdb():
             couch_query = "_design/{design_doc_name}/_view/{view_name}".format(
                 design_doc_name=design_doc_name,
                 view_name=view_name)
+
+        logger.info("couch_querycouch_query: " + couch_query)
 
         url = "/".join([
             os.getenv("CLOUDANT_URL"),
