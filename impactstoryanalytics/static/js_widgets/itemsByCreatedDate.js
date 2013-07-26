@@ -5,37 +5,36 @@ ItemsByCreatedDate.prototype = {
     init: function(){
     }
     ,create: function(data){
-        this.createCumulativeCharts(data)
-    }
-    ,createDailyCharts:function(data){
-
-    }
-    ,createCumulativeCharts:function(data){
-
-        var getYesterdayCount = function(xValues, dailyCum){
-            var revDailyCum = dailyCum.slice().reverse()
-            return revDailyCum[1] - revDailyCum[2]
-        }
-
-        var cumTotals = _.pluck(data, "cum_total")
-        var cumProfiles = _.pluck(data, "cum_unregistered")
-        var days = _.pluck(data, "date")
-        var timestamps = _.map(days, function(x){
-            var d = new Date(x)
-            return d.getTime()
-        })
-
-        var options = {
-            chartRangeMax: _.max(cumTotals),
-            width: "150px",
-            iaSecondaryValue: getYesterdayCount,
+        console.log("raw data: ", data)
+        var baseOptions = {
+            type: "line",
+            iaShareYAxis: true,
+            width: "125px",
+            iaSecondaryValue: function(yValues){
+                var revValues = yValues.slice().reverse()
+                return revValues[1] - revValues[2]
+            },
             iaSecondaryValueLabel: "yesterday"
-
         }
+        var sparklineOptions = [
+            {
+                iaClassName: "cum_total",
+                iaDisplayName: "total"
+            },
+            {
+                iaClassName:"cum_registered",
+                iaDisplayName: "registered"
+            },
+            {
+                iaClassName:"cum_unregistered",
+                iaDisplayName: "unregistered"
+            }
+        ]
+        var ss = new SparklineSet(data, baseOptions)
 
-        var ss = new SparklineSet( $(".widget-items-by-created-date"), options)
-        ss.createSparklineLine("total", timestamps, cumTotals)
-        ss.createSparklineLine("profile", timestamps, cumProfiles)
-
+        _.each(sparklineOptions, function(options){
+            ss.addSparkline(new Sparkline(options))
+        })
+        ss.render($(".widget-items-by-created-date"))
     }
 }

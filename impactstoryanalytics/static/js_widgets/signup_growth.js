@@ -1,10 +1,37 @@
 var Signup_growth = function() {
 }
 
+var convertToDailyFormat = function(data) {
+    var addYValuesToTimePans = function(timepans, yValues, name){
+
+    }
+
+
+    var timestamps = data[0].x
+    var timepans = []
+    _.each(timestamps, function(ts, timepan_index){
+        var timepan = {}
+        timepan.start_iso = moment.unix(ts).format("X")
+        timepan.ts = ts
+        timepans.push(timepan)
+    })
+
+    _.each(data, function(lineObj){
+
+    })
+
+
+
+    return timepans
+}
+
+
 Signup_growth.prototype = {
     init: function(){
     }
     ,create:function(data){
+        console.log("signup growth", data)
+
         for (chart_index in data) {
             var ss = new SparklineSet(
                         $(".widget-signup_growth"), 

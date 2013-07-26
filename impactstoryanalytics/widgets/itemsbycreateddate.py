@@ -39,7 +39,7 @@ class ItemsCount():
 
     def get_dict(self):
         return {
-            "date": self.d.isoformat(),
+            "start_iso": self.d.isoformat(),
             "total": self.total,
             "registered": self.registered,
             "unregistered": self.total - self.registered,
