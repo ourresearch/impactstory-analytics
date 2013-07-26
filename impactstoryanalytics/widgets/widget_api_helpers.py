@@ -255,7 +255,7 @@ class Couchdb():
             couch_query
         ])
 
-        print url
+        logger.info("url: " + url)
         response = requests.get(url).json()
 
         return response["rows"]
