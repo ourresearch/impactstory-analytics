@@ -2,22 +2,34 @@ var Uservoice_suggestions = function() {
 }
 
 Uservoice_suggestions.prototype = {
-    init: function(){
-    }
-    ,create:function(data){
-
-        for (chart_index in data) {
-            var ss = new SparklineSet(
-                        $(".widget-uservoice_suggestions"), 
-                        {iaDisplayName: data[chart_index]["display"]})
-
-            if (data[chart_index]["name"].indexOf("percent") >= 0) {
-                var ss_percent = {iaPrimaryUnit: "%", iaSecondaryUnit: "%"}
-                ss["options"] = _.extend(ss["options"], ss_percent)
+    create:function(data){
+        var baseOptions = {
+            tooltipFormatter:function(sparkline, options, fields){
+                var dateStr = moment(fields.x*1000).format("ddd h:mm a")
+                return "<span>" + fields.y + '</span>' + ', ' + dateStr
             }
-            ss.createSparklineLine(data[chart_index]["name"], 
-                data[chart_index]["x"], 
-                data[chart_index]["y"])
         }
+        var sparklineOptions = [
+            {
+                iaClassName: "started",
+            },
+            {
+                iaClassName: "under_review",
+            },
+            {
+                iaClassName: "planned",
+            },
+            {
+                iaClassName: "inbox",
+                iaDisplayName: "unfiled"
+            }
+        ]
+        var ss = new SparklineSet(data, baseOptions)
+        _.each(sparklineOptions, function(options){
+            var sparkline = new Sparkline(options)
+            ss.addSparkline(sparkline)
+        })
+        ss.render($(".widget-uservoice_suggestions"))
     }
 }
+

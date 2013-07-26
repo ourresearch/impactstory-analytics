@@ -18,11 +18,11 @@ class Gmail(Widget):
                 "project": "context",
                 "analysis": "minimum",
                 "params": {
-                    "timeframe": "this_48_hours",
-                    "interval": "hourly", 
                     "event_collection": "Inbox check", 
                     "target_property": "thread_count",
-                    "group_by": "userId"
+                    "group_by": "userId",
+                    "timeframe": "this_48_hours",
+                    "interval": "hourly" 
                 }
             }
         }
