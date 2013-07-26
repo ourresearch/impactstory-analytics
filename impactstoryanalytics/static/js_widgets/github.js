@@ -10,10 +10,10 @@ Github.prototype = {
         }
         var sparklineOptions = [
             {
-                iaClassName: "webapp_issues_opened"
+                iaClassName: "webapp_issues_open"
             },
             {
-                iaClassName:"core_issues_opened"
+                iaClassName:"core_issues_open"
             },
             {
                 iaClassName:"issues_closed"

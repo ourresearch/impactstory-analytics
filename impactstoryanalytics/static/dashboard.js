@@ -56,10 +56,12 @@ function load_widget(widget, dataUrl) {
 
 
 
-var SparklineSet = function(rows, userSuppliedOptions){
+var SparklineSet = function(rows, optionsFromUser){
     this.rows = rows
-    this.userSuppliedOptions = userSuppliedOptions
-    this.calculatedOptions = this.calculateOptions(userSuppliedOptions)
+    this.optionsFromUser = optionsFromUser
+
+
+
     this.sparklines = []
 }
 
@@ -76,16 +78,23 @@ SparklineSet.conversionRate = function(rows, numeratorKey, denominatorKey){
 }
 
 SparklineSet.prototype = {
-    calculateOptions: function(userSuppliedOptions){
-        var calculatedOptions = _.extend(userSuppliedOptions, {})
+    calculateSSOptions: function(){
+        var calculatedOptions = _.clone(this.optionsFromUser, {})
+
         calculatedOptions.xvalues = _.map(_.pluck(this.rows, "start_iso"), function(iso){
             return moment(iso).format("X")
         })
+
         calculatedOptions.iaShareYAxisMax = this.findOverallMax()
+
         return calculatedOptions
     }
     ,addSparkline: function(sparkline){
-        sparkline.setOptions(this.calculatedOptions, this.rows)
+        var calculatedOptions = this.calculateSSOptions()
+        console.log("before first sparkline add: ", calculatedOptions)
+        console.log("before first sparkline add: ", calculatedOptions.iaUnit)
+
+        sparkline.setOptions.call(sparkline, calculatedOptions, this.rows)
         this.sparklines.push(sparkline)
     }
     ,findOverallMax: function(){
@@ -181,28 +190,28 @@ Sparkline.prototype = {
     ,setOptions: function(extraOptions, dataRows){
 
         // start with the custom user options handed to us at instantiation
-        var options = this.userSuppliedOptions
+        var options = _.clone(this.userSuppliedOptions)
 
 
         // apply extra options handed in to us at render time (likely from a SparklineSet)
-        options = _.extend(extraOptions, options)
+        options = _.defaults(options, extraOptions)
 
 
         // layer on type-specific options
-        options = _.extend(
-            this.typeSpecificDefaultOptions(options.type), // gets overwritten if conflicts
-            options
+        options = _.defaults(
+            options,
+            this.typeSpecificDefaultOptions(options.type) // gets overwritten if conflicts
         )
 
         // layer on with unit-specific options
-        options = _.extend(
-            this.unitSpecificDefaultOptions(options.unit), // gets overwritten if conflicts
-            options
+        options = _.defaults(
+            options,
+            this.unitSpecificDefaultOptions(options.iaUnit) // gets overwritten if conflicts
         )
 
         // layer on any default options not covered yet:
         // start with the default options
-        options = _.extend(this.defaultOptions, options)
+        options = _.defaults(options, this.defaultOptions)
 
 
         // finally, calculate new values based on stuff we've put in the options
@@ -210,6 +219,7 @@ Sparkline.prototype = {
 
         // done!
         this.options = options
+
 
 
     }
