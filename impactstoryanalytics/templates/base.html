@@ -4,7 +4,7 @@
 <head>
    <meta charset="utf-8">
    <link rel="icon" type="image/ico" href="/static/img/favicon.png" />
-   <title>ImpactStory: {{ dashboard_name }}</title>
+   <title>ImpactStory: {{ current_dashboard_name }}</title>
 
    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
    {% assets "js_all" %}
@@ -23,7 +23,13 @@
    <h1><img class="brand" src="{{ url_for("static", filename="img/impactstory-logo-small.png") }}"/> <span class="sub">analytics</span></h1>
    <ul class="nav">
       {%  for dashboard_name in g.dashboards.keys() %}
-      <li><a href='{{ url_for("dashboard", dashboard_name=dashboard_name )}}'>{{ dashboard_name }}</a></li>
+         {% if dashboard_name == current_dashboard_name %}
+            {% set nav_link_class = "active"  %}
+         {% else %}
+            {% set nav_link_class = "inactive"  %}
+         {% endif %}
+
+      <li><a class="{{ nav_link_class }}" href='{{ url_for("dashboard", dashboard_name=dashboard_name )}}'>{{ dashboard_name }}</a></li>
       {% endfor %}
    </ul>
 </div>

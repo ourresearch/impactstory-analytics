@@ -183,7 +183,7 @@ def dashboard(dashboard_name):
 
     return render_template(
         "dashboards/{name}.html".format(name=dashboard_name),
-        dashboard_name=dashboard_name,
+        current_dashboard_name=dashboard_name,
         widget_names=widget_names
     )
 

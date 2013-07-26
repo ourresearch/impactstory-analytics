@@ -15,10 +15,10 @@ div#navbar {
   position: fixed;
   z-index: 1000;
   top: 0;
-  padding: 5px 20px;
+  padding: 0 20px 6px;
   left: 0;
   right: 0;
-  border-bottom: 5px solid #eee;
+  border-bottom: 1px solid #eee;
   background: #fff;
 }
 div#navbar h1 {
@@ -55,6 +55,18 @@ div#navbar ul.nav li a {
   padding: 12px 8px 0;
   display: block;
   color: #555;
+}
+div#navbar ul.nav li a:hover {
+  color: #ff4e00;
+  text-decoration: none;
+}
+div#navbar ul.nav li a.active {
+  color: #ff4e00;
+  font-weight: bold;
+}
+div#navbar ul.nav li a.active:hover {
+  text-decoration: none;
+  cursor: default;
 }
 div#content {
   margin-top: 100px;
