@@ -235,16 +235,15 @@ class Uservoice():
 class Couchdb():
 
     @classmethod
-    def get_view(cls, full_view_name, reduce_state=False, group_level=1):
+    def get_view(cls, full_view_name, reduce_state=False):
         logger.info("getting view from couch")
 
         (design_doc_name, view_name) = full_view_name.split("/")
 
         if reduce_state:
-            couch_query = "_design/{design_doc_name}/_view/{view_name}?reduce=true&group={group_level}".format(
+            couch_query = "_design/{design_doc_name}/_view/{view_name}?reduce=true&group=true".format(
                 design_doc_name=design_doc_name,
-                view_name=view_name,
-                group_level="true")
+                view_name=view_name)
         else:
             couch_query = "_design/{design_doc_name}/_view/{view_name}".format(
                 design_doc_name=design_doc_name,

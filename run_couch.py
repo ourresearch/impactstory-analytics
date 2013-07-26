@@ -16,7 +16,7 @@ def run_couch():
 
     #analytics.identify(user_id="couchdb")
 
-    rows = Couchdb.get_view("collections_per_genre/collections_per_genre", True, True)
+    rows = Couchdb.get_view("collections_per_genre/collections_per_genre", True)
     for row in rows:
     	print row
     #analytics.track(user_id="uservoice", event='UserVoice ticket stats', properties=ticket_dict)
