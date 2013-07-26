@@ -133,7 +133,8 @@ var Sparkline = function(userSuppliedOptions){
         chartRangeMin:0,
         iaShareYAxis: false,
         iaUnit: "default",
-        type: "line"
+        type: "line",
+        width: "150px"
     }
     this.userSuppliedOptions = userSuppliedOptions
     this.options = {}

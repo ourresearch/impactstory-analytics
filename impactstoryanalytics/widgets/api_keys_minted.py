@@ -14,7 +14,8 @@ class Api_keys_minted(Widget):
 
     def get_data(self):
         datapoints = get_raw_dataclip_data(self.new_accounts_query_url)["values"]
-        first_point_time = datapoints[-1][0]
+        first_point_iso = datapoints[-1][0]
+        first_point_time = arrow.get(str(first_point_iso), 'YYYY-MM-DDTHH:mm:ss')
         pans = Widget.get_time_pan_list(first_point_time)
 
         for datapoint in datapoints:

@@ -121,7 +121,13 @@ class Widget:
         raise NotImplementedError
 
     @classmethod
-    def get_time_pan_list(cls, num_bins, interval="day"):
+    def get_time_pan_list(cls, input, interval="day"):
+        if isinstance(input, int):
+            num_bins = input
+        else:  # input is an arrow object
+            num_bins = (arrow.utcnow() - input).days + 1
+
+
         end = arrow.utcnow().ceil("day")  # end of today
         start = end.floor("day").replace(days=-num_bins)
         pans = TimePansList()
