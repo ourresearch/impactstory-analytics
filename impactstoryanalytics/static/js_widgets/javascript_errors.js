@@ -16,7 +16,7 @@ Javascript_errors.prototype = {
             },
             {
                 iaClassName:"isFirstOccurrence_False",
-                iaDisplayName: "repeat offenders",
+                iaDisplayName: "repeats",
             }
         ]
         var ss = new SparklineSet(data, baseOptions)
