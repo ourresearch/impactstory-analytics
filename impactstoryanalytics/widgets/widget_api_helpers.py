@@ -85,6 +85,16 @@ class Keenio():
 
         return ret
 
+    @classmethod
+    def ungroup(cls, dict_key, group_by, rows):
+        for row in rows:
+            for userDict in row[dict_key]:
+                key = userDict[group_by]
+                val = userDict["result"]
+                row[key] = val
+            del row[dict_key]
+        return rows
+
 
 
 class Mixpanel():
