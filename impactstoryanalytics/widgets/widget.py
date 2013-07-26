@@ -1,4 +1,5 @@
 from collections import defaultdict
+from collections import Counter
 import requests
 import logging
 import arrow
@@ -52,9 +53,16 @@ class TimePansList:
         return self
 
     def add_cum_counts(self):
-        cum_counts = dict.fromkeys(self.list_all_pan_keys(), 0)
+        counter = Counter()
         for pan in self.pans:
-            pass  # working on this right now.
+            # update the cumulative totals for each dict key
+            counter.update(pan.as_dict(counts_only=True))
+
+            # put the current cumlative totals in the pan's dict
+            for k, count in counter.iteritems():
+                pan.dict["cum_" + k] = count
+
+        return self
 
 
 
@@ -78,10 +86,19 @@ class TimePan:
         self.end = end
         self.dict = defaultdict(int)
 
-    def as_dict(self):
+    def as_dict(self, counts_only=False):
         dict = self.dict
         dict["start_iso"] = self.start.isoformat(" ")
         dict["end_iso"] = self.end.isoformat(" ")
+
+        if counts_only:
+            dict = {}
+            for k, v in self.dict.iteritems():
+                try:
+                    dict[k] = v + 0  # make sure it's a number
+                except TypeError:
+                    pass
+
         return dict
 
     def pad_keys(self, keys):

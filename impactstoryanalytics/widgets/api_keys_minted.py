@@ -21,6 +21,6 @@ class Api_keys_minted(Widget):
             time = arrow.get(str(iso_time), 'YYYY-MM-DDTHH:mm:ss')
             pans.add_to_pan(time, "api_keys_minted", int(api_keys_minted))
 
-        return pans.replace_NAs_with_zeroes().as_list()
+        return pans.add_cum_counts().replace_NAs_with_zeroes().as_list()
 
 
