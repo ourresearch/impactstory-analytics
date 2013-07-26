@@ -6,8 +6,8 @@ import logging
 import arrow
 
 from impactstoryanalytics.widgets.widget import Widget
-from impactstoryanalytics.widgets.widget import get_raw_dataclip_data
-
+from impactstoryanalytics.widgets.widget_api_helpers import get_raw_dataclip_data
+from impactstoryanalytics.widgets.widget_api_helpers import Couchdb
 
 
 logger = logging.getLogger("impactstoryanalytics.widgets.itemsbycreateddate")
@@ -51,7 +51,7 @@ class ItemsCount():
 
 
 class ItemsByCreatedDate(Widget):
-    couch_query = "_design/dashboard/_view/items_by_day_created?reduce=true&group=true"
+    couch_view = "dashboard/items_by_day_created"
     registered_items_url = "https://dataclips.heroku.com/btawwfbgqkmuzkkstbvlrqfyjqzz.json"
 
     def get_point(self, k, table):
@@ -102,13 +102,7 @@ class ItemsByCreatedDate(Widget):
 
 
     def get_total_items_by_day(self):
-            url = "/".join([
-                os.getenv("CLOUDANT_URL"),
-                os.getenv("CLOUDANT_DB"),
-                self.couch_query
-            ])
-
-            items_by_day = requests.get(url).json()["rows"]
+            items_by_day = Couchdb.get_view(couch_view, True, True)
             ret = {}
             for day in items_by_day:
                 ret[day["key"]] = day["value"]
