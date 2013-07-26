@@ -20,7 +20,10 @@ from impactstoryanalytics.widgets import uservoice_tickets
 from impactstoryanalytics.widgets import embedded_widget_use
 from impactstoryanalytics.widgets import uservoice_suggestions
 from impactstoryanalytics.widgets import javascript_errors
+from impactstoryanalytics.widgets import profiles_per_genre
 from impactstoryanalytics.widgets import api_keys_minted
+
+from impactstoryanalytics.widgets.widget import Widget
 
 from flask import request, abort, make_response, g, redirect, url_for
 from flask import render_template
@@ -47,7 +50,8 @@ dashboards = {
     ],
     "scale": [
         daily_new_users.Daily_new_users(),
-        daily_api_calls.Daily_api_calls()
+        daily_api_calls.Daily_api_calls(),
+        profiles_per_genre.Profiles_per_genre()
     ],
     "totals":[
         itemsbycreateddate.ItemsByCreatedDate(),

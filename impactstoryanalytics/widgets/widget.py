@@ -120,7 +120,8 @@ class Widget:
     def get_data(self):
         raise NotImplementedError
 
-    def get_time_pan_list(self, num_bins, interval="day"):
+    @classmethod
+    def get_time_pan_list(cls, num_bins, interval="day"):
         end = arrow.utcnow().ceil("day")  # end of today
         start = end.floor("day").replace(days=-num_bins)
         pans = TimePansList()

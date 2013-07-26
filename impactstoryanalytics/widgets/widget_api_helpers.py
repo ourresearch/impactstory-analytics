@@ -6,7 +6,9 @@ import couchdb
 import os
 import urllib
 import logging
+import arrow
 
+from impactstoryanalytics.widgets.widget import Widget
 from impactstoryanalytics.lib import mixpanel_export
 import uservoice
 
@@ -54,6 +56,18 @@ class Keenio():
 
         self.timebins = defaultdict(dict)
 
+    def timebin_extraction_data(self, raw_data):
+        pans = Widget.get_time_pan_list(100)
+
+        for row_from_keen in raw_data:
+            iso_time = row_from_keen["keen"]["timestamp"]
+            time = arrow.get(str(iso_time), 'YYYY-MM-DDTHH:mm:ss')
+            for key in row_from_keen.keys():
+                if key not in ["keen", "userId"]:
+                    pans.add_to_pan(time, key, row_from_keen[key])
+
+        return pans.replace_NAs_with_zeroes().as_list()
+
 
     def get_raw_data(self):
         for query_name in self.queries:
@@ -63,11 +77,16 @@ class Keenio():
 
             raw_data = r.json()["result"]
 
-            for row_from_keen in raw_data:
-                new_row = self.create_row(row_from_keen, query_name)
-                self.timebins[new_row["start_iso"]].update(new_row)
+            if self.queries[query_name]["analysis"] == "extraction":
+                binned = self.timebin_extraction_data(raw_data)
+                return binned
 
-        return self.timebins_as_list()
+            else:
+                for row_from_keen in raw_data:
+                    new_row = self.create_row(row_from_keen, query_name)
+                    self.timebins[new_row["start_iso"]].update(new_row)
+
+                return self.timebins_as_list()
 
 
     def create_row(self, row_from_keen, value_name):
