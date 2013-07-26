@@ -1,9 +1,7 @@
-import requests
 import os
 import sys
 import json
 import logging
-import iso8601
 import hashlib
 import analytics
 from impactstoryanalytics import app
@@ -22,7 +20,7 @@ from impactstoryanalytics.widgets import uservoice_tickets
 from impactstoryanalytics.widgets import embedded_widget_use
 from impactstoryanalytics.widgets import uservoice_suggestions
 from impactstoryanalytics.widgets import javascript_errors
-from impactstoryanalytics.widgets.widget import Widget
+from impactstoryanalytics.widgets import api_keys_minted
 
 from flask import request, abort, make_response, g, redirect, url_for
 from flask import render_template
@@ -52,7 +50,8 @@ dashboards = {
         daily_api_calls.Daily_api_calls()
     ],
     "totals":[
-        itemsbycreateddate.ItemsByCreatedDate()
+        itemsbycreateddate.ItemsByCreatedDate(),
+        api_keys_minted.Api_keys_minted()
     ],
     "api": [
         embedded_widget_use.Embedded_widget_use()

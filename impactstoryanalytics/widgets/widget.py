@@ -1,14 +1,6 @@
-import time
-from datetime import timedelta
-from datetime import date
-from datetime import datetime
 from collections import defaultdict
 import requests
-import iso8601
-import os
 import logging
-import pytz
-import json
 import arrow
 
 import cache
@@ -48,7 +40,7 @@ class TimePansList:
 
     def add_to_pan(self, time, k, v):
         for pan in self.pans:
-            if pan.start < time < pan.end:
+            if pan.start <= time < pan.end:
                 pan.dict[k] += v
                 return True
 
@@ -58,6 +50,12 @@ class TimePansList:
             pan.pad_keys(keys)
 
         return self
+
+    def add_cum_counts(self):
+        cum_counts = dict.fromkeys(self.list_all_pan_keys(), 0)
+        for pan in self.pans:
+            pass  # working on this right now.
+
 
 
     def list_all_pan_keys(self):
