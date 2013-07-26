@@ -5,18 +5,18 @@ Javascript_errors.prototype = {
     create:function(data){
         var baseOptions = {
             tooltipFormatter:function(sparkline, options, fields){
-                var dateStr = moment(fields.x*1000).format("ddd h:mm a")
+                var dateStr = moment(fields.x*1000).format("ddd MMM Do")
                 return "<span>" + fields.y + '</span>' + ', ' + dateStr
             }
         }
         var sparklineOptions = [
             {
-                iaClassName: "Jason",
-                iaShareYAxis: true
+                iaClassName: "isFirstOccurrence_True",
+                iaDisplayName: "first time",
             },
             {
-                iaClassName:"Heather",
-                iaShareYAxis: true
+                iaClassName:"isFirstOccurrence_False",
+                iaDisplayName: "repeat offenders",
             }
         ]
         var ss = new SparklineSet(data, baseOptions)

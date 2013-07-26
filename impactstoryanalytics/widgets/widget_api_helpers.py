@@ -26,7 +26,7 @@ class Keenio():
     def __init__(self, queries, shared_params={}):
 
         default_params = {
-            "timeframe": "last_30_days",
+            "timeframe": "this_30_days",
             "interval": "daily",
             "timezone": 0,
         }
@@ -86,11 +86,13 @@ class Keenio():
         return ret
 
     @classmethod
-    def ungroup(cls, dict_key, group_by, rows):
+    def ungroup(cls, rows, dict_key, group_by, prepend_group_name=False):
         for row in rows:
-            for userDict in row[dict_key]:
-                key = userDict[group_by]
-                val = userDict["result"]
+            for groupDict in row[dict_key]:
+                key = groupDict[group_by]
+                if prepend_group_name:
+                    key = group_by + "_" + str(key)
+                val = groupDict["result"]
                 row[key] = val
             del row[dict_key]
         return rows

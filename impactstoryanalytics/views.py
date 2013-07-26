@@ -58,7 +58,7 @@ dashboards = {
         embedded_widget_use.Embedded_widget_use()
     ],
     "health": [
-        #javascript_errors.Javascript_errors()
+        javascript_errors.Javascript_errors()
     ]
 }
 

@@ -29,6 +29,6 @@ class Gmail(Widget):
 
         keenio = Keenio(queries)
         raw_data = keenio.get_raw_data()
-        return keenio.ungroup("both", "userId", raw_data)
+        return keenio.ungroup(raw_data, "both", "userId")
 
        

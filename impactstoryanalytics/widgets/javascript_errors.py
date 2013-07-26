@@ -20,14 +20,15 @@ class Javascript_errors(Widget):
                 "params": {
                     "event_collection": "Caused a JavaScript error",
                     "target_property": "message",
-                    "group_by": "isFirstOccurence",
+                    "group_by": "isFirstOccurrence",
                 }
             }
         }
 
         keenio = Keenio(queries)
         raw_data = keenio.get_raw_data()
-        return keenio.ungroup(raw_data, "both", "isFirstOccurence")
+        ungrouped_data = keenio.ungroup(raw_data, "both", "isFirstOccurrence", prepend_group_name=True)
+        return ungrouped_data
 
 
 
