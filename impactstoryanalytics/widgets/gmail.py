@@ -13,16 +13,21 @@ logger = logging.getLogger("impactstoryanalytics.widgets.gmail")
 class Gmail(Widget):
 
     def get_data(self):
-        query_urls = {"both": "minimum"}
-        params = {
-            "timeframe": "this_48_hours",
-            "interval": "hourly", 
-            "event_collection": "Inbox check", 
-            "target_property": "thread_count",
-            "group_by": "userId"
+        queries = {
+            "both": {
+                "project": "context",
+                "analysis": "minimum",
+                "params": {
+                    "timeframe": "this_48_hours",
+                    "interval": "hourly", 
+                    "event_collection": "Inbox check", 
+                    "target_property": "thread_count",
+                    "group_by": "userId"
+                }
+            }
         }
 
-        keenio = Keenio(query_urls, params, "context")
+        keenio = Keenio(queries)
         raw_data = keenio.get_raw_data()
         return self.ungroup(raw_data)
 

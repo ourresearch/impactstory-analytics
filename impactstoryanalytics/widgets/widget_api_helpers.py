@@ -4,6 +4,7 @@ from collections import defaultdict
 import requests
 import couchdb
 import os
+import urllib
 import logging
 
 from impactstoryanalytics.lib import mixpanel_export
@@ -19,41 +20,55 @@ def get_raw_dataclip_data(query_url):
     #print raw_data
     return raw_data
 
-def get_raw_keenio_data(query_url):
-    raw_data = requests.get(query_url).json()["result"]
-    return raw_data
-
 
 class Keenio():
 
-    def __init__(self, queries, overrride_params={}):
-        self.queries = queries
+    def __init__(self, queries, shared_params={}):
 
         default_params = {
-            "api_key": "b915f0ca9fcbe1cc4760640adf9f09fa1d330f74c763bfd1aa867d6148f528055a3f97afc6b111e8905ef78bfe7f97d1d2dd2b7ddbb0f9ed8e586fd69d79f12f2215d06298924631d8ccfa7a12845dde94921855ae223c69ad26789dca2ec5fd26296a80af72c3a014df5554948bac8e",
             "timeframe": "last_30_days",
             "interval": "daily",
-            "timezone": 0            
+            "timezone": 0,
         }
-        self.params = default_params
-        self.params.update(overrride_params)
+        url_roots = {
+            "context" : "https://api.keen.io/3.0/projects/51df37f0897a2c7fcd000000/queries", 
+            "production": "https://api.keen.io/3.0/projects/51d858213843314922000002/queries"
+        }
+        api_keys = {
+            "context" : "b915f0ca9fcbe1cc4760640adf9f09fa1d330f74c763bfd1aa867d6148f528055a3f97afc6b111e8905ef78bfe7f97d1d2dd2b7ddbb0f9ed8e586fd69d79f12f2215d06298924631d8ccfa7a12845dde94921855ae223c69ad26789dca2ec5fd26296a80af72c3a014df5554948bac8e",
+            "production": "69023dd079bdb913522954c0f9bb010766be7e87a543674f8ee5d3a66e9b127f5ee641546858bf2c260af4831cd2f7bba4e37c22efb4b21b57bab2a36b9e8e3eccd57db3c75114ba0f788013a08f404738535e9a7eb8a29a30592095e5347e446cf61d50d5508a624934584e17a436ba"
+        }
+
+        self.queries = queries
+        for query in self.queries:
+            #set in priority order, highest priority last
+            self.queries[query]["params"] = dict(default_params.items() + shared_params.items() + queries[query]["params"].items())
+            print self.queries[query]["params"]
+
+        for query in self.queries:
+            self.queries[query]["url"] = url_roots[self.queries[query]["project"]]
+            self.queries[query]["url"] += "/" + self.queries[query]["analysis"]
+            self.queries[query]["url"] += "?api_key=" + api_keys[self.queries[query]["project"]]
+            self.queries[query]["url"] += "&" + urllib.urlencode(self.queries[query]["params"])
+            print self.queries[query]["url"]
 
         self.timebins = defaultdict(dict)
 
 
     def get_raw_data(self):
-        for q_name, q_url in self.queries.iteritems():
-            print "sending a query to keenio: " + q_name
-            r = requests.get(q_url, params=self.params)
+        for query_name in self.queries:
+            print "sending a query to keenio: " + query_name
+            r = requests.get(self.queries[query_name]["url"])
             print r.text
 
             raw_data = r.json()["result"]
 
             for row_from_keen in raw_data:
-                new_row = self.create_row(row_from_keen, q_name)
+                new_row = self.create_row(row_from_keen, query_name)
                 self.timebins[new_row["start_iso"]].update(new_row)
 
         return self.timebins_as_list()
+
 
     def create_row(self, row_from_keen, value_name):
         return {
@@ -62,16 +77,13 @@ class Keenio():
             value_name: row_from_keen["value"]
         }
 
+
     def timebins_as_list(self):
         ret = []
         for k in sorted(self.timebins.keys()):
             ret.append(self.timebins[k])
 
         return ret
-
-
-
-
 
 
 
