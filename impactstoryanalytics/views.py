@@ -22,6 +22,7 @@ from impactstoryanalytics.widgets import uservoice_suggestions
 from impactstoryanalytics.widgets import javascript_errors
 from impactstoryanalytics.widgets import profiles_per_genre
 from impactstoryanalytics.widgets import api_keys_minted
+from impactstoryanalytics.widgets import importers_used
 
 from impactstoryanalytics.widgets.widget import Widget
 
@@ -51,7 +52,8 @@ dashboards = {
     "scale": [
         daily_new_users.Daily_new_users(),
         daily_api_calls.Daily_api_calls(),
-        profiles_per_genre.Profiles_per_genre()
+        profiles_per_genre.Profiles_per_genre(),
+        importers_used.Importers_used()
     ],
     "totals":[
         itemsbycreateddate.ItemsByCreatedDate(),
