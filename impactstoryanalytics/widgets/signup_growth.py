@@ -1,18 +1,10 @@
 import time
-from datetime import timedelta
-from datetime import date
-from datetime import datetime
 from collections import defaultdict
-import requests
 import iso8601
-import os
 import logging
-import pytz
-import json
-import arrow
 
 from impactstoryanalytics.widgets.widget import Widget, get_raw_dataclip_data
-import cache
+from impactstoryanalytics.widgets.widget_api_helpers import Converter
 
 
 
@@ -82,4 +74,4 @@ class Signup_growth(Widget):
                         "y": data["percent_growth"]
                         }
                    ]
-        return response
+        return Converter.from_x_y_format(response)

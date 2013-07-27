@@ -7,6 +7,8 @@ import os
 import urllib
 import logging
 import arrow
+import operator
+import itertools
 
 from impactstoryanalytics.widgets.widget import Widget
 from impactstoryanalytics.lib import mixpanel_export
@@ -21,6 +23,46 @@ def get_raw_dataclip_data(query_url):
     raw_data = requests.get(query_url).json()
     #print raw_data
     return raw_data
+
+class Converter():
+    @classmethod
+    def from_x_y_format(cls, lines):
+        events = defaultdict(dict)
+        for line in lines:
+            event_name = line["name"]
+            new_events_dict = cls.events_dict_from_line(line)
+            events = cls.merge_new_events_dict(events, new_events_dict, event_name)
+
+        events_list = cls.events_list_from_dict(events)
+        return events_list
+
+
+    @classmethod
+    def events_dict_from_line(cls, line):
+        ts_values = zip(line["x"], line["y"])
+        events_dict = {}
+        for ts_value in ts_values:
+            timestamp, value = ts_value
+            events_dict[timestamp] = value
+
+        return events_dict
+
+    @classmethod
+    def merge_new_events_dict(cls, old_events_dict, new_events_dict, event_name):
+        for ts, value in new_events_dict.iteritems():
+            old_events_dict[ts][event_name] = value
+
+        return old_events_dict
+
+    @classmethod
+    def events_list_from_dict(cls, events_dict):
+        events_list = []
+        for ts in sorted(events_dict.keys()):
+            dict_to_add = events_dict[ts]
+            dict_to_add["start_iso"] = arrow.get(ts).isoformat(" ")
+            events_list.append(dict_to_add)
+
+        return events_list
 
 
 class Keenio():
