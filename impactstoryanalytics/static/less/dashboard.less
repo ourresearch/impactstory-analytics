@@ -105,13 +105,18 @@ div.dashboard {
          }
       }
       h2 {
-         padding-left: 20px;
-         margin-bottom: 10px;
+         padding: 0 0 3px 10px;
+         margin-bottom: 15px;
+         border-bottom: 2px solid #333;
+         position: relative;
          span {
             font-size: 12px;
             font-weight: normal;
             color: #666;
-            margin-left: 8px;
+            position: absolute;
+            padding: 0 10px 3px 0;
+            right: 0;
+            bottom: 0;
          }
       }
       div.container {
@@ -142,7 +147,22 @@ div.dashboard {
 
          div.sparkline-with-numbers {
             margin-bottom: 20px;
+            float:left;
+            clear:both;
+            width: 100%;
             font-size: 24px;
+            &.border-top-true {
+               border-top:  1px solid #ddd;
+               padding-top: 10px;
+            }
+            &.highlight-true{
+               margin-top: 10px;
+               padding-top: 20px;
+               border-top:  2px solid #ddd;
+               a.sparkline-label {
+                  font-weight: bold;
+               }
+            }
             &.type-bar {
                canvas {
                   margin-top: -3px;
@@ -163,6 +183,9 @@ div.dashboard {
                span.secondary {
                   span.value {
                      color:  @percentColor;
+                  }
+                  span.label {
+                     color:  #aaa;
                   }
                }
             }

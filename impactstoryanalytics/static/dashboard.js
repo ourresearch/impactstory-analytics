@@ -134,7 +134,9 @@ var Sparkline = function(userSuppliedOptions){
         iaShareYAxis: false,
         iaUnit: "default",
         type: "line",
-        width: "150px"
+        width: "150px",
+        iaHighlight: false,
+        iaBorderTop: false
     }
     this.userSuppliedOptions = userSuppliedOptions
     this.options = {}
@@ -157,12 +159,12 @@ Sparkline.prototype = {
                 barWidth: 2
             },
             line: {
-                iaPrimaryValue: function(yValues) {return _.last(_.without(yValues, null))},
-                iaSecondaryValue: function(yValues) {return _.max(yValues)},
+                iaPrimaryValue: function(yValues) {return Math.round(_.last(_.without(yValues, null)))},
+                iaSecondaryValue: function(yValues) {return Math.round(_.max(yValues))},
                 type:"line",
                 tooltipFormatter:function(sparkline, options, fields){
                     var dateStr = moment(fields.x*1000).format("MMM D")
-                    return "<span>" + fields.y + '</span>' + ', ' + dateStr
+                    return "<span>" + Math.round(fields.y) + '</span>' + ', ' + dateStr
                 }
             }
         }
@@ -176,7 +178,8 @@ Sparkline.prototype = {
                 lineColor: "indianred",
                 fillColor: "pink",
                 iaPrimaryUnit: "%",
-                iaSecondaryUnit: "%"
+                iaSecondaryUnit: "%",
+                chartRangeMax: 100
             },
             default: {}
         }[unit]

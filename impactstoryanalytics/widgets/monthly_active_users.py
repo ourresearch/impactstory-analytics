@@ -1,17 +1,12 @@
 import time
 from datetime import timedelta
-from datetime import date
-from datetime import datetime
 from collections import defaultdict
-import requests
 import iso8601
-import os
 import logging
-import pytz
-import json
-import arrow
 
 from impactstoryanalytics.widgets.widget import Widget, get_raw_dataclip_data, get_raw_keenio_data
+from impactstoryanalytics.widgets.widget_api_helpers import Converter
+
 import cache
 
 
@@ -91,4 +86,4 @@ class Monthly_active_users(Widget):
                         "y": data["percent_monthly_active_users"]
                         }
                    ]
-        return response
+        return Converter.from_x_y_format(response)
