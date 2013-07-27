@@ -114,6 +114,17 @@ SparklineSet.prototype = {
             sparkline.render(loc$, that.calculatedOptions, that.rows)
         })
     }
+    ,sortBy: function(sortBy){
+        sortBy = sortBy || "max"
+        that = this
+        if (sortBy=="max"){
+            this.sparklines = _.sortBy(that.sparklines, function(sparkline){
+                return _.max(sparkline.options.iaYvalues)
+            }).reverse()
+        }
+
+        return this
+    }
 }
 
 
@@ -134,7 +145,8 @@ var Sparkline = function(userSuppliedOptions){
         type: "line",
         width: "150px",
         iaHighlight: false,
-        iaBorderTop: false
+        iaBorderTop: false,
+        iaSize: "medium"
     }
     this.userSuppliedOptions = userSuppliedOptions
     this.options = {}
@@ -244,6 +256,10 @@ Sparkline.prototype = {
 
         if (!options.iaDisplayName){
             options.iaDisplayName = options.iaClassName.replace(/[-_]/g, " ")
+        }
+
+        if (options.iaSize == "small") {
+            options.width = "75px"
         }
 
         return options

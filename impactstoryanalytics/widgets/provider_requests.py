@@ -22,7 +22,7 @@ class Provider_requests(Widget):
         }
 
         shared_params = {
-            "timeframe": "this_30_days",
+            "timeframe": "last_30_days",
             "interval": "daily"
         }
 

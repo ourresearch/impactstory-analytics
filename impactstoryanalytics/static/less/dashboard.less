@@ -146,11 +146,43 @@ div.dashboard {
          }
 
          div.sparkline-with-numbers {
+            @baseFontSize: 24px;
+
             margin-bottom: 20px;
             float:left;
             clear:both;
             width: 100%;
-            font-size: 24px;
+            font-size: @baseFontSize;
+            &.size-small {
+               @baseFontSize: 18px;
+               font-size:  @baseFontSize;
+               margin-bottom: @baseFontSize * .6;
+               a.sparkline-label {
+                  font-size: @baseFontSize * .9;
+                  &.label-width-1 {
+                     width: 85px;
+                  }
+                  &.label-width-2 {
+                     width: 150px;
+                  }
+               }
+               span.primary {
+                  span.value{
+                     font-size: @baseFontSize;
+                  }
+               }
+               span.sep{
+                  display:inline;
+               }
+               span.secondary {
+                  font-size: @baseFontSize * .6;
+                  span.value {
+                     font-size: @baseFontSize * .8;
+                     font-weight: normal;
+                  }
+
+               }
+            }
             &.border-top-true {
                border-top:  1px solid #ddd;
                padding-top: 10px;
@@ -180,6 +212,7 @@ div.dashboard {
                      color: @percentColor;
                   }
                }
+               span.sep {display:none;}
                span.secondary {
                   span.value {
                      color:  @percentColor;
@@ -192,7 +225,7 @@ div.dashboard {
             a.sparkline-label{
                text-align: right;
                display: inline-block;
-               font-size: 18px;
+               font-size: @baseFontSize * .75;
                padding-top:0;
                &.label-width-1 {
                   width: 100px;
@@ -216,22 +249,31 @@ div.dashboard {
             span.primary {
                span.value{
                   font-weight: bolder;
-                  font-size: 24px;
+                  font-size: @baseFontSize;
                }
                span.unit {
-                  margin-left: -8px;
+                  margin-left: -6px;
+                  font-weight: lighter;
+                  font-size:  @baseFontSize * .7;
                }
             }
+            span.sep {
+               font-size:  @baseFontSize * .7;
+               font-weight: lighter;
+               margin-right: -4px;
+            }
             span.secondary {
-               font-size: 10px;
+               font-size: @baseFontSize * .4;
                font-weight: normal;
                span.value{
-                  color:  #333;
-                  font-weight: normal;
-                  font-size: 14px;
+                  font-weight: lighter;
+                  font-size: @baseFontSize * .7;;
                }
                span.unit {
                   margin-left: -4px;
+               }
+               span.label {
+                  color:  #aaa;
                }
             }
          }
