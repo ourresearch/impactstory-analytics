@@ -6,6 +6,7 @@ import hashlib
 import analytics
 from impactstoryanalytics import app
 from impactstoryanalytics import widgets
+from impactstoryanalytics.widgets import products_per_profile
 from impactstoryanalytics.widgets import signup_growth
 from impactstoryanalytics.widgets import signup_funnel
 from impactstoryanalytics.widgets import monthly_active_users
@@ -51,6 +52,7 @@ dashboards = {
         latestprofile.LatestProfile()
     ],
     "scale": [
+        products_per_profile.Products_per_profile(),
         daily_new_users.Daily_new_users(),
         daily_api_calls.Daily_api_calls(),
         profiles_per_genre.Profiles_per_genre(),
