@@ -6,6 +6,7 @@ import hashlib
 import analytics
 from impactstoryanalytics import app
 from impactstoryanalytics import widgets
+from impactstoryanalytics.widgets import hourly_uniques
 from impactstoryanalytics.widgets import products_per_profile
 from impactstoryanalytics.widgets import signup_growth
 from impactstoryanalytics.widgets import signup_funnel
@@ -49,6 +50,7 @@ dashboards = {
         gmail.Gmail()
     ],
     "latest": [
+        hourly_uniques.Hourly_uniques(),
         latestprofile.LatestProfile()
     ],
     "scale": [
