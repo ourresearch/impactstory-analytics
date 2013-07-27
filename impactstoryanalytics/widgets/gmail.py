@@ -31,4 +31,4 @@ class Gmail(Widget):
         raw_data = keenio.get_raw_data()
         return keenio.ungroup(raw_data, "both", "userId")
 
-       
+
