@@ -2,13 +2,10 @@ from datetime import timedelta
 from datetime import datetime
 from collections import defaultdict
 import requests
-import couchdb
 import os
 import urllib
 import logging
 import arrow
-import operator
-import itertools
 
 from impactstoryanalytics.widgets.widget import Widget
 from impactstoryanalytics.lib import mixpanel_export
@@ -23,6 +20,13 @@ def get_raw_dataclip_data(query_url):
     raw_data = requests.get(query_url).json()
     #print raw_data
     return raw_data
+
+def perc(num, den, round_to=2):
+    try:
+        return round(100 * num / den, round_to)
+    except ZeroDivisionError:
+        return None
+
 
 class Converter():
     @classmethod

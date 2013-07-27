@@ -91,8 +91,6 @@ SparklineSet.prototype = {
     }
     ,addSparkline: function(sparkline){
         var calculatedOptions = this.calculateSSOptions()
-        console.log("before first sparkline add: ", calculatedOptions)
-        console.log("before first sparkline add: ", calculatedOptions.iaUnit)
 
         sparkline.setOptions.call(sparkline, calculatedOptions, this.rows)
         this.sparklines.push(sparkline)
