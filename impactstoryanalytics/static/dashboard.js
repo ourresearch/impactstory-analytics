@@ -15,6 +15,16 @@ function nFormatter(num) {
     return num;
 }
 
+function log10(val) {
+    if (val === 0) {
+        return 0
+    }
+    else {
+        return Math.log(val) / Math.LN10;
+    }
+
+}
+
 // PAGE FUNCTIONS
 
 function load_widget(widget, dataUrl) {

@@ -60,7 +60,8 @@ dashboards = {
     ],
     "totals":[
         itemsbycreateddate.ItemsByCreatedDate(),
-        api_keys_minted.Api_keys_minted()
+        api_keys_minted.Api_keys_minted(),
+        products_per_profile.Products_per_profile()
     ],
     "api": [
         embedded_widget_use.Embedded_widget_use()
