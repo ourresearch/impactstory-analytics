@@ -115,7 +115,7 @@ class Keenio():
         return pans.replace_NAs_with_zeroes().as_list()
 
 
-    def get_raw_data(self):
+    def get_raw_data(self, return_raw_response=False):
         response = []
         for query_name in self.queries:
             print "sending a query to keenio: " + query_name
@@ -123,6 +123,9 @@ class Keenio():
             print r.text
 
             raw_data = r.json()["result"]
+            if return_raw_response:
+                return self.get_raw_raw_data_dict()
+
 
             if self.queries[query_name]["analysis"] == "extraction":
                 response = self.timebin_extraction_data(raw_data)
@@ -134,6 +137,17 @@ class Keenio():
 
         if not response:
             response = self.timebins_as_list()
+        return response
+
+    def get_raw_raw_data_dict(self):
+        response = {}
+        for query_name in self.queries:
+            print "sending a query to keenio: " + query_name
+            r = requests.get(self.queries[query_name]["url"])
+
+            raw_data = r.json()["result"]
+            response[query_name] = raw_data
+
         return response
 
 

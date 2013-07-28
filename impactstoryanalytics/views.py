@@ -25,6 +25,7 @@ from impactstoryanalytics.widgets import profiles_per_genre
 from impactstoryanalytics.widgets import api_keys_minted
 from impactstoryanalytics.widgets import importers_used
 from impactstoryanalytics.widgets import provider_requests
+from impactstoryanalytics.widgets import profile_load_times
 
 from impactstoryanalytics.widgets.widget import Widget
 
@@ -68,7 +69,8 @@ dashboards = {
     ],
     "health": [
         javascript_errors.Javascript_errors(),
-        provider_requests.Provider_requests()
+        provider_requests.Provider_requests(),
+        profile_load_times.Profile_load_times()
     ]
 }
 
