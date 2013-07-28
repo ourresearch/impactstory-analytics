@@ -6,6 +6,7 @@ import hashlib
 import analytics
 from impactstoryanalytics import app
 from impactstoryanalytics import widgets
+from impactstoryanalytics.widgets import papertrail_alerts
 from impactstoryanalytics.widgets import api_key_item_creates
 from impactstoryanalytics.widgets import api_key_item_views
 from impactstoryanalytics.widgets import hourly_uniques
@@ -72,6 +73,7 @@ dashboards = {
         api_key_item_views.Api_key_item_views()
     ],
     "health": [
+        papertrail_alerts.Papertrail_alerts(),
         javascript_errors.Javascript_errors(),
         provider_requests.Provider_requests()
     ]
