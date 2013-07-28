@@ -75,9 +75,9 @@ dashboards = {
         api_key_item_views.Api_key_item_views()
     ],
     "health": [
-        papertrail_alerts.Papertrail_alerts(),
-        javascript_errors.Javascript_errors(),
-        provider_requests.Provider_requests(),
+        # papertrail_alerts.Papertrail_alerts(),
+        # javascript_errors.Javascript_errors(),
+        # provider_requests.Provider_requests(),
         profile_load_times.Profile_load_times()
     ]
 }

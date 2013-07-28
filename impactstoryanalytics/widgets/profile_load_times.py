@@ -1,5 +1,6 @@
 from impactstoryanalytics.widgets.widget import Widget
 from impactstoryanalytics.widgets.widget_api_helpers import Keenio
+from collections import defaultdict
 import numpy
 
 class Profile_load_times(Widget):
@@ -43,18 +44,48 @@ class Profile_load_times(Widget):
         for point in points:
             point["num_products_ceil"] = min(point["number products"], max_value)
 
+        keys = self.find_all_keys(points)
+
         bin_width = max_value / num_bins
+        bins = []
         for bin_start in xrange(0, max_value, bin_width):
-            bin_end = bin_start + bin_width
+            bin = self.create_bin(bin_start, bin_start + bin_width, keys)
+
             for point in points:
-                if point["num_products_ceil"] >= bin_start and point["num_products_ceil"] < bin_end:
-                    point["hist_bin_start"] = bin_start
-                    point["hist_bin_end"] = bin_end
+                if bin["bin_start"] <= point["num_products_ceil"] < bin["bin_end"]:
+                    key = self.key_for_this_point(point)
+                    bin[key] += 1
+
+            bins.append(bin)
+
+        return bins
 
 
-        return points
+    def key_for_this_point(self, point):
+        return "_".join([
+            "num",
+            point["success_state"],
+            point["prev collection action"]
+        ])
 
+    def find_all_keys(self, points):
+        keys = set()
+        for point in points:
+            key = self.key_for_this_point(point)
+            keys.add(key)
 
+        return list(keys)
+
+    def create_bin(self, start, end, keys):
+        bin = {
+            "bin_start": start,
+            "bin_end": end
+        }
+
+        for key in keys:
+            bin[key] = 0
+
+        return bin
 
 
     def add_to_points_list(self, new_point, points_list):

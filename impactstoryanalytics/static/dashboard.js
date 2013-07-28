@@ -173,6 +173,7 @@ Sparkline.prototype = {
                 },
                 iaSecondaryValue: function(values) {return _.max(values)},
                 tooltipFormatter: function(sparkline, options, fields) {
+                    console.log(fields)
                     return "still working on it..."
                 },
                 type:"bar",
