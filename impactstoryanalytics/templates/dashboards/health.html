@@ -3,10 +3,16 @@
 {% block dashboard_content %}
    <div class="dashboard dashboard-api">
 
+      <div class="widget widget-papertrail_alerts sparkline-set">
+         <h2>python exceptions<span>last 30 days</span></h2>
+         <div class="container"></div>
+      </div>
+
       <div class="widget widget-javascript_errors sparkline-set">
          <h2>javascript errors<span>last 30 days</span></h2>
          <div class="container"></div>
       </div>
+
       <div class="widget widget-provider-requests sparkline-set">
          <h2>Requests to providers<span>last 30 days</span></h2>
          <div class="container"></div>
@@ -15,6 +21,15 @@
       <div class="widget widget-profile-load-times sparkline-set">
          <h2>Requests to providers<span>last 30 days</span></h2>
          <div class="container"></div>
+      </div>
+
+
+      <div class="widget widget-newrelic widget-iframe">
+         <h2>new relic<span></span></h2>
+         <div class="container">
+            <iframe class="newrelic" seamless="seamless" src="https://heroku.newrelic.com/public/charts/i1exfDmo77q">
+            </iframe>
+         </div>
       </div>
 
 

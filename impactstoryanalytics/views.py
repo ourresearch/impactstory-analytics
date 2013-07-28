@@ -6,6 +6,10 @@ import hashlib
 import analytics
 from impactstoryanalytics import app
 from impactstoryanalytics import widgets
+from impactstoryanalytics.widgets import papertrail_alerts
+from impactstoryanalytics.widgets import api_key_item_creates
+from impactstoryanalytics.widgets import api_key_item_views
+from impactstoryanalytics.widgets import hourly_uniques
 from impactstoryanalytics.widgets import products_per_profile
 from impactstoryanalytics.widgets import signup_growth
 from impactstoryanalytics.widgets import signup_funnel
@@ -50,6 +54,7 @@ dashboards = {
         gmail.Gmail()
     ],
     "latest": [
+        hourly_uniques.Hourly_uniques(),
         latestprofile.LatestProfile()
     ],
     "scale": [
@@ -65,9 +70,12 @@ dashboards = {
         products_per_profile.Products_per_profile()
     ],
     "api": [
-        embedded_widget_use.Embedded_widget_use()
+        embedded_widget_use.Embedded_widget_use(),
+        api_key_item_creates.Api_key_item_creates(),
+        api_key_item_views.Api_key_item_views()
     ],
     "health": [
+        papertrail_alerts.Papertrail_alerts(),
         javascript_errors.Javascript_errors(),
         provider_requests.Provider_requests(),
         profile_load_times.Profile_load_times()
