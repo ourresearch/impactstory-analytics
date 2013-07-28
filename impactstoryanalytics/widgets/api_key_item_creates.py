@@ -21,7 +21,7 @@ class Api_key_item_creates(Widget):
         shared_params = {
             "event_collection": "Created item because of registration",
             "group_by": "api_key",
-            "timeframe": "today",
+            "timeframe": "this_30_days", # change to last_30_days after we have some data
             "interval": "daily"
         }
 
