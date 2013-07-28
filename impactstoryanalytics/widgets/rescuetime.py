@@ -57,7 +57,7 @@ class Rescuetime(Widget):
             "editing & ides",
             "quality assurance",
             "systems operations",
-            "data modeling and analysis"
+            "data modeling & analysis"
         ]
 
         if category.lower() in code_categories:
