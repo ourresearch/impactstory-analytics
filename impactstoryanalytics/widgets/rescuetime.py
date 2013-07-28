@@ -41,7 +41,7 @@ class Rescuetime(Widget):
             "perspective": "interval",
             "resolution_time": "day",
             "restrict_kind": "category",
-            "restrict_begin": date.today() - timedelta(days=6),
+            "restrict_begin": date.today() - timedelta(days=7),
             "restrict_end": date.today() + timedelta(days=1)
         }
         url = "https://www.rescuetime.com/anapi/data"

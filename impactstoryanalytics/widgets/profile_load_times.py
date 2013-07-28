@@ -1,5 +1,6 @@
 from impactstoryanalytics.widgets.widget import Widget
 from impactstoryanalytics.widgets.widget_api_helpers import Keenio
+import numpy
 
 class Profile_load_times(Widget):
 
@@ -10,14 +11,14 @@ class Profile_load_times(Widget):
         }
 
         queries = {}
-        queries["load success"] = {
+        queries["load_success"] = {
             "project": "production",
             "analysis": "extraction",
             "params": {
                 "event_collection": "Completed profile load",
             }
         }
-        queries["load failure"] = {
+        queries["load_failure"] = {
             "project": "production",
             "analysis": "extraction",
             "params": {
@@ -31,17 +32,38 @@ class Profile_load_times(Widget):
         for success_state, datapoints in raw_data_dict.iteritems():
 
             for point in datapoints:
-                if "prev collection action" not in point.keys():
-                    continue
-
-                new_point = {
-                    "success state": success_state,
-                    "seconds": point["seconds"],
-                    "number products": point["number products"]
-                }
-                all_points.append(new_point)
+                point["success_state"] = success_state
+                all_points = self.add_to_points_list(point, all_points)
 
 
+        return self.bin_points(all_points)
 
-        return all_points
+
+    def bin_points(self, points, num_bins=100, max_value=300):
+        for point in points:
+            point["num_products_ceil"] = min(point["number products"], max_value)
+
+        bin_width = max_value / num_bins
+        for bin_start in xrange(0, max_value, bin_width):
+            bin_end = bin_start + bin_width
+            for point in points:
+                if point["num_products_ceil"] >= bin_start and point["num_products_ceil"] < bin_end:
+                    point["hist_bin_start"] = bin_start
+                    point["hist_bin_end"] = bin_end
+
+
+        return points
+
+
+
+
+    def add_to_points_list(self, new_point, points_list):
+        required_keys = ["seconds", "number products", "prev collection action"]
+        for required_key in required_keys:
+            if required_key not in new_point.keys():
+                return points_list
+
+        points_list.append(new_point)
+        return points_list
+
 
