@@ -6,6 +6,8 @@ import hashlib
 import analytics
 from impactstoryanalytics import app
 from impactstoryanalytics import widgets
+from impactstoryanalytics.widgets import api_key_item_creates
+from impactstoryanalytics.widgets import api_key_item_views
 from impactstoryanalytics.widgets import hourly_uniques
 from impactstoryanalytics.widgets import products_per_profile
 from impactstoryanalytics.widgets import signup_growth
@@ -65,7 +67,9 @@ dashboards = {
         api_keys_minted.Api_keys_minted()
     ],
     "api": [
-        embedded_widget_use.Embedded_widget_use()
+        embedded_widget_use.Embedded_widget_use(),
+        api_key_item_creates.Api_key_item_creates(),
+        api_key_item_views.Api_key_item_views()
     ],
     "health": [
         javascript_errors.Javascript_errors(),
