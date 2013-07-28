@@ -84,6 +84,7 @@ dashboards = {
 base_js = [
     'js_libs/jquery.sparkline.js',
     'js_libs/underscore.js',
+    'js_libs/underscoreAddon.js',
     'js_libs/d3.min.js',
     'js_libs/d3.layout.min.js',
     'js_libs/rickshaw.js',
