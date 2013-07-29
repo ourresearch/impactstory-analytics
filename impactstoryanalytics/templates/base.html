@@ -29,7 +29,7 @@
             {% set nav_link_class = "inactive"  %}
          {% endif %}
 
-      <li><a class="{{ nav_link_class }}" href='{{ url_for("dashboard", dashboard_name=dashboard_name )}}'>{{ dashboard_name }}</a></li>
+      <li><a class="{{ nav_link_class }}" href='{{ url_for("dashboard", dashboard_name=dashboard_name )}}'>{{ dashboard_name|replace("_", " ") }}</a></li>
       {% endfor %}
    </ul>
 </div>
