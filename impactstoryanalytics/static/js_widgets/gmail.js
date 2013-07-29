@@ -12,11 +12,11 @@ Gmail.prototype = {
         var sparklineOptions = [
             {
                 iaClassName: "Jason",
-                iaShareYAxis: true
+                iaShareYAxis: false
             },
             {
                 iaClassName:"Heather",
-                iaShareYAxis: true
+                iaShareYAxis: false
             }
         ]
         var ss = new SparklineSet(data, baseOptions)

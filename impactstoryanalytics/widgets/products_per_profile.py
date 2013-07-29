@@ -13,8 +13,12 @@ class Products_per_profile(Widget):
 
     def get_data(self):
         rows = Couchdb.get_view("products_per_collection/products_per_collection", True)
-        products_per_profile = {}
+        result = []
         for row in rows:
-            products_per_profile[row["key"]] = row["value"]
+            result.append({
+            				"products_per_profile": row["key"], 
+            				"number_of_profiles": row["value"],
+            				"start_iso": "1900-01-01 00:00:00+00:00"  # dummy date to keep sparklines wrappers happy
+            				})
 
-        return products_per_profile
+        return result
