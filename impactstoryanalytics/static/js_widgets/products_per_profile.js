@@ -70,13 +70,40 @@ Products_per_profile.prototype = {
         var sparkline = new Sparkline(options)
         ss.addSparkline(sparkline)
 
+        // build histogram of bin size 10
+        var binned_array = that.build_histogram_array_binned(iaYvalues_bin_size_1, 10)
         var options = { 
-                iaClassName: "histogram"
-            }
-        var ss = new SparklineSet(data, baseOptions)
+                iaClassName: "profiles_10_to_100",
+                iaDisplayName: "10-100, by 10s",
+                iaYvalues: _.map(that.fraction(binned_array, number_of_profiles).slice(1,10), Math.round),
+                tooltipFormatter: function(sparkline, options, fields) {
+                    var stepSize = 10
+                    var bottomBracket = (1+fields[0]["offset"])*stepSize
+                    var upperBracket = bottomBracket + stepSize
+                    var percentofProducts = fields[0]["value"]
+                    return percentofProducts+'% of profiles have '+bottomBracket+'-'+upperBracket+' products.'
+                }                                               
+        }
         var sparkline = new Sparkline(options)
         ss.addSparkline(sparkline)
+
+        // build histogram of bin size 100
+        var binned_array = that.build_histogram_array_binned(iaYvalues_bin_size_1, 100)
+        var options = { 
+                iaClassName: "profiles_100_to_1000",
+                iaDisplayName: "100-1000, by 100s",
+                iaYvalues: _.map(that.fraction(binned_array, number_of_profiles).slice(1,10), Math.round),
+                tooltipFormatter: function(sparkline, options, fields) {
+                    var stepSize = 100
+                    var bottomBracket = (1+fields[0]["offset"])*stepSize
+                    var upperBracket = bottomBracket + stepSize
+                    var percentofProducts = fields[0]["value"]
+                    return percentofProducts+'% of profiles have '+bottomBracket+'-'+upperBracket+' products.'
+                }                                               
+        }
+        var sparkline = new Sparkline(options)
+        ss.addSparkline(sparkline)
+
         ss.render($(".widget-products_per_profile"))
     }
 }
-
