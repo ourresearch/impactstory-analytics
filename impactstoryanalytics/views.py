@@ -55,7 +55,7 @@ dashboards = {
         github.Github(),
         gmail.Gmail()
     ],
-    "latest": [
+    "realtime": [
         hourly_uniques.Hourly_uniques(),
         latestprofile.LatestProfile()
     ],
@@ -81,6 +81,12 @@ dashboards = {
         javascript_errors.Javascript_errors(),
         provider_requests.Provider_requests(),
         profile_load_times.Profile_load_times()
+    ],
+    "profiles": [
+
+    ],
+    "provider_health": [
+
     ]
 }
 
