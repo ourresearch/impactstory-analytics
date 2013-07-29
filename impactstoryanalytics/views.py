@@ -84,7 +84,7 @@ dashboards = {
     "realtime": [
         hourly_uniques.Hourly_uniques()
     ],
-      "today": [
+    "today": [
     ]
 }
 

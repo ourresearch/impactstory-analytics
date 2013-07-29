@@ -1,9 +1,17 @@
-<!DOCTYPE html>
-<html>
-<head>
-   <title></title>
-</head>
-<body>
+{% extends "dashboard.html" %}
 
-</body>
-</html>
+{% block dashboard_content %}
+   <div class="dashboard dashboard-profiles">
+
+
+      <div class="widget widget-provider-requests sparkline-set">
+         <h2>Requests to providers<span>last 30 days</span></h2>
+         <div class="container"></div>
+      </div>
+
+
+
+   </div>
+
+
+{% endblock %}
