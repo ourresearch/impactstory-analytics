@@ -22,8 +22,9 @@ from impactstoryanalytics.widgets import github
 from impactstoryanalytics.widgets import latestprofile
 from impactstoryanalytics.widgets import itemsbycreateddate
 from impactstoryanalytics.widgets import uservoice_tickets
-from impactstoryanalytics.widgets import embedded_widget_use
 from impactstoryanalytics.widgets import uservoice_suggestions
+from impactstoryanalytics.widgets import uservoice_suggestions_upvoted
+from impactstoryanalytics.widgets import embedded_widget_use
 from impactstoryanalytics.widgets import javascript_errors
 from impactstoryanalytics.widgets import profiles_per_genre
 from impactstoryanalytics.widgets import api_keys_minted
@@ -48,6 +49,7 @@ dashboards = {
     "productivity": [
         uservoice_tickets.Uservoice_tickets(),
         uservoice_suggestions.Uservoice_suggestions(),
+        uservoice_suggestions_upvoted.Uservoice_suggestions_upvoted(),
         rescuetime.Rescuetime(),
         github.Github(),
         gmail.Gmail()

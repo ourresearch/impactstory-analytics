@@ -153,6 +153,11 @@ div.dashboard {
             clear:both;
             width: 100%;
             font-size: @baseFontSize;
+            &.show-sparkline-false {
+               span.sparkline {
+                  display: none;
+               }
+            }
             &.size-small {
                @baseFontSize: 18px;
                font-size:  @baseFontSize;
@@ -267,7 +272,7 @@ div.dashboard {
                font-weight: normal;
                span.value{
                   font-weight: lighter;
-                  font-size: @baseFontSize * .7;;
+                  font-size: @baseFontSize * .7;
                }
                span.unit {
                   margin-left: -4px;

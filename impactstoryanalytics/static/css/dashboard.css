@@ -136,6 +136,9 @@ div.dashboard div.widget div.container div.sparkline-with-numbers {
   width: 100%;
   font-size: 24px;
 }
+div.dashboard div.widget div.container div.sparkline-with-numbers.show-sparkline-false span.sparkline {
+  display: none;
+}
 div.dashboard div.widget div.container div.sparkline-with-numbers.size-small {
   font-size: 18px;
   margin-bottom: 10.799999999999999px;

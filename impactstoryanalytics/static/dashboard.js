@@ -146,7 +146,8 @@ var Sparkline = function(userSuppliedOptions){
         width: "150px",
         iaHighlight: false,
         iaBorderTop: false,
-        iaSize: "medium"
+        iaSize: "medium",
+        iaShowSparkline: true
     }
     this.userSuppliedOptions = userSuppliedOptions
     this.options = {}

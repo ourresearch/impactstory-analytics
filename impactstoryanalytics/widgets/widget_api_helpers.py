@@ -297,6 +297,16 @@ class Uservoice():
 
         return(suggestion_dict)
 
+    @classmethod
+    def get_suggestion_details(cls):
+        logger.info("Getting uservoice suggestion details")
+
+        owner = cls.get_uservoice_owner()
+        suggestions_active = owner.get("/api/v1/suggestions?filter=active&per_page=1000")["suggestions"]
+        suggestions_inbox = owner.get("/api/v1/suggestions?filter=inbox&per_page=1000")["suggestions"]
+        suggestions = suggestions_active + suggestions_inbox
+
+        return suggestions
 
 
 class Couchdb():
