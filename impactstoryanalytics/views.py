@@ -75,12 +75,12 @@ dashboards = {
         profiles_per_genre.Profiles_per_genre(),
         importers_used.Importers_used(),
         itemsbycreateddate.ItemsByCreatedDate(),
-        latestprofile.LatestProfile()
     ],
     "provider_health": [
-        provider_requests.Provider_requests()    
-    ],    
+        provider_requests.Provider_requests()
+    ],
     "realtime": [
+        latestprofile.LatestProfile(),
         hourly_uniques.Hourly_uniques()
     ],
     "today": [
