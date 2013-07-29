@@ -14,7 +14,9 @@ Uservoice_suggestions_upvoted.prototype = {
             var options = {
                     iaDisplayName: suggestion["title"],
                     iaHref: suggestion["url"],
-                    iaYvalues: [suggestion["vote_count"]]               
+                    iaYvalues: [suggestion["vote_count"]],               
+                    iaSecondaryValue: function(yValues) {return suggestion["subscriber_count"]},               
+                    iaSecondaryValueLabel: "subscribers"               
                 }
             var sparkline = new Sparkline(options)
             ss.addSparkline(sparkline)
