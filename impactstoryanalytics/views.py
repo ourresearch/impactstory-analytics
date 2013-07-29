@@ -6,31 +6,31 @@ import hashlib
 import analytics
 from impactstoryanalytics import app
 from impactstoryanalytics import widgets
-from impactstoryanalytics.widgets import papertrail_alerts
 from impactstoryanalytics.widgets import api_key_item_creates
 from impactstoryanalytics.widgets import api_key_item_views
-from impactstoryanalytics.widgets import hourly_uniques
-from impactstoryanalytics.widgets import products_per_profile
-from impactstoryanalytics.widgets import signup_growth
-from impactstoryanalytics.widgets import signup_funnel
-from impactstoryanalytics.widgets import monthly_active_users
+from impactstoryanalytics.widgets import api_keys_minted
 from impactstoryanalytics.widgets import daily_new_users
 from impactstoryanalytics.widgets import daily_api_calls
-from impactstoryanalytics.widgets import rescuetime
+from impactstoryanalytics.widgets import embedded_widget_use
 from impactstoryanalytics.widgets import gmail
 from impactstoryanalytics.widgets import github
-from impactstoryanalytics.widgets import latestprofile
+from impactstoryanalytics.widgets import hourly_uniques
 from impactstoryanalytics.widgets import itemsbycreateddate
+from impactstoryanalytics.widgets import importers_used
+from impactstoryanalytics.widgets import javascript_errors
+from impactstoryanalytics.widgets import latestprofile
+from impactstoryanalytics.widgets import monthly_active_users
+from impactstoryanalytics.widgets import papertrail_alerts
+from impactstoryanalytics.widgets import profiles_per_genre
+from impactstoryanalytics.widgets import profile_load_times
+from impactstoryanalytics.widgets import products_per_profile
+from impactstoryanalytics.widgets import provider_requests
+from impactstoryanalytics.widgets import rescuetime
+from impactstoryanalytics.widgets import signup_growth
+from impactstoryanalytics.widgets import signup_funnel
 from impactstoryanalytics.widgets import uservoice_tickets
 from impactstoryanalytics.widgets import uservoice_suggestions
 from impactstoryanalytics.widgets import uservoice_suggestions_upvoted
-from impactstoryanalytics.widgets import embedded_widget_use
-from impactstoryanalytics.widgets import javascript_errors
-from impactstoryanalytics.widgets import profiles_per_genre
-from impactstoryanalytics.widgets import api_keys_minted
-from impactstoryanalytics.widgets import importers_used
-from impactstoryanalytics.widgets import provider_requests
-from impactstoryanalytics.widgets import profile_load_times
 
 from impactstoryanalytics.widgets.widget import Widget
 
@@ -42,45 +42,49 @@ logger = logging.getLogger("impactstoryanalytics.views")
 
 # define dashboards
 dashboards = {
-    "engagement": [
-        signup_growth.Signup_growth(),
-        signup_funnel.Signup_funnel(),
-        monthly_active_users.Monthly_active_users()
-    ],
-    "productivity": [
-        uservoice_tickets.Uservoice_tickets(),
-        uservoice_suggestions.Uservoice_suggestions(),
-        uservoice_suggestions_upvoted.Uservoice_suggestions_upvoted(),
-        rescuetime.Rescuetime(),
-        github.Github(),
-        gmail.Gmail()
-    ],
-    "latest": [
-        hourly_uniques.Hourly_uniques(),
-        latestprofile.LatestProfile()
-    ],
-    "scale": [
-        products_per_profile.Products_per_profile(),
-        daily_new_users.Daily_new_users(),
-        daily_api_calls.Daily_api_calls(),
-        profiles_per_genre.Profiles_per_genre(),
-        importers_used.Importers_used()
-    ],
-    "totals":[
-        itemsbycreateddate.ItemsByCreatedDate(),
-        api_keys_minted.Api_keys_minted(),
-        products_per_profile.Products_per_profile()
+    "today": [
     ],
     "api": [
         embedded_widget_use.Embedded_widget_use(),
         api_key_item_creates.Api_key_item_creates(),
-        api_key_item_views.Api_key_item_views()
+        api_key_item_views.Api_key_item_views(),
+        daily_api_calls.Daily_api_calls(),
+        api_keys_minted.Api_keys_minted()                
     ],
     "health": [
         papertrail_alerts.Papertrail_alerts(),
         javascript_errors.Javascript_errors(),
-        provider_requests.Provider_requests(),
         profile_load_times.Profile_load_times()
+    ],
+    "profile_characteristics": [
+        products_per_profile.Products_per_profile(),
+        profiles_per_genre.Profiles_per_genre(),
+        importers_used.Importers_used(),
+        products_per_profile.Products_per_profile(),
+        itemsbycreateddate.ItemsByCreatedDate(),
+        latestprofile.LatestProfile()
+    ],
+    "productivity": [
+        gmail.Gmail(),
+        rescuetime.Rescuetime(),
+        uservoice_tickets.Uservoice_tickets(),
+        uservoice_suggestions.Uservoice_suggestions(),
+        uservoice_suggestions_upvoted.Uservoice_suggestions_upvoted(),
+        github.Github(),
+        papertrail_alerts.Papertrail_alerts(),
+        javascript_errors.Javascript_errors()
+    ],    
+    "provider_health": [
+        provider_requests.Provider_requests()    
+    ],    
+    "engagement": [
+        signup_growth.Signup_growth(),
+        signup_funnel.Signup_funnel(),
+        monthly_active_users.Monthly_active_users(),
+        daily_new_users.Daily_new_users()
+    ],
+    "right_now": [
+        hourly_uniques.Hourly_uniques()
     ]
 }
 
