@@ -74,7 +74,6 @@ dashboards = {
         products_per_profile.Products_per_profile(),
         profiles_per_genre.Profiles_per_genre(),
         importers_used.Importers_used(),
-        products_per_profile.Products_per_profile(),
         itemsbycreateddate.ItemsByCreatedDate(),
         latestprofile.LatestProfile()
     ],
