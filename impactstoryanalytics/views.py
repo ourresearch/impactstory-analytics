@@ -127,7 +127,7 @@ def load_dashboards_list():
 # static pages
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('today.html')
 
 @app.route('/favicon.ico')
 def favicon_ico():
