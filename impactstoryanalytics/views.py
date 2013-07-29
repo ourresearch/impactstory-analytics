@@ -42,8 +42,6 @@ logger = logging.getLogger("impactstoryanalytics.views")
 
 # define dashboards
 dashboards = {
-    "today": [
-    ],
     "api": [
         embedded_widget_use.Embedded_widget_use(),
         api_key_item_creates.Api_key_item_creates(),
@@ -51,18 +49,16 @@ dashboards = {
         daily_api_calls.Daily_api_calls(),
         api_keys_minted.Api_keys_minted()                
     ],
+    "engagement": [
+        signup_growth.Signup_growth(),
+        signup_funnel.Signup_funnel(),
+        monthly_active_users.Monthly_active_users(),
+        daily_new_users.Daily_new_users()
+    ],    
     "health": [
         papertrail_alerts.Papertrail_alerts(),
         javascript_errors.Javascript_errors(),
         profile_load_times.Profile_load_times()
-    ],
-    "profile_characteristics": [
-        products_per_profile.Products_per_profile(),
-        profiles_per_genre.Profiles_per_genre(),
-        importers_used.Importers_used(),
-        products_per_profile.Products_per_profile(),
-        itemsbycreateddate.ItemsByCreatedDate(),
-        latestprofile.LatestProfile()
     ],
     "productivity": [
         gmail.Gmail(),
@@ -73,18 +69,22 @@ dashboards = {
         github.Github(),
         papertrail_alerts.Papertrail_alerts(),
         javascript_errors.Javascript_errors()
-    ],    
+    ],      
+    "profiles": [
+        products_per_profile.Products_per_profile(),
+        profiles_per_genre.Profiles_per_genre(),
+        importers_used.Importers_used(),
+        products_per_profile.Products_per_profile(),
+        itemsbycreateddate.ItemsByCreatedDate(),
+        latestprofile.LatestProfile()
+    ],
     "provider_health": [
         provider_requests.Provider_requests()    
     ],    
-    "engagement": [
-        signup_growth.Signup_growth(),
-        signup_funnel.Signup_funnel(),
-        monthly_active_users.Monthly_active_users(),
-        daily_new_users.Daily_new_users()
-    ],
-    "right_now": [
+    "realtime": [
         hourly_uniques.Hourly_uniques()
+    ],
+      "today": [
     ]
 }
 
