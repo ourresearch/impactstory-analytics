@@ -7,6 +7,8 @@ Profile_load_times.prototype = {
 
         var baseOptions = {
             type: "bar",
+            barWidth: "3px",
+            iaReplaceZerosWithNulls: true,
             tooltipFormatter: function(s, o, fields){
                 console.log(fields)
                 var binStart = fields[0].offset * binWidth
@@ -30,7 +32,8 @@ Profile_load_times.prototype = {
             {
                 iaClassName:"num_load_success_create",
                 iaDisplayName: "successful after create",
-                iaShareYAxis: true
+                iaShareYAxis: true,
+                iaBorderTop:true
             },
             {
                 iaClassName:"num_load_failure_create",
@@ -40,13 +43,16 @@ Profile_load_times.prototype = {
             {
                 iaClassName:"num_load_success_refresh",
                 iaDisplayName: "successful after refresh",
-                iaShareYAxis: true
-            },
-            {
-                iaClassName:"num_load_failure_refresh",
-                iaDisplayName: "failed after refresh",
-                iaShareYAxis: true
+                iaShareYAxis: true,
+                iaBorderTop:true
+
             }
+//            there aren't any of these yet:
+//            {
+//                iaClassName:"num_load_failure_refresh",
+//                iaDisplayName: "failed after refresh",
+//                iaShareYAxis: true
+//            }
         ]
         var ss = new SparklineSet(data, baseOptions)
         _.each(sparklineOptions, function(options){

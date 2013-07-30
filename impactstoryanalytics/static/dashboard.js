@@ -193,7 +193,8 @@ var Sparkline = function(userSuppliedOptions){
         iaHighlight: false,
         iaBorderTop: false,
         iaSize: "medium",
-        iaShowSparkline: true
+        iaShowSparkline: true,
+        iaReplaceZerosWithNulls: false
     }
     this.userSuppliedOptions = userSuppliedOptions || {}
     this.options = {}
@@ -309,6 +310,20 @@ Sparkline.prototype = {
 
         if (options.iaSize == "small") {
             options.width = "75px"
+        }
+
+        if (options.iaReplaceZerosWithNulls) {
+            console.log("replacing zeroes with nulls")
+            options.iaYvalues = _.map(options.iaYvalues, function(yValue){
+                if (yValue === 0) {
+                    console.log("found a zero")
+                    return null
+                }
+                else {
+                    return yValue
+                }
+            })
+            console.log("replaced zeroes with nulls: ", options.iaYvalues)
         }
 
         return options

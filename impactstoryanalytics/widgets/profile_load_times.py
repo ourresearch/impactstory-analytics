@@ -29,6 +29,8 @@ class Profile_load_times(Widget):
 
         keenio = Keenio(queries, shared_params)
         raw_data_dict = keenio.get_raw_data(True)
+
+
         all_points = []
         for success_state, datapoints in raw_data_dict.iteritems():
 
@@ -37,10 +39,12 @@ class Profile_load_times(Widget):
                 all_points = self.add_to_points_list(point, all_points)
 
 
-        return self.bin_points(all_points)
+        sample_profile_loads, no_sample_profile_loads = self.filter_sample_profiles(all_points)
+
+        return self.bin_points(no_sample_profile_loads)
 
 
-    def bin_points(self, points, num_bins=100, max_value=300):
+    def bin_points(self, points, num_bins=40, max_value=200):
         for point in points:
             point["num_products_ceil"] = min(point["number products"], max_value)
 
@@ -96,5 +100,17 @@ class Profile_load_times(Widget):
 
         points_list.append(new_point)
         return points_list
+
+    def filter_sample_profiles(self, events):
+        sample_profile_events = []
+        no_sample_profile_events = []
+        for event in events:
+            if event["collection id"] == "q1kvih":
+                sample_profile_events.append(event)
+            else:
+                no_sample_profile_events.append(event)
+
+        return sample_profile_events, no_sample_profile_events
+
 
 
