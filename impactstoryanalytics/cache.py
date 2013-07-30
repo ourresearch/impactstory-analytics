@@ -16,16 +16,29 @@ class CacheException(Exception):
 class Cache(object):
     """ Maintains a cache of URL responses in memcached """
 
-    def __init__(self, max_cache_age=60*60):  #one hour
+    def __init__(self, max_cache_age=60*60, enabled=True):  #one hour
         self.max_cache_age = max_cache_age
         self.mc = self._get_memcached_client()
+        self.enabled = True
+        if not self.mc:
+            logger.info("MEMCACHIER env variables aren't set, so DISABLING CACHING")
+            self.enabled = False            
+        if (os.environ.get('DISABLE_CACHE', "0") == "1"):
+            logger.info("found DISABLE_CACHE so disabling cache")
+            self.enabled = False
+        if self.enabled:
+            logger.info("caching is ENABLED")
 
     def _get_memcached_client(self):
-        mc = pylibmc.Client(
-            servers=[os.environ.get('MEMCACHIER_SERVERS')],
-            username=os.environ.get('MEMCACHIER_USERNAME'),
-            password=os.environ.get('MEMCACHIER_PASSWORD'),
-            binary=True)
+        try:
+            mc = pylibmc.Client(
+                    servers=[os.environ.get('MEMCACHIER_SERVERS')],
+                    username=os.environ.get('MEMCACHIER_USERNAME'),
+                    password=os.environ.get('MEMCACHIER_PASSWORD'),
+                    binary=True)
+        except AttributeError:
+            logger.info("MEMCACHIER env variables aren't set, so no valid cache client")
+            mc = None
         return mc
 
     def flush_cache(self):
@@ -39,12 +52,19 @@ class Cache(object):
 
     def get_cache_entry(self, key):
         """ Get an entry from the cache, returns None if not found """
+
+        if not self.enabled:
+            return None
+
         hash_key = self._build_hash_key(key)
         response = self.mc.get(hash_key)
         return response
 
     def set_cache_entry(self, key, data, max_cache_age=None):
         """ Store a cache entry """
+
+        if not self.enabled:
+            return None
 
         if not max_cache_age:
             max_cache_age = self.max_cache_age  # use default
