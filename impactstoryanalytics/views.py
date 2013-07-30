@@ -35,6 +35,7 @@ from impactstoryanalytics.widgets import uservoice_suggestions
 from impactstoryanalytics.widgets import uservoice_suggestions_upvoted
 
 from impactstoryanalytics.widgets.widget import Widget
+import cache
 
 from flask import request, abort, make_response, g, redirect, url_for
 from flask import render_template
@@ -116,6 +117,8 @@ for board, widgets in dashboards.iteritems():
 assets.register('js_all', Bundle(*base_js))
 assets.register('css_all', Bundle(*base_css))
 
+memcache_client = cache.Cache()
+
 
 
 
@@ -141,7 +144,25 @@ def widget_data(widget_name):
     class_name = widget_name[0].capitalize() + widget_name[1:]
     widget = getattr(module, class_name)()
 
-    resp = make_response(json.dumps(widget.get_data(), indent=4), 200)
+    # get it from the cache if it is there
+    cache_key = "widget_{widget_name}_{url}".format(
+        widget_name=widget_name, 
+        url=request.url)
+    widget_response = memcache_client.get_cache_entry(cache_key)
+
+    # if not there, get it from widget and cache it
+    if widget_response:
+        logger.info("CACHE HIT for {cache_key}".format(
+            cache_key=cache_key))
+    else:
+        logger.info("CACHE MISS for {cache_key}".format(
+            cache_key=cache_key))
+        widget_response = widget.get_data()
+        memcache_client.set_cache_entry(cache_key, 
+                                        widget_response, 
+                                        widget.max_cache_age)
+
+    resp = make_response(json.dumps(widget_response, indent=4), 200)
     resp.mimetype = "application/json"
     return resp
 
