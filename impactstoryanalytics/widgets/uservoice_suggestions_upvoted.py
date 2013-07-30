@@ -14,9 +14,6 @@ import arrow
 from impactstoryanalytics.widgets.widget import Widget
 from impactstoryanalytics.widgets.widget_api_helpers import Uservoice
 
-import cache
-
-
 
 logger = logging.getLogger("impactstoryanalytics.widgets.uservoice_suggestions_upvoted")
 

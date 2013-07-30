@@ -12,7 +12,6 @@ import json
 import arrow
 
 from impactstoryanalytics.widgets.widget import Widget
-import cache
 
 
 
