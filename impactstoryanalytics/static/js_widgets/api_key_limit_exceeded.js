@@ -1,20 +1,18 @@
-var Daily_api_calls = function() {
+var Api_key_limit_exceeded = function() {
 }
-
-Daily_api_calls.prototype = {
+Api_key_limit_exceeded.prototype = {
     create:function(data){
         var baseOptions = {
             tooltipFormatter:function(sparkline, options, fields){
-                var dateStr = moment(fields.x*1000).format("ddd MMM Do")
+                moment().zone(0)
+                var dateStr = moment.utc(fields.x*1000).format("ddd h:mm a z")
                 return "<span>" + fields.y + '</span>' + ', ' + dateStr
             }
         }
         var sparklineOptions = [
             {
-                iaClassName: "GET",
-            },
-            {
-                iaClassName: "POST",
+                iaClassName: "api_key_limit_exceeded",
+                iaDisplayName: "Calls with key over limit"
             }
         ]
         var ss = new SparklineSet(data, baseOptions)
@@ -22,6 +20,7 @@ Daily_api_calls.prototype = {
             var sparkline = new Sparkline(options)
             ss.addSparkline(sparkline)
         })
-        ss.render($(".widget-daily_api_calls"))
+        ss.render($(".widget-api_key_limit_exceeded"))
     }
 }
+

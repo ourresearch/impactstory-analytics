@@ -5,9 +5,6 @@ Api_key_item_creates.prototype = {
     create:function(data){
         console.log("Api_key_item_creates data" , data)
 
-        var total = _.sum(_.pluck(data, ))
-
-
         var baseOptions = {
             iaLabelWidth: "2"
         }

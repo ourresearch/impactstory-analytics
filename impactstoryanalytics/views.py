@@ -10,8 +10,8 @@ from impactstoryanalytics import widgets
 from impactstoryanalytics.widgets import api_key_item_creates
 from impactstoryanalytics.widgets import api_key_item_views
 from impactstoryanalytics.widgets import api_keys_minted
+from impactstoryanalytics.widgets import api_key_limit_exceeded
 from impactstoryanalytics.widgets import daily_new_users
-from impactstoryanalytics.widgets import daily_api_calls
 from impactstoryanalytics.widgets import embedded_widget_use
 from impactstoryanalytics.widgets import gmail
 from impactstoryanalytics.widgets import github
@@ -46,10 +46,10 @@ logger = logging.getLogger("impactstoryanalytics.views")
 dashboards = OrderedDict([
     ("api", [
         embedded_widget_use.Embedded_widget_use(),
-        api_key_item_creates.Api_key_item_creates(),
+        api_keys_minted.Api_keys_minted(),                
+        api_key_limit_exceeded.Api_key_limit_exceeded(),                
         api_key_item_views.Api_key_item_views(),
-        daily_api_calls.Daily_api_calls(),
-        api_keys_minted.Api_keys_minted()                
+        api_key_item_creates.Api_key_item_creates()
     ]),
     ("engagement", [
         signup_growth.Signup_growth(),
