@@ -4,8 +4,12 @@ var Api_key_item_creates = function() {
 Api_key_item_creates.prototype = {
     create:function(data){
         console.log("Api_key_item_creates data" , data)
+
+        var total = _.sum(_.pluck(data, ))
+
+
         var baseOptions = {
-            iaLabelWidth: "1"
+            iaLabelWidth: "2"
         }
         var ss = new SparklineSet(data, baseOptions)
 

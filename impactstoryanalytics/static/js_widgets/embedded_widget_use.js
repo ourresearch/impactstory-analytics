@@ -4,16 +4,18 @@ Embedded_widget_use.prototype = {
     create:function(data){
 
         var baseOptions = {
-            iaLabelWidth: "2"
+            iaLabelWidth: "1"
         }
         var sparklineOptions = [
             {
                 iaClassName:"clickthroughs"
             },
             {
-                iaClassName:"conversion-rate", // note hyphen gets removed automatically for display name...
+                iaClassName:"conversion-rate",
+                iaDisplayName: "conversion%",
                 iaYvalues: SparklineSet.conversionRate(data, "clickthroughs", "pageviews"),
-                iaUnit: "percent"
+                iaUnit: "percent",
+                chartRangeMax: false
             },
             {
                 iaClassName:"pageviews"
