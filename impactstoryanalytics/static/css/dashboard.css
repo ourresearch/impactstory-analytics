@@ -94,6 +94,21 @@ div.dashboard div.widget.widget-iframe div.container iframe {
   left: -179px;
   z-index: 1;
 }
+div.dashboard div.widget.widget-iframe div.container iframe path {
+  fill: red !important;
+}
+div.dashboard div.widget.widget-iframe.widget-newrelic div.container {
+  width: 206px;
+  height: 135px;
+  border-width: 1px;
+}
+div.dashboard div.widget.widget-iframe.widget-newrelic div.container iframe {
+  width: 1100px;
+  height: 800px;
+  -webkit-transform: scale(0.2);
+  top: -334px;
+  left: -447px;
+}
 div.dashboard div.widget h2 {
   padding: 0 0 3px 10px;
   margin-bottom: 15px;

@@ -87,7 +87,7 @@ div.dashboard {
       padding:  10px 40px 10px 10px;
       float:left;
       &.widget-iframe {
-         div.container{
+         div.container{ // default for all iframe widgets
             width: 742px;
             height: 540px;
             overflow: hidden;
@@ -102,6 +102,23 @@ div.dashboard {
                top:  -130px;
                left:  -179px;
                z-index: 1;
+               path {
+                  fill: red !important;
+               }
+            }
+         }
+         &.widget-newrelic { // just for the new relic widgets
+            div.container {
+               width: 206px;
+               height: 135px;
+               border-width: 1px;
+               iframe {
+                  width: 1100px;
+                  height: 800px;
+                  -webkit-transform: scale(0.2);
+                  top:  -334px;
+                  left:  -447px;
+               }
             }
          }
       }
