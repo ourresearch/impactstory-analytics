@@ -18,10 +18,10 @@ from impactstoryanalytics.widgets import github
 from impactstoryanalytics.widgets import hourly_uniques
 from impactstoryanalytics.widgets import itemsbycreateddate
 from impactstoryanalytics.widgets import importers_used
-from impactstoryanalytics.widgets import javascript_errors
+from impactstoryanalytics.widgets import exceptions
 from impactstoryanalytics.widgets import latestprofile
 from impactstoryanalytics.widgets import monthly_active_users
-from impactstoryanalytics.widgets import papertrail_alerts
+from impactstoryanalytics.widgets import showstopper_papertrail_alerts
 from impactstoryanalytics.widgets import profiles_per_genre
 from impactstoryanalytics.widgets import profile_load_times
 from impactstoryanalytics.widgets import products_per_profile
@@ -48,7 +48,8 @@ dashboards = OrderedDict([
         embedded_widget_use.Embedded_widget_use(),
         api_key_item_creates.Api_key_item_creates(),
         api_key_item_views.Api_key_item_views(),
-        api_keys_minted.Api_keys_minted()
+        api_keys_minted.Api_keys_minted(),
+        api_key_limit_exceeded.Api_key_limit_exceeded()
     ]),
     ("engagement", [
         signup_growth.Signup_growth(),
@@ -57,8 +58,8 @@ dashboards = OrderedDict([
         daily_new_users.Daily_new_users()
     ]),    
     ("health", [
-        papertrail_alerts.Papertrail_alerts(),
-        javascript_errors.Javascript_errors(),
+        showstopper_papertrail_alerts.Showstopper_papertrail_alerts(),
+        exceptions.Exceptions(),
         profile_load_times.Profile_load_times()
     ]),
     ("productivity", [
@@ -68,8 +69,7 @@ dashboards = OrderedDict([
         uservoice_suggestions.Uservoice_suggestions(),
         uservoice_suggestions_upvoted.Uservoice_suggestions_upvoted(),
         github.Github(),
-        papertrail_alerts.Papertrail_alerts(),
-        javascript_errors.Javascript_errors()
+        exceptions.Exceptions()
     ]),      
     ("profiles", [
         products_per_profile.Products_per_profile(),
