@@ -43,6 +43,13 @@ div#navbar h1 span {
   color: #ff4e00;
   letter-spacing: 1px;
 }
+div#navbar span.last-updated {
+  color: #aaa;
+  float: left;
+  font-size: 12px;
+  display: inline-block;
+  margin: 16px 0 0 10px;
+}
 div#navbar ul.nav {
   padding: 0;
   margin: 0;

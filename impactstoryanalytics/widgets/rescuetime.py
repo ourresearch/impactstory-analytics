@@ -1,15 +1,10 @@
 import time
 from datetime import timedelta
 from datetime import date
-from datetime import datetime
-from collections import defaultdict
 import requests
 import iso8601
 import os
 import logging
-import pytz
-import json
-import arrow
 
 from impactstoryanalytics.widgets.widget import Widget
 

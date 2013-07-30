@@ -49,7 +49,33 @@ function load_widget(widget, dataUrl) {
                }
            })
 }
-
+function PagesController(loc){
+    this.loc = loc
+    this.init()
+    this.refreshTime = 60*2 // every two minutes
+}
+PagesController.prototype = {
+    init: function(){
+        var that = this
+        var pageMethodName = this.loc.pathname.slice(1) + "Page"
+        if (pageMethodName in this) {
+            this[pageMethodName]()
+        }
+        this.allPages()
+        setTimeout(function(){that.init.call(that)}, that.refreshTime*1000)
+    }
+    ,todayPage: function(){
+        console.log("welcome to the today page!")
+    }
+    ,allPages: function() {
+        var that = this
+        _.each(widgetNames, function(name){
+            var widget = makeObjFromName(name)
+            var dataUrl = "/widget_data/"+name
+            load_widget(widget, dataUrl)
+        })
+    }
+}
 
 
 
@@ -138,12 +164,14 @@ SparklineSet.prototype = {
     ,render: function(loc$) {
         var that = this
         var max = this.findOverallMax()
+        var container$ = loc$.find(".container")
+        container$.empty()
         _.each(this.sparklines, function(sparkline){
             sparkline.setYAxisMaxIfShared(max)
-            sparkline.render(loc$, that.calculatedOptions, that.rows)
+            sparkline.render(container$, that.calculatedOptions, that.rows)
         })
         _.each(this.summarySparklines, function(sparkline){
-            sparkline.render(loc$, that.calculatedOptions, that.rows)
+            sparkline.render(container$, that.calculatedOptions, that.rows)
         })
     }
     ,sortBy: function(sortBy){
@@ -257,7 +285,7 @@ Sparkline.prototype = {
     }
     ,render: function(container$){
         var elem$ = ich.sparklineWithNumbers(this.options)
-        container$.find("div.container").append(elem$)
+        container$.append(elem$)
         container$.find(".sparkline."+this.options.iaClassName)
             .sparkline(this.options.iaYvalues, this.options)
         return container$
@@ -354,11 +382,7 @@ Sparkline.prototype = {
 
 // PROCEDURAL CODE
 $(document).ready(function(){
+    var pageController = new PagesController(location)
 
-    _.each(widgetNames, function(name){
-        var widget = makeObjFromName(name)
-        var dataUrl = "/widget_data/"+name
-        load_widget(widget, dataUrl)
-    })
 
 })
