@@ -4,8 +4,10 @@ var Api_key_item_creates = function() {
 Api_key_item_creates.prototype = {
     create:function(data){
         console.log("Api_key_item_creates data" , data)
+        var that = this
 
-        var total = _.sum(_.pluck(data, ))
+
+        console.log("transformed data. here it is: ", data)
 
 
         var baseOptions = {
@@ -28,7 +30,12 @@ Api_key_item_creates.prototype = {
             ss.addSparkline(new Sparkline(options))
         })
 
-        ss.sortBy("max").first(10).render($(".widget_api_key_item_creates"))
+        ss
+            .sortBy("max")
+            .first(10)
+            .addTotalSparkline({iaSize: "small"})
+            .render($(".widget_api_key_item_creates"))
     }
+
 }
 

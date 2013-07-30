@@ -100,9 +100,10 @@ SparklineSet.prototype = {
         return calculatedOptions
     }
     ,addSparkline: function(sparkline){
+        var that = this
         var calculatedOptions = this.calculateSSOptions()
 
-        sparkline.setOptions.call(sparkline, calculatedOptions, this.rows)
+        sparkline.setOptions.call(sparkline, calculatedOptions, that.rows)
         this.sparklines.push(sparkline)
     }
     ,findOverallMax: function(){
@@ -139,6 +140,28 @@ SparklineSet.prototype = {
         this.sparklines = this.sparklines.slice(0, size)
         return this
     }
+    ,addTotalSparkline: function(options){
+        var that = this
+        options.iaClassName = "total"
+        options.iaHighlight = true
+
+        newSparkline = new Sparkline(options)
+        _.map(that.rows, function(row){
+            row.total = that.sumObj(row)
+        })
+
+        this.addSparkline(newSparkline)
+        return this
+    }
+    ,sumObj: function(obj){
+        var sum = 0
+        _.each(obj, function(v, k){
+            if (_.isNumber(v)) {
+                sum += v
+            }
+        })
+        return sum
+    }
 }
 
 
@@ -163,7 +186,7 @@ var Sparkline = function(userSuppliedOptions){
         iaSize: "medium",
         iaShowSparkline: true
     }
-    this.userSuppliedOptions = userSuppliedOptions
+    this.userSuppliedOptions = userSuppliedOptions || {}
     this.options = {}
 
 }
@@ -270,6 +293,7 @@ Sparkline.prototype = {
         options.iaPrimaryValueDisplay = nFormatter(primaryValue)
         options.iaSecondaryValueDisplay = nFormatter(secondaryValue)
 
+        console.log("using these options", options)
         if (!options.iaDisplayName){
             options.iaDisplayName = options.iaClassName.replace(/[-_]/g, " ")
         }

@@ -164,6 +164,11 @@ div.dashboard {
                @baseFontSize: 15px;
                font-size:  @baseFontSize;
                margin-bottom: @baseFontSize * .6;
+               &.highlight-true {
+                  margin-top: 0;
+                  padding-top: @baseFontSize * .5;
+                  border-top-width: 1px;
+               }
                a.sparkline-label {
                   font-size: @baseFontSize * .9;
                   &.label-width-1 {

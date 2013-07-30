@@ -13,6 +13,7 @@ Hourly_uniques.prototype = {
         var sparklineOptions = [
             {
                 iaClassName:"hourly_uniques",
+                iaLabelWidth: "2"
             }
         ]
         var ss = new SparklineSet(data, baseOptions)

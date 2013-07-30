@@ -145,6 +145,11 @@ div.dashboard div.widget div.container div.sparkline-with-numbers.size-small {
   font-size: 15px;
   margin-bottom: 9px;
 }
+div.dashboard div.widget div.container div.sparkline-with-numbers.size-small.highlight-true {
+  margin-top: 0;
+  padding-top: 7.5px;
+  border-top-width: 1px;
+}
 div.dashboard div.widget div.container div.sparkline-with-numbers.size-small a.sparkline-label {
   font-size: 13.5px;
 }
