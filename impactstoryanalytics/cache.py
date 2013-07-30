@@ -16,7 +16,7 @@ class CacheException(Exception):
 class Cache(object):
     """ Maintains a cache of URL responses in memcached """
 
-    def __init__(self, max_cache_age=60*60, enabled=True):  #one hour
+    def __init__(self, max_cache_age=60*60):  #one hour
         self.max_cache_age = max_cache_age
         self.mc = self._get_memcached_client()
         self.enabled = True
