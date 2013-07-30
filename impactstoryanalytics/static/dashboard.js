@@ -153,7 +153,7 @@ var Sparkline = function(userSuppliedOptions){
         iaShareYAxis: false,
         iaUnit: "default",
         type: "line",
-        width: "150px",
+        width: "100px",
         iaHighlight: false,
         iaBorderTop: false,
         iaSize: "medium",

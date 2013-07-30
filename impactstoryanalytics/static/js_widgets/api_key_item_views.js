@@ -5,7 +5,9 @@ Api_key_item_views.prototype = {
     create:function(data){
         console.log("Api_key_item_views data" , data)
         var baseOptions = {
-            iaLabelWidth: "1"
+            iaLabelWidth: "1",
+            iaSize:"small",
+            iaLabelWidth: "2"
         }
         var ss = new SparklineSet(data, baseOptions)
 

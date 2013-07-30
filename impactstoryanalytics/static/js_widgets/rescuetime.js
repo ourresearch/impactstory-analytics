@@ -14,8 +14,8 @@ Rescuetime.prototype = {
         var graphOptions = {
             element: div$.find(".graphic")[0],
             renderer: "stack",
-            width: 300,
-            height: 100,
+            width: 200,
+            height: 75,
             series: [
                 {
                     color: '#1A9641',
