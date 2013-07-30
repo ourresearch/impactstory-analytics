@@ -25,6 +25,7 @@ from impactstoryanalytics.widgets import papertrail_alerts
 from impactstoryanalytics.widgets import profiles_per_genre
 from impactstoryanalytics.widgets import profile_load_times
 from impactstoryanalytics.widgets import products_per_profile
+from impactstoryanalytics.widgets import provider_errors
 from impactstoryanalytics.widgets import provider_requests
 from impactstoryanalytics.widgets import rescuetime
 from impactstoryanalytics.widgets import signup_growth
@@ -78,6 +79,7 @@ dashboards = OrderedDict([
         itemsbycreateddate.ItemsByCreatedDate(),
     ]),
     ("provider_health", [
+        provider_errors.Provider_errors(),
         provider_requests.Provider_requests()
     ]),
     ("realtime", [
