@@ -25,11 +25,17 @@ function log10(val) {
 
 }
 
+function makeObjFromName(name){
+    var obj = new window[capitalize(name)]()
+    obj.name = name  // loathsome hack arg
+    return obj
+
+}
+
 // PAGE FUNCTIONS
 
 function load_widget(widget, dataUrl) {
-    var widgetName = widget.constructor.name
-    function log(msg) { return console.log(widget.constructor.name + ": " + msg)}
+    function log(msg) { return console.log(widget.name + ": " + msg)}
 
     // first load the data, then use it to create the widget
     log("now running.")
@@ -350,7 +356,7 @@ Sparkline.prototype = {
 $(document).ready(function(){
 
     _.each(widgetNames, function(name){
-        var widget = new window[capitalize(name)]()
+        var widget = makeObjFromName(name)
         var dataUrl = "/widget_data/"+name
         load_widget(widget, dataUrl)
     })
