@@ -22,14 +22,14 @@
 <div id="navbar">
    <h1><img class="brand" src="{{ url_for("static", filename="img/impactstory-logo-small.png") }}"/> <span class="sub">analytics</span></h1>
    <ul class="nav">
-      {%  for dashboard_name in g.dashboards.keys() %}
+      {%  for dashboard_name in g.dashboards.keys()|reverse %}
          {% if dashboard_name == current_dashboard_name %}
             {% set nav_link_class = "active"  %}
          {% else %}
             {% set nav_link_class = "inactive"  %}
          {% endif %}
 
-      <li><a class="{{ nav_link_class }}" href='{{ url_for("dashboard", dashboard_name=dashboard_name )}}'>{{ dashboard_name|replace("_", " ") }}</a></li>
+         <li><a class="{{ nav_link_class }}" href='{{ url_for("dashboard", dashboard_name=dashboard_name )}}'>{{ dashboard_name|replace("_", " ") }}</a></li>
       {% endfor %}
    </ul>
 </div>
