@@ -10,8 +10,8 @@ from impactstoryanalytics import widgets
 from impactstoryanalytics.widgets import api_key_item_creates
 from impactstoryanalytics.widgets import api_key_item_views
 from impactstoryanalytics.widgets import api_keys_minted
+from impactstoryanalytics.widgets import api_key_limit_exceeded
 from impactstoryanalytics.widgets import daily_new_users
-from impactstoryanalytics.widgets import daily_api_calls
 from impactstoryanalytics.widgets import embedded_widget_use
 from impactstoryanalytics.widgets import gmail
 from impactstoryanalytics.widgets import github
@@ -25,6 +25,7 @@ from impactstoryanalytics.widgets import papertrail_alerts
 from impactstoryanalytics.widgets import profiles_per_genre
 from impactstoryanalytics.widgets import profile_load_times
 from impactstoryanalytics.widgets import products_per_profile
+from impactstoryanalytics.widgets import provider_errors
 from impactstoryanalytics.widgets import provider_requests
 from impactstoryanalytics.widgets import rescuetime
 from impactstoryanalytics.widgets import signup_growth
@@ -44,11 +45,11 @@ logger = logging.getLogger("impactstoryanalytics.views")
 # define dashboards
 dashboards = OrderedDict([
     ("api", [
-        # embedded_widget_use.Embedded_widget_use(),
-        api_key_item_creates.Api_key_item_creates()
-        # api_key_item_views.Api_key_item_views(),
-        # daily_api_calls.Daily_api_calls(),
-        # api_keys_minted.Api_keys_minted()
+        embedded_widget_use.Embedded_widget_use(),
+        api_key_item_creates.Api_key_item_creates(),
+        api_key_item_views.Api_key_item_views(),
+        daily_api_calls.Daily_api_calls(),
+        api_keys_minted.Api_keys_minted()                
     ]),
     ("engagement", [
         signup_growth.Signup_growth(),
@@ -78,6 +79,7 @@ dashboards = OrderedDict([
         itemsbycreateddate.ItemsByCreatedDate(),
     ]),
     ("provider_health", [
+        provider_errors.Provider_errors(),
         provider_requests.Provider_requests()
     ]),
     ("realtime", [

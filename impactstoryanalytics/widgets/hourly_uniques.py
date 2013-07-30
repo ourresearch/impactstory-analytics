@@ -19,7 +19,7 @@ class Hourly_uniques(Widget):
                 "analysis": "count_unique",
                 "params": {
                     "event_collection": "Loaded a page (custom)",
-                    "target_property": "user.userId",
+                    "target_property": "ga_cookie",
                     "timeframe": "this_24_hours",
                     "interval": "hourly"
                 }

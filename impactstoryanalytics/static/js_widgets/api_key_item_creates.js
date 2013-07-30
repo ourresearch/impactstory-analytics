@@ -7,8 +7,6 @@ Api_key_item_creates.prototype = {
         var that = this
 
 
-        console.log("transformed data. here it is: ", data)
-
 
         var baseOptions = {
             iaLabelWidth: "2"

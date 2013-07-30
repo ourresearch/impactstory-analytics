@@ -8,17 +8,17 @@ Embedded_widget_use.prototype = {
         }
         var sparklineOptions = [
             {
-                iaClassName:"clickthroughs"
+                iaClassName:"pageviews"
             },
             {
                 iaClassName:"conversion-rate",
-                iaDisplayName: "conversion%",
+                iaDisplayName: "conversion",
                 iaYvalues: SparklineSet.conversionRate(data, "clickthroughs", "pageviews"),
                 iaUnit: "percent",
                 chartRangeMax: false
             },
             {
-                iaClassName:"pageviews"
+                iaClassName:"clickthroughs"
             }
         ]
         var ss = new SparklineSet(data, baseOptions)

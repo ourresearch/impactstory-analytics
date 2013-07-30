@@ -3,7 +3,7 @@ var Api_keys_minted = function() {
 Api_keys_minted.prototype = {
     create:function(data){
         var baseOptions = {
-            iaLabelWidth: "2",
+            iaLabelWidth: "1",
             iaSecondaryValue: function(yValues){
                 var revValues = yValues.slice().reverse()
                 return revValues[1] - revValues[8]
@@ -13,7 +13,7 @@ Api_keys_minted.prototype = {
         var sparklineOptions = [
             {
                 iaClassName: "cum_api_keys_minted",
-                iaDisplayName: "API keys minted"
+                iaDisplayName: "api keys"
             }
         ]
         var ss = new SparklineSet(data, baseOptions)
