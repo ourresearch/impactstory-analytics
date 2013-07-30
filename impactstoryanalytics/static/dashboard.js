@@ -73,6 +73,7 @@ var SparklineSet = function(rows, optionsFromUser){
 
 
     this.sparklines = []
+    this.summarySparklines = [] // these print at the bottom
 }
 
 // static method
@@ -99,12 +100,17 @@ SparklineSet.prototype = {
 
         return calculatedOptions
     }
-    ,addSparkline: function(sparkline){
+    ,addSparkline: function(sparkline, isSummary){
         var that = this
         var calculatedOptions = this.calculateSSOptions()
 
         sparkline.setOptions.call(sparkline, calculatedOptions, that.rows)
-        this.sparklines.push(sparkline)
+        if (isSummary) {
+            this.summarySparklines.push(sparkline)
+        }
+        else {
+            this.sparklines.push(sparkline)
+        }
     }
     ,findOverallMax: function(){
         var overallMax = 0
@@ -122,6 +128,9 @@ SparklineSet.prototype = {
         var max = this.findOverallMax()
         _.each(this.sparklines, function(sparkline){
             sparkline.setYAxisMaxIfShared(max)
+            sparkline.render(loc$, that.calculatedOptions, that.rows)
+        })
+        _.each(this.summarySparklines, function(sparkline){
             sparkline.render(loc$, that.calculatedOptions, that.rows)
         })
     }
@@ -150,7 +159,7 @@ SparklineSet.prototype = {
             row.total = that.sumObj(row)
         })
 
-        this.addSparkline(newSparkline)
+        this.addSparkline(newSparkline, true)
         return this
     }
     ,sumObj: function(obj){

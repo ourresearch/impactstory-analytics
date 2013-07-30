@@ -48,8 +48,7 @@ dashboards = OrderedDict([
         embedded_widget_use.Embedded_widget_use(),
         api_key_item_creates.Api_key_item_creates(),
         api_key_item_views.Api_key_item_views(),
-        daily_api_calls.Daily_api_calls(),
-        api_keys_minted.Api_keys_minted()                
+        api_keys_minted.Api_keys_minted()
     ]),
     ("engagement", [
         signup_growth.Signup_growth(),

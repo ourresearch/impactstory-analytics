@@ -30,8 +30,8 @@ Api_key_item_creates.prototype = {
 
         ss
             .sortBy("max")
-            .first(10)
             .addTotalSparkline({iaSize: "small"})
+            .first(10)
             .render($(".widget_api_key_item_creates"))
     }
 
