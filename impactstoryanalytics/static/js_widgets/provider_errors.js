@@ -7,21 +7,27 @@ Provider_errors.prototype = {
         var baseOptions = {
             iaLabelWidth: "2"
         }
+
+        var sparklineOptions = [
+            {
+                iaClassName: "provider_request_exception",
+                iaDisplayName: "RequestException",
+                iaHref: "https://papertrailapp.com/groups/74491/events?q=RequestException"
+            },
+            {
+                iaClassName:"provider_timeout",
+                iaDisplayName: "timeout",
+                iaHref: "https://papertrailapp.com/searches/127981"
+            },
+            {
+                iaClassName:"provider_error_response",
+                iaDisplayName: "status 4xx or 5xx",
+                iaHref: "https://papertrailapp.com/groups/74491/events?q=ProviderServerError+OR+ProviderClientError"
+            }
+        ]
         var ss = new SparklineSet(data, baseOptions)
 
-        displayNames = {
-            "provider_request_exception": "RequestException",
-            "provider_error_response": "other response error",
-            "provider_timeout": "timeout",
-            }
-
-        _.each(data[0], function(val, key){
-            if (typeof val === "string") return true  // continue iterating
-
-            var options = {
-                iaClassName: key,
-                iaDisplayName: displayNames[key]
-            }
+        _.each(sparklineOptions, function(options){
             ss.addSparkline(new Sparkline(options))
         })
 

@@ -7,14 +7,21 @@ Showstopper_papertrail_alerts.prototype = {
         var baseOptions = {
             iaLabelWidth: "1"
         }
+        var sparklineOptions = [
+            {
+                iaClassName: "threw_server_error",
+                iaDisplayName: "returned status=500",
+                iaHref: "https://papertrailapp.com/searches/368061"
+            },
+            {
+                iaClassName:"cant_start_thread",
+                iaDisplayName: "couldn't start thread",
+                iaHref: "https://papertrailapp.com/searches/137911"
+            }
+        ]
         var ss = new SparklineSet(data, baseOptions)
 
-        _.each(data[0], function(val, key){
-            if (typeof val === "string") return true  // continue iterating
-
-            var options = {
-                iaClassName: key
-            }
+        _.each(sparklineOptions, function(options){
             ss.addSparkline(new Sparkline(options))
         })
 
