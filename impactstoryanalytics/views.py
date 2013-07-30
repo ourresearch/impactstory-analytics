@@ -79,7 +79,7 @@ dashboards = OrderedDict([
         "itemsByCreatedDate",
     ]),
     ("provider_health", [
-        "provider_errors"
+        "provider_errors",
         "provider_requests"
     ]),
     ("realtime", [
