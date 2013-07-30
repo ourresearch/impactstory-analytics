@@ -10,14 +10,11 @@ logger = logging.getLogger("impactstoryanalytics.widgets.github")
 
 class Github(Widget):
 
-    def __init__(self):
-        self.issue_q_url_template = "https://api.github.com/repos/total-impact/total-impact-{NAME}/issues"
-        self.repo_names = ["webapp", "core"]
-
     def get_data(self):
+        repo_names = ["webapp", "core"]
         pans = Widget.get_time_pan_list(30)
 
-        for repo_name in self.repo_names:
+        for repo_name in repo_names:
             for open_issue in self.get_issues_list(repo_name, "open"):
                 opened_time = arrow.get(str(open_issue["created_at"]), 'YYYY-MM-DDTHH:mm:ss')
                 opened_name = repo_name + "_issues_open"
@@ -31,7 +28,9 @@ class Github(Widget):
 
 
     def get_issues_list(self, repo_name, state):
-        q_url = self.issue_q_url_template.format(NAME=repo_name)
+        issue_q_url_template = "https://api.github.com/repos/total-impact/total-impact-{NAME}/issues"
+
+        q_url = issue_q_url_template.format(NAME=repo_name)
         begin = (datetime.now() - timedelta(days=32))
         params = {
             "since": begin.isoformat(),
