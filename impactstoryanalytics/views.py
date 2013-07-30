@@ -4,6 +4,7 @@ import json
 import logging
 import hashlib
 import analytics
+from collections import OrderedDict
 from impactstoryanalytics import app
 from impactstoryanalytics import widgets
 from impactstoryanalytics.widgets import api_key_item_creates
@@ -41,26 +42,26 @@ from flask.ext.assets import Environment, Bundle
 logger = logging.getLogger("impactstoryanalytics.views")
 
 # define dashboards
-dashboards = {
-    "api": [
+dashboards = OrderedDict([
+    ("api", [
         embedded_widget_use.Embedded_widget_use(),
         api_key_item_creates.Api_key_item_creates(),
         api_key_item_views.Api_key_item_views(),
         daily_api_calls.Daily_api_calls(),
         api_keys_minted.Api_keys_minted()                
-    ],
-    "engagement": [
+    ]),
+    ("engagement", [
         signup_growth.Signup_growth(),
         signup_funnel.Signup_funnel(),
         monthly_active_users.Monthly_active_users(),
         daily_new_users.Daily_new_users()
-    ],    
-    "health": [
+    ]),    
+    ("health", [
         papertrail_alerts.Papertrail_alerts(),
         javascript_errors.Javascript_errors(),
         profile_load_times.Profile_load_times()
-    ],
-    "productivity": [
+    ]),
+    ("productivity", [
         gmail.Gmail(),
         rescuetime.Rescuetime(),
         uservoice_tickets.Uservoice_tickets(),
@@ -69,23 +70,24 @@ dashboards = {
         github.Github(),
         papertrail_alerts.Papertrail_alerts(),
         javascript_errors.Javascript_errors()
-    ],      
-    "profiles": [
+    ]),      
+    ("profiles", [
         products_per_profile.Products_per_profile(),
         profiles_per_genre.Profiles_per_genre(),
         importers_used.Importers_used(),
         itemsbycreateddate.ItemsByCreatedDate(),
-    ],
-    "provider_health": [
+    ]),
+    ("provider_health", [
         provider_requests.Provider_requests()
-    ],
-    "realtime": [
+    ]),
+    ("realtime", [
         latestprofile.LatestProfile(),
         hourly_uniques.Hourly_uniques()
-    ],
-    "today": [
-    ]
-}
+    ]),
+    ("today", [
+        hourly_uniques.Hourly_uniques()
+    ])
+])
 
 
 # add all the js to the page.
@@ -123,11 +125,10 @@ assets.register('css_all', Bundle(*base_css))
 def load_dashboards_list():
     g.dashboards = dashboards
 
-
 # static pages
 @app.route('/')
 def index():
-    return render_template('today.html')
+    return dashboard("today")
 
 @app.route('/favicon.ico')
 def favicon_ico():
