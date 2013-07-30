@@ -1,7 +1,7 @@
-var Javascript_errors = function() {
+var Exceptions = function() {
 }
 
-Javascript_errors.prototype = {
+Exceptions.prototype = {
     create:function(data){
         var baseOptions = {
             tooltipFormatter:function(sparkline, options, fields){
@@ -11,12 +11,20 @@ Javascript_errors.prototype = {
         }
         var sparklineOptions = [
             {
-                iaClassName: "isFirstOccurrence_True",
-                iaDisplayName: "first time",
+                iaClassName: "python"
+            },
+            {                
+                iaClassName: "javascript",
+                iaBorderTop: true                
             },
             {
-                iaClassName:"isFirstOccurrence_False",
-                iaDisplayName: "repeats",
+                iaClassName: "conversion-rate",
+                iaDisplayName: "javascript error % of pageviews",
+                iaYvalues: SparklineSet.conversionRate(data, "javascript", "daily_pageviews"),
+                iaUnit: "percent"
+            },            
+            {
+                iaClassName: "daily_pageviews"
             }
         ]
         var ss = new SparklineSet(data, baseOptions)
@@ -24,6 +32,6 @@ Javascript_errors.prototype = {
             var sparkline = new Sparkline(options)
             ss.addSparkline(sparkline)
         })
-        ss.render($(".widget-javascript_errors"))
+        ss.render($(".widget-exceptions"))
     }
 }

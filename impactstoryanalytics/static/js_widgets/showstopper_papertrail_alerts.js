@@ -1,9 +1,9 @@
-var Papertrail_alerts = function() {
+var Showstopper_papertrail_alerts = function() {
 }
 
-Papertrail_alerts.prototype = {
+Showstopper_papertrail_alerts.prototype = {
     create:function(data){
-        console.log("Papertrail_alerts data" , data)
+        console.log("Showstopper_papertrail_alerts data" , data)
         var baseOptions = {
             iaLabelWidth: "1"
         }
@@ -18,7 +18,7 @@ Papertrail_alerts.prototype = {
             ss.addSparkline(new Sparkline(options))
         })
 
-        ss.render($(".widget-papertrail_alerts"))
+        ss.render($(".widget-showstopper_papertrail_alerts"))
     }
 }
 
