@@ -135,6 +135,10 @@ SparklineSet.prototype = {
 
         return this
     }
+    ,first: function(size) {
+        this.sparklines = this.sparklines.slice(0, size)
+        return this
+    }
 }
 
 

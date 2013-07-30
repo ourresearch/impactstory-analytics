@@ -24,7 +24,7 @@ Api_key_item_creates.prototype = {
             ss.addSparkline(new Sparkline(options))
         })
 
-        ss.sortBy("max").render($(".widget_api_key_item_creates"))
+        ss.sortBy("max").first(10).render($(".widget_api_key_item_creates"))
     }
 }
 
