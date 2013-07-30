@@ -35,6 +35,7 @@ from impactstoryanalytics.widgets import uservoice_suggestions
 from impactstoryanalytics.widgets import uservoice_suggestions_upvoted
 
 from impactstoryanalytics.widgets.widget import Widget
+import cache
 
 from flask import request, abort, make_response, g, redirect, url_for
 from flask import render_template
@@ -45,48 +46,48 @@ logger = logging.getLogger("impactstoryanalytics.views")
 # define dashboards
 dashboards = OrderedDict([
     ("api", [
-        embedded_widget_use.Embedded_widget_use(),
-        api_key_item_creates.Api_key_item_creates(),
-        api_key_item_views.Api_key_item_views(),
-        api_keys_minted.Api_keys_minted(),
-        api_key_limit_exceeded.Api_key_limit_exceeded()
+        "embedded_widget_use",
+        "api_key_item_creates",
+        "api_key_item_views",
+        "api_keys_minted",
+        "api_key_limit_exceeded"
     ]),
     ("engagement", [
-        signup_growth.Signup_growth(),
-        signup_funnel.Signup_funnel(),
-        monthly_active_users.Monthly_active_users(),
-        daily_new_users.Daily_new_users()
+        "signup_growth",
+        "signup_funnel",
+        "monthly_active_users",
+        "daily_new_users"
     ]),    
     ("health", [
-        showstopper_papertrail_alerts.Showstopper_papertrail_alerts(),
-        exceptions.Exceptions(),
-        profile_load_times.Profile_load_times()
+        "showstopper_papertrail_alerts",
+        "exceptions",
+        "profile_load_times"
     ]),
     ("productivity", [
-        gmail.Gmail(),
-        rescuetime.Rescuetime(),
-        uservoice_tickets.Uservoice_tickets(),
-        uservoice_suggestions.Uservoice_suggestions(),
-        uservoice_suggestions_upvoted.Uservoice_suggestions_upvoted(),
-        github.Github(),
-        exceptions.Exceptions()
+        "gmail",
+        "rescuetime",
+        "uservoice_tickets",
+        "uservoice_suggestions",
+        "uservoice_suggestions_upvoted",
+        "github",
+        "exceptions"
     ]),      
     ("profiles", [
-        products_per_profile.Products_per_profile(),
-        profiles_per_genre.Profiles_per_genre(),
-        importers_used.Importers_used(),
-        itemsbycreateddate.ItemsByCreatedDate(),
+        "products_per_profile",
+        "profiles_per_genre",
+        "importers_used",
+        "itemsByCreatedDate",
     ]),
     ("provider_health", [
-        provider_errors.Provider_errors(),
-        provider_requests.Provider_requests()
+        "provider_errors",
+        "provider_requests"
     ]),
     ("realtime", [
-        latestprofile.LatestProfile(),
-        hourly_uniques.Hourly_uniques()
+        "latestProfile",
+        "hourly_uniques"
     ]),
     ("today", [
-        hourly_uniques.Hourly_uniques()
+        "hourly_uniques"
     ])
 ])
 
@@ -109,13 +110,14 @@ base_css = [
 ]
 assets = Environment(app)
 
-for k, v in dashboards.iteritems():
-    for widget in v:
-
-        base_js.append("js_widgets/" + widget.get_js_name_lower() + ".js")
+for board, widgets in dashboards.iteritems():
+    for widget in widgets:
+        base_js.append("js_widgets/" + widget + ".js")
 
 assets.register('js_all', Bundle(*base_js))
 assets.register('css_all', Bundle(*base_css))
+
+memcache_client = cache.Cache()
 
 
 
@@ -142,7 +144,25 @@ def widget_data(widget_name):
     class_name = widget_name[0].capitalize() + widget_name[1:]
     widget = getattr(module, class_name)()
 
-    resp = make_response(json.dumps(widget.get_data(), indent=4), 200)
+    # get it from the cache if it is there
+    cache_key = "widget_{widget_name}_{url}".format(
+        widget_name=widget_name, 
+        url=request.url)
+    widget_response = memcache_client.get_cache_entry(cache_key)
+
+    # if not there, get it from widget and cache it
+    if widget_response:
+        logger.info("CACHE HIT for {cache_key}".format(
+            cache_key=cache_key))
+    else:
+        logger.info("CACHE MISS for {cache_key}".format(
+            cache_key=cache_key))
+        widget_response = widget.get_data()
+        memcache_client.set_cache_entry(cache_key, 
+                                        widget_response, 
+                                        widget.max_cache_age)
+
+    resp = make_response(json.dumps(widget_response, indent=4), 200)
     resp.mimetype = "application/json"
     return resp
 
@@ -206,12 +226,9 @@ def webhook(source):
 @app.route('/<dashboard_name>')
 def dashboard(dashboard_name):
     try:
-        widgets = g.dashboards[dashboard_name]
+        widget_names = g.dashboards[dashboard_name]
     except AttributeError:
         redirect(url_for(dashboard, dashboard_name="main"))
-
-
-    widget_names = [widget.get_name() for widget in widgets]
 
     return render_template(
         "dashboards/{name}.html".format(name=dashboard_name),

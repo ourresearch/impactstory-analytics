@@ -16,10 +16,9 @@ class CacheException(Exception):
 class Cache(object):
     """ Maintains a cache of URL responses in memcached """
 
-    def _build_hash_key(self, key):
-        json_key = json.dumps(key)
-        hash_key = hashlib.md5(json_key.encode("utf-8")).hexdigest()
-        return hash_key
+    def __init__(self, max_cache_age=60*60):  #one hour
+        self.max_cache_age = max_cache_age
+        self.mc = self._get_memcached_client()
 
     def _get_memcached_client(self):
         mc = pylibmc.Client(
@@ -28,31 +27,31 @@ class Cache(object):
             password=os.environ.get('MEMCACHIER_PASSWORD'),
             binary=True)
         return mc
- 
-    def __init__(self, max_cache_age=60*60):  #one hour
-        self.max_cache_age = max_cache_age
-
 
     def flush_cache(self):
         #empties the cache
-        mc = self._get_memcached_client()        
-        mc.flush_all()
+        self.mc.flush_all()
 
-    #@Retry(3, pylibmc.Error, 0.1)
+    def _build_hash_key(self, key):
+        json_key = json.dumps(key)
+        hash_key = hashlib.md5(json_key.encode("utf-8")).hexdigest()
+        return hash_key
+
     def get_cache_entry(self, key):
         """ Get an entry from the cache, returns None if not found """
-        mc = self._get_memcached_client()
         hash_key = self._build_hash_key(key)
-        response = mc.get(hash_key)
+        response = self.mc.get(hash_key)
         return response
 
-    #@Retry(3, pylibmc.Error, 0.1)
-    def set_cache_entry(self, key, data):
+    def set_cache_entry(self, key, data, max_cache_age=None):
         """ Store a cache entry """
-        mc = self._get_memcached_client()
+
+        if not max_cache_age:
+            max_cache_age = self.max_cache_age  # use default
+
         hash_key = self._build_hash_key(key)
         try:
-            set_response = mc.set(hash_key, data, time=self.max_cache_age)
+            set_response = self.mc.set(hash_key, data, time=max_cache_age)
             if not set_response:
                 raise CacheException("Unable to store into Memcached. Make sure memcached server is running.")
         except PicklingError:

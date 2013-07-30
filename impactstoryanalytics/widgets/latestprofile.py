@@ -12,8 +12,6 @@ import json
 import arrow
 
 from impactstoryanalytics.widgets.widget import Widget, get_raw_dataclip_data
-import cache
-
 
 
 logger = logging.getLogger("impactstoryanalytics.widgets.latestprofile")

@@ -4,9 +4,6 @@ import requests
 import logging
 import arrow
 
-import cache
-
-
 
 logger = logging.getLogger("impactstoryanalytics.widget")
 
@@ -116,6 +113,9 @@ class TimePan:
 
 
 class Widget:
+    def __init__(self):
+        self.max_cache_age = 60*60  # one hour, in seconds
+
     def get_name(self):
         return self.__class__.__name__
 
