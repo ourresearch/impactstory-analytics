@@ -137,31 +137,37 @@ def index():
 def favicon_ico():
     return redirect(url_for('static', filename='favicon.ico'))
 
-
-@app.route("/widget_data/<widget_name>")
-def widget_data(widget_name):
+def widget_instance_from_name(widget_name):
     module = sys.modules["impactstoryanalytics.widgets." + widget_name.lower()]  # hack, ick
     class_name = widget_name[0].capitalize() + widget_name[1:]
     widget = getattr(module, class_name)()
+    return widget
+
+def widget_data_raw(widget_name, get_from_cache=True):
+    widget = widget_instance_from_name(widget_name)
 
     # get it from the cache if it is there
-    cache_key = "widget_{widget_name}_{url}".format(
-        widget_name=widget_name, 
-        url=request.url)
-    widget_response = memcache_client.get_cache_entry(cache_key)
+    cache_key = "widget_{widget_name}".format(
+        widget_name=widget_name)
 
-    # if not there, get it from widget and cache it
-    if widget_response:
-        logger.info("CACHE HIT for {cache_key}".format(
-            cache_key=cache_key))
-    else:
-        logger.info("CACHE MISS for {cache_key}".format(
-            cache_key=cache_key))
+    widget_response = None
+    if get_from_cache:
+        widget_response = memcache_client.get_cache_entry(cache_key)
+        if widget_response:
+            logger.info("CACHE HIT for {cache_key}".format(
+                cache_key=cache_key))
+
+    if not widget_response:
         widget_response = widget.get_data()
         memcache_client.set_cache_entry(cache_key, 
                                         widget_response, 
                                         widget.max_cache_age)
+    return widget_response
 
+
+@app.route("/widget_data/<widget_name>")
+def widget_data(widget_name, get_from_cache=True):
+    widget_response = widget_data_raw(widget_name)
     resp = make_response(json.dumps(widget_response, indent=4), 200)
     resp.mimetype = "application/json"
     return resp
@@ -235,29 +241,6 @@ def dashboard(dashboard_name):
         current_dashboard_name=dashboard_name,
         widget_names=widget_names
     )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
