@@ -1,4 +1,4 @@
-var Github = function() {
+function Github() {
 }
 Github.prototype = {
     create:function(data){

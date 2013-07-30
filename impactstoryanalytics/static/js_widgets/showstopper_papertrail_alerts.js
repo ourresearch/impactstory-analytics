@@ -1,4 +1,4 @@
-var Showstopper_papertrail_alerts = function() {
+function Showstopper_papertrail_alerts() {
 }
 
 Showstopper_papertrail_alerts.prototype = {

@@ -1,4 +1,4 @@
-var Daily_new_users = function() {
+function Daily_new_users() {
 }
 
 Daily_new_users.prototype = {

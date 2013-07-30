@@ -1,9 +1,8 @@
-var Importers_used = function() {
+function Importers_used() {
 }
 
 Importers_used.prototype = {
     create:function(data){
-        console.log("Importers_used data" , data)
         var baseOptions = {
             iaUnit: "percent",
             iaLabelWidth: "1"

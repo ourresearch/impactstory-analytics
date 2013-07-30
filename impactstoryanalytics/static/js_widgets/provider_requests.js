@@ -1,4 +1,4 @@
-var Provider_requests = function() {
+function Provider_requests() {
 }
 
 Provider_requests.prototype = {

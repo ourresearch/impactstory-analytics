@@ -1,4 +1,4 @@
-var Provider_errors = function() {
+function Provider_errors() {
 }
 
 Provider_errors.prototype = {

@@ -1,4 +1,4 @@
-var Gmail = function() {
+function Gmail() {
 }
 
 Gmail.prototype = {

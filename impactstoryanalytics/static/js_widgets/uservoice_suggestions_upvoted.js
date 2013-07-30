@@ -1,4 +1,4 @@
-var Uservoice_suggestions_upvoted = function() {
+function Uservoice_suggestions_upvoted() {
 }
 
 Uservoice_suggestions_upvoted.prototype = {

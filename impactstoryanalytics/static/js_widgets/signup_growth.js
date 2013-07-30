@@ -1,4 +1,4 @@
-var Signup_growth = function() {
+function Signup_growth() {
 }
 
 Signup_growth.prototype = {

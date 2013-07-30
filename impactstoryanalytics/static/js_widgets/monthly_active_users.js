@@ -1,4 +1,4 @@
-var Monthly_active_users = function() {
+function Monthly_active_users() {
 }
 
 Monthly_active_users.prototype = {

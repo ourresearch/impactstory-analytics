@@ -1,4 +1,4 @@
-var Products_per_profile = function() {
+function Products_per_profile() {
 }
 
 Products_per_profile.prototype = {
@@ -49,7 +49,8 @@ Products_per_profile.prototype = {
                 barWidth: 10,                
                 iaPrimaryValue: function(values){return _.sum(values)},
                 iaSecondaryValue: function(values) {return _.max(values)},
-                iaUnit: "percent"                
+                iaUnit: "percent",
+                iaChartRangeMax: 50
             }                
 
         var ss = new SparklineSet(data, baseOptions)

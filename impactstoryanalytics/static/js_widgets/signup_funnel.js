@@ -1,4 +1,4 @@
-var Signup_funnel = function() {
+function Signup_funnel() {
 }
 
 Signup_funnel.prototype = {

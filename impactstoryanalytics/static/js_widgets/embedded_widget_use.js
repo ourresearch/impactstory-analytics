@@ -1,4 +1,4 @@
-var Embedded_widget_use = function() {
+function Embedded_widget_use() {
 }
 Embedded_widget_use.prototype = {
     create:function(data){

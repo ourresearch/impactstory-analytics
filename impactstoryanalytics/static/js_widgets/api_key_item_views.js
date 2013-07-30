@@ -1,4 +1,4 @@
-var Api_key_item_views = function() {
+function Api_key_item_views() {
 }
 
 Api_key_item_views.prototype = {

@@ -1,4 +1,4 @@
-var Exceptions = function() {
+function Exceptions() {
 }
 
 Exceptions.prototype = {

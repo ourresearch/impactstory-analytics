@@ -1,4 +1,4 @@
-var Profile_load_times = function() {}
+function Profile_load_times() {}
 
 Profile_load_times.prototype = {
     create:function(data){

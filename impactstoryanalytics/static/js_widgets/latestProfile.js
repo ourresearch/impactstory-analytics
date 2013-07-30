@@ -1,4 +1,4 @@
-var LatestProfile = function() {
+function LatestProfile() {
 }
 
 

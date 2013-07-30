@@ -1,4 +1,4 @@
-var Rescuetime = function() {
+function Rescuetime() {
 }
 
 Rescuetime.prototype = {

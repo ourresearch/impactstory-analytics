@@ -1,4 +1,4 @@
-var Profiles_per_genre = function() {
+function Profiles_per_genre() {
 }
 
 Profiles_per_genre.prototype = {

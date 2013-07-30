@@ -1,4 +1,4 @@
-var Api_keys_minted = function() {
+function Api_keys_minted() {
 }
 Api_keys_minted.prototype = {
     create:function(data){

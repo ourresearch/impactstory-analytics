@@ -1,4 +1,4 @@
-var Uservoice_tickets = function() {
+function Uservoice_tickets() {
 }
 
 Uservoice_tickets.prototype = {

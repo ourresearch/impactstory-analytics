@@ -1,4 +1,4 @@
-var Hourly_uniques = function() {
+function Hourly_uniques() {
 }
 
 Hourly_uniques.prototype = {

@@ -1,4 +1,4 @@
-var Api_key_item_creates = function() {
+function Api_key_item_creates() {
 }
 
 Api_key_item_creates.prototype = {

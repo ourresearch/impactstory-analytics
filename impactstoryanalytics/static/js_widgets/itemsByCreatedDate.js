@@ -1,11 +1,10 @@
-var ItemsByCreatedDate = function() {
+function ItemsByCreatedDate() {
 }
 
 ItemsByCreatedDate.prototype = {
     init: function(){
     }
     ,create: function(data){
-        console.log("raw data: ", data)
         var baseOptions = {
             type: "line",
             iaShareYAxis: true,

@@ -28,12 +28,18 @@ function log10(val) {
 // PAGE FUNCTIONS
 
 function load_widget(widget, dataUrl) {
-    // first load the data, then use it to creat the widget
+    var widgetName = widget.constructor.name
+    function log(msg) { return console.log(widget.constructor.name + ": " + msg)}
+
+    // first load the data, then use it to create the widget
+    log("now running.")
+
     $.ajax({
                url: dataUrl,
                type:"GET",
                success: function(data){
-                       widget.create.call(widget, data)
+                   log("got data back from REST call; rendering.")
+                   widget.create.call(widget, data)
                }
            })
 }
@@ -303,7 +309,6 @@ Sparkline.prototype = {
         options.iaPrimaryValueDisplay = nFormatter(primaryValue)
         options.iaSecondaryValueDisplay = nFormatter(secondaryValue)
 
-        console.log("using these options", options)
         if (!options.iaDisplayName){
             options.iaDisplayName = options.iaClassName.replace(/[-_]/g, " ")
         }
@@ -313,7 +318,6 @@ Sparkline.prototype = {
         }
 
         if (options.iaReplaceZerosWithNulls) {
-            console.log("replacing zeroes with nulls")
             options.iaYvalues = _.map(options.iaYvalues, function(yValue){
                 if (yValue === 0) {
                     console.log("found a zero")
@@ -346,7 +350,6 @@ Sparkline.prototype = {
 $(document).ready(function(){
 
     _.each(widgetNames, function(name){
-        console.log("Now running the '"+ name + "' widget")
         var widget = new window[capitalize(name)]()
         var dataUrl = "/widget_data/"+name
         load_widget(widget, dataUrl)

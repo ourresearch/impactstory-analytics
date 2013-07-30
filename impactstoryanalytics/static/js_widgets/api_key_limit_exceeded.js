@@ -1,4 +1,4 @@
-var Api_key_limit_exceeded = function() {
+function Api_key_limit_exceeded() {
 }
 Api_key_limit_exceeded.prototype = {
     create:function(data){
