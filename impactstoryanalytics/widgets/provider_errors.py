@@ -24,7 +24,7 @@ class Provider_errors(Widget):
                 }
 
         shared_params = {
-                    "timeframe": "last_30_days",
+                    "timeframe": "this_30_days",  # WANT to include today for this one
                     "target_property": "id",
                     "interval": "daily"
                 }
