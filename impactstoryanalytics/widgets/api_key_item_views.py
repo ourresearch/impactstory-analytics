@@ -38,9 +38,6 @@ class Api_key_item_views(Widget):
             except KeyError:
                 pass
 
-            for k, v in mydict:
-                pass
-
         return ungrouped
 
 
