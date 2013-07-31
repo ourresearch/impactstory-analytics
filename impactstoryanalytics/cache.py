@@ -19,7 +19,7 @@ class Cache(object):
     def __init__(self, max_cache_age=60*60):  #one hour
         self.max_cache_age = max_cache_age
         self.mc = self._get_memcached_client()
-        self.enabled = True
+        self.enabled = True 
         if not self.mc:
             logger.info("MEMCACHIER env variables aren't set, so DISABLING CACHING")
             self.enabled = False            

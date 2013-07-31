@@ -114,7 +114,7 @@ class TimePan:
 
 class Widget:
     def __init__(self):
-        self.max_cache_age = 60*60  # one hour, in seconds
+        self.max_cache_age = 60*61  # 61 minutes, in seconds
 
     def get_name(self):
         return self.__class__.__name__
