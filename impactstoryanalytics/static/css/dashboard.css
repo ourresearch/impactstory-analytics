@@ -15,7 +15,7 @@ div#navbar {
   position: fixed;
   z-index: 1000;
   top: 0;
-  padding: 0 20px 6px;
+  padding: 0 20px;
   left: 0;
   right: 0;
   border-bottom: 1px solid #eee;
@@ -25,19 +25,17 @@ div#navbar h1 {
   float: left;
   font-size: 15px;
   margin: 0;
-  padding: 0;
+  padding: 10px 0 0;
   font-family: "Helvetica Neue";
   font-weight: lighter;
 }
 div#navbar h1 img {
   height: 23px;
-  margin-top: 10px;
   float: left;
 }
 div#navbar h1 span {
   float: left;
-  height: 22px;
-  margin-top: 13px;
+  margin-top: 3px;
   padding-left: 10px;
   text-transform: uppercase;
   color: #ff4e00;
@@ -59,7 +57,7 @@ div#navbar ul.nav li {
   float: right;
 }
 div#navbar ul.nav li a {
-  padding: 12px 8px 0;
+  padding: 10px;
   font-size: 14px;
   display: block;
   color: #555;
@@ -78,10 +76,11 @@ div#navbar ul.nav li a.active:hover {
 }
 div#content {
   margin-top: 100px;
-  padding: 0 50px;
+  padding: 0 20px;
 }
 div.dashboard div.widget {
-  padding: 10px 40px 10px 10px;
+  padding: 10px;
+  margin: 10px;
   float: left;
 }
 div.dashboard div.widget.widget-iframe div.container {
