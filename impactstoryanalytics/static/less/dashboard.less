@@ -28,7 +28,7 @@ div#navbar {
    padding: 0 20px;
    left: 0;
    right: 0;
-   background:  #444;
+   background:  #333;
    h1 {
       float:left;
       font-size: 15px;
@@ -96,6 +96,19 @@ div#content {
 
 
 div.dashboard {
+
+   // positioning for individual widgets, to fit on page better.
+   &.dashboard-health {
+      .widget-exceptions {
+         clear:both;
+      }
+   }
+   &.dashboard-engagement{
+      .widget-monthly_active_users {
+         margin-bottom: 50px;
+      }
+   }
+
    div.widgets-vertical{
       float: left;
    }
@@ -104,16 +117,10 @@ div.dashboard {
       margin: 0 20px 20px;
       float:left;
 
-      // positioning for individual widgets, to fit on page better.
-      &.widget-monthly_active_users {
-         margin-bottom: 50px;
-      }
-
-      &.widget-exceptions {
-         clear:both;
-      }
-
       // types of widgets
+      &.widget-rescuetime {
+         min-width: 225px;
+      }
       &.widget-iframe {
          div.container{ // default for all iframe widgets
             width: 742px;

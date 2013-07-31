@@ -7,6 +7,7 @@ Rescuetime.prototype = {
     ,create: function(data){
         var that = this
         var div$ = $("div.widget-rescuetime")
+        div$.find(".graphic, .y_axis").empty()
         that.makeRickshawGraph(div$.filter(".Heather"), data.Heather)
         that.makeRickshawGraph(div$.filter(".Jason"), data.Jason)
     }

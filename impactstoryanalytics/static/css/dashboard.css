@@ -18,7 +18,7 @@ div#navbar {
   padding: 0 20px;
   left: 0;
   right: 0;
-  background: #444;
+  background: #333;
 }
 div#navbar h1 {
   float: left;
@@ -78,6 +78,12 @@ div#content {
   margin-top: 80px;
   padding: 0 20px;
 }
+div.dashboard.dashboard-health .widget-exceptions {
+  clear: both;
+}
+div.dashboard.dashboard-engagement .widget-monthly_active_users {
+  margin-bottom: 50px;
+}
 div.dashboard div.widgets-vertical {
   float: left;
 }
@@ -86,11 +92,8 @@ div.dashboard div.widget {
   margin: 0 20px 20px;
   float: left;
 }
-div.dashboard div.widget.widget-monthly_active_users {
-  margin-bottom: 50px;
-}
-div.dashboard div.widget.widget-exceptions {
-  clear: both;
+div.dashboard div.widget.widget-rescuetime {
+  min-width: 225px;
 }
 div.dashboard div.widget.widget-iframe div.container {
   width: 742px;
