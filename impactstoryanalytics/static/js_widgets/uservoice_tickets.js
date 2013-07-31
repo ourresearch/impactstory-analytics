@@ -4,7 +4,7 @@ function Uservoice_tickets() {
 Uservoice_tickets.prototype = {
     create:function(data){
         var baseOptions = {
-            iaLabelWidth: "2",
+            iaLabelWidth: "1",
             tooltipFormatter:function(sparkline, options, fields){
                 var dateStr = moment(fields.x*1000).format("ddd h:mm a")
                 return "<span>" + fields.y + '</span>' + ', ' + dateStr
@@ -24,7 +24,7 @@ Uservoice_tickets.prototype = {
                 iaDisplayName: "total"
             },
             {
-                iaClassName: "median_open_days",
+                iaClassName: "median_open_days"
             }
         ]
         var ss = new SparklineSet(data, baseOptions)
