@@ -17,7 +17,7 @@ Provider_errors.prototype = {
             {
                 iaClassName:"provider_timeout",
                 iaDisplayName: "timeout",
-                iaHref: "https://papertrailapp.com/searches/127981"
+                iaHref: "https://papertrailapp.com/groups/74491/events?q=%22Provider+timed+out+during+GET+on%22"
             },
             {
                 iaClassName:"provider_error_response",
