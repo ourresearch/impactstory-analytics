@@ -1,12 +1,12 @@
 // page globals
 function color(color, light){
     var colors = {
-        'scalar': "#16a085",
-        'percent': "#2980b9"
+        'scalar': "#3498db",
+        'percent': "#2ecc71"
     }
     var myColor = colors[color]
     if (light){
-        myColor = tinycolor.lighten(myColor, 50).toHexString()
+        myColor = tinycolor.lighten(myColor, 45).toHexString()
         console.log("light! here's what we got: ", myColor)
     }
     return myColor
@@ -243,6 +243,7 @@ var Sparkline = function(userSuppliedOptions){
         iaShareYAxis: false,
         iaUnit: "default",
         type: "line",
+        lineWidth: 2,
         lineColor: color('scalar'),
         fillColor: color('scalar', true),
         width: "100px",
@@ -250,7 +251,9 @@ var Sparkline = function(userSuppliedOptions){
         iaBorderTop: false,
         iaSize: "medium",
         iaShowSparkline: true,
-        iaReplaceZerosWithNulls: false
+        iaReplaceZerosWithNulls: false,
+        barColor: color("scalar")
+
     }
     this.userSuppliedOptions = userSuppliedOptions || {}
     this.options = {}

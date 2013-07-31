@@ -170,7 +170,7 @@ div.dashboard div.widget div.container div.graphic.rickshaw_graph.bar div.x_tick
   border: none;
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers {
-  color: #16a085;
+  color: #3498db;
   margin-bottom: 20px;
   float: left;
   clear: both;
@@ -230,16 +230,16 @@ div.dashboard div.widget div.container div.sparkline-with-numbers.unit-default s
   display: none;
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers.unit-percent {
-  color: #2980b9;
+  color: #2ecc71;
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers.unit-percent a.sparkline-label[href='#'] {
-  color: #2980b9;
+  color: #2ecc71;
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers.unit-percent span.sep {
   display: none;
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers.unit-percent span.secondary span.value {
-  color: #2980b9;
+  color: #2ecc71;
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers.unit-percent span.secondary span.label {
   color: #aaa;
@@ -261,7 +261,7 @@ div.dashboard div.widget div.container div.sparkline-with-numbers a.sparkline-la
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers a.sparkline-label[href='#'] {
   cursor: default;
-  color: #16a085;
+  color: #3498db;
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers a.sparkline-label[href='#']:hover {
   text-decoration: none;
