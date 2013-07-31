@@ -46,7 +46,8 @@ Products_per_profile.prototype = {
 
         var baseOptions = {
                 type: "bar",
-                barWidth: 10,                
+                barWidth: 10,
+                iaLabelWidth: "2",
                 iaPrimaryValue: function(values){return _.sum(values)},
                 iaSecondaryValue: function(values) {return _.max(values)},
                 iaUnit: "percent",

@@ -19,7 +19,8 @@ Signup_growth.prototype = {
                 chartRangeMax: false
             },
             {
-                iaClassName:"new_accounts_per_week"
+                iaClassName:"new_accounts_per_week",
+                iaDisplayName:"new accounts/wk"
             }
         ]
         var ss = new SparklineSet(data, baseOptions)

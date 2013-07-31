@@ -38,6 +38,7 @@ div#navbar h1 span {
   padding-left: 10px;
   text-transform: uppercase;
   color: #ff4e00;
+  color: #ddd;
   letter-spacing: 2px;
   font-size: 13px;
 }
@@ -58,9 +59,11 @@ div#navbar ul.nav li {
 }
 div#navbar ul.nav li a {
   padding: 10px;
-  font-size: 14px;
+  font-size: 13px;
   display: block;
   color: #bbb;
+  font-weight: lighter;
+  letter-spacing: 1px;
 }
 div#navbar ul.nav li a:hover {
   color: #ff4e00;
