@@ -87,6 +87,7 @@ dashboards = OrderedDict([
         "hourly_uniques"
     ]),
     ("today", [
+        "gmail",        
         "rescuetime",
         "uservoice_tickets",
         "github",
