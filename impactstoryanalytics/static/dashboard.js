@@ -1,3 +1,17 @@
+// page globals
+function color(color, light){
+    var colors = {
+        'scalar': "#16a085",
+        'percent': "#2980b9"
+    }
+    var myColor = colors[color]
+    if (light){
+        myColor = tinycolor.lighten(myColor, 50).toHexString()
+        console.log("light! here's what we got: ", myColor)
+    }
+    return myColor
+}
+
 // UTILITY FUNCTIONS
 
 function capitalize(str){
@@ -229,6 +243,8 @@ var Sparkline = function(userSuppliedOptions){
         iaShareYAxis: false,
         iaUnit: "default",
         type: "line",
+        lineColor: color('scalar'),
+        fillColor: color('scalar', true),
         width: "100px",
         iaHighlight: false,
         iaBorderTop: false,
@@ -274,8 +290,8 @@ Sparkline.prototype = {
 
         return {
             percent: {
-                lineColor: "indianred",
-                fillColor: "pink",
+                lineColor: color("percent"),
+                fillColor: color("percent", true),
                 iaPrimaryUnit: "%",
                 iaSecondaryUnit: "%",
                 chartRangeMax: 100

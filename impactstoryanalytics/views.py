@@ -102,6 +102,7 @@ base_js = [
     'js_libs/rickshaw.js',
     'js_libs/icanhaz.js',
     'js_libs/moment.min.js',
+    'js_libs/tinycolor.js',
     'dashboard.js'
 ]
 base_css = [

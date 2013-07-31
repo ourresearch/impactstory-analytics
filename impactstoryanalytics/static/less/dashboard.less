@@ -1,5 +1,10 @@
 @linkColor: #FF4E00;
-@percentColor: indianred;
+@scalarColor: #16a085;
+@percentColor: #2980b9;
+
+@percentColorLight: lighten(@percentColor, 50%);
+@scalarColorLight: lighten(@percentColor, 50%);
+@neutralColor: #777777;
 
 body {
    padding: 0;
@@ -135,9 +140,10 @@ div.dashboard {
       h2 {
          padding: 0 0 3px 10px;
          margin-bottom: 15px;
-         border-bottom: 2px solid #333;
+         border-bottom: 2px solid @neutralColor;
          font-size: 16px;
          position: relative;
+         color:  @neutralColor;
          span {
             font-size: 66%;
             font-weight: normal;
@@ -176,6 +182,7 @@ div.dashboard {
 
          div.sparkline-with-numbers {
             @baseFontSize: 18px;
+            color: @scalarColor;
 
             margin-bottom: 20px;
             float:left;
@@ -277,7 +284,7 @@ div.dashboard {
                }
                &[href='#'] {
                   cursor: default;
-                  color: #555;
+                  color: @scalarColor;
                   &:hover{
                      text-decoration: none;
                   }
