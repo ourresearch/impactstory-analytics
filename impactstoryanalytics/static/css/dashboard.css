@@ -6,9 +6,13 @@ body {
 }
 a {
   text-decoration: none;
+  color: #ff4e00;
 }
 a:hover {
   text-decoration: underline;
+  color: #ff4e00;
+}
+a:visited {
   color: #ff4e00;
 }
 div#navbar {
@@ -177,6 +181,9 @@ div.dashboard div.widget div.container div.sparkline-with-numbers {
   width: 100%;
   font-size: 18px;
 }
+div.dashboard div.widget div.container div.sparkline-with-numbers span.sep {
+  display: none;
+}
 div.dashboard div.widget div.container div.sparkline-with-numbers.show-sparkline-false span.sparkline {
   display: none;
 }
@@ -191,6 +198,7 @@ div.dashboard div.widget div.container div.sparkline-with-numbers.size-small.hig
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers.size-small a.sparkline-label {
   font-size: 13.5px;
+  text-decoration: underline;
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers.size-small a.sparkline-label.label-width-1 {
   width: 85px;
@@ -200,12 +208,6 @@ div.dashboard div.widget div.container div.sparkline-with-numbers.size-small a.s
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers.size-small span.primary span.value {
   font-size: 15px;
-}
-div.dashboard div.widget div.container div.sparkline-with-numbers.size-small span.sep {
-  display: inline;
-}
-div.dashboard div.widget div.container div.sparkline-with-numbers.size-small span.secondary {
-  font-size: 9px;
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers.size-small span.secondary span.value {
   font-size: 12px;
@@ -229,14 +231,11 @@ div.dashboard div.widget div.container div.sparkline-with-numbers.type-bar canva
 div.dashboard div.widget div.container div.sparkline-with-numbers.unit-default span.unit {
   display: none;
 }
-div.dashboard div.widget div.container div.sparkline-with-numbers.unit-percent {
-  color: #2ecc71;
-}
 div.dashboard div.widget div.container div.sparkline-with-numbers.unit-percent a.sparkline-label[href='#'] {
   color: #2ecc71;
 }
-div.dashboard div.widget div.container div.sparkline-with-numbers.unit-percent span.sep {
-  display: none;
+div.dashboard div.widget div.container div.sparkline-with-numbers.unit-percent span.primary {
+  color: #2ecc71;
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers.unit-percent span.secondary span.value {
   color: #2ecc71;
@@ -249,6 +248,7 @@ div.dashboard div.widget div.container div.sparkline-with-numbers a.sparkline-la
   display: inline-block;
   font-size: 13.5px;
   padding-top: 0;
+  color: #ff4e00;
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers a.sparkline-label.label-width-1 {
   width: 85px;
@@ -261,27 +261,23 @@ div.dashboard div.widget div.container div.sparkline-with-numbers a.sparkline-la
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers a.sparkline-label[href='#'] {
   cursor: default;
+  text-decoration: none;
   color: #3498db;
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers a.sparkline-label[href='#']:hover {
-  text-decoration: none;
+  text-decoration: underline;
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers span.primary span.value {
   font-weight: bolder;
   font-size: 18px;
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers span.primary span.unit {
-  margin-left: -6px;
+  margin-left: -5px;
   font-weight: lighter;
   font-size: 12.6px;
-}
-div.dashboard div.widget div.container div.sparkline-with-numbers span.sep {
-  font-size: 12.6px;
-  font-weight: lighter;
-  margin-right: -4px;
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers span.secondary {
-  font-size: 7.2px;
+  font-size: 9px;
   font-weight: normal;
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers span.secondary span.value {
@@ -289,7 +285,7 @@ div.dashboard div.widget div.container div.sparkline-with-numbers span.secondary
   font-size: 12.6px;
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers span.secondary span.unit {
-  margin-left: -4px;
+  margin-left: -3px;
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers span.secondary span.label {
   color: #aaa;

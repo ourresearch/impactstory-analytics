@@ -15,8 +15,12 @@ body {
 
 a {
    text-decoration: none;
+   color:  @linkColor;
    &:hover{
       text-decoration: underline;
+      color:  @linkColor;
+   }
+   &:visited {
       color:  @linkColor;
    }
 }
@@ -213,6 +217,9 @@ div.dashboard {
             clear:both;
             width: 100%;
             font-size: @baseFontSize;
+            span.sep {
+               display:none;
+            }
             &.show-sparkline-false {
                span.sparkline {
                   display: none;
@@ -229,6 +236,7 @@ div.dashboard {
                }
                a.sparkline-label {
                   font-size: @baseFontSize * .9;
+                  text-decoration: underline;
                   &.label-width-1 {
                      width: 85px;
                   }
@@ -241,11 +249,7 @@ div.dashboard {
                      font-size: @baseFontSize;
                   }
                }
-               span.sep{
-                  display:inline;
-               }
                span.secondary {
-                  font-size: @baseFontSize * .6;
                   span.value {
                      font-size: @baseFontSize * .8;
                      font-weight: normal;
@@ -276,13 +280,14 @@ div.dashboard {
                }
             }
             &.unit-percent {
-               color: @percentColor;
                a.sparkline-label {
                   &[href='#'] {
                      color: @percentColor;
                   }
                }
-               span.sep {display:none;}
+               span.primary{
+                  color: @percentColor;
+               }
                span.secondary {
                   span.value {
                      color:  @percentColor;
@@ -297,6 +302,7 @@ div.dashboard {
                display: inline-block;
                font-size: @baseFontSize * .75;
                padding-top:0;
+               color:  @linkColor;
                &.label-width-1 {
                   width: 85px;
                }
@@ -308,9 +314,10 @@ div.dashboard {
                }
                &[href='#'] {
                   cursor: default;
+                  text-decoration: none;
                   color: @scalarColor;
                   &:hover{
-                     text-decoration: none;
+                     text-decoration: underline;
                   }
                }
 
@@ -325,25 +332,20 @@ div.dashboard {
                   font-size: @baseFontSize;
                }
                span.unit {
-                  margin-left: -6px;
+                  margin-left: -5px;
                   font-weight: lighter;
                   font-size:  @baseFontSize * .7;
                }
             }
-            span.sep {
-               font-size:  @baseFontSize * .7;
-               font-weight: lighter;
-               margin-right: -4px;
-            }
             span.secondary {
-               font-size: @baseFontSize * .4;
+               font-size: @baseFontSize * .5;
                font-weight: normal;
                span.value{
                   font-weight: lighter;
                   font-size: @baseFontSize * .7;
                }
                span.unit {
-                  margin-left: -4px;
+                  margin-left: -3px;
                }
                span.label {
                   color:  #aaa;

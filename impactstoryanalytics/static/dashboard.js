@@ -6,7 +6,7 @@ function color(color, light){
     }
     var myColor = colors[color]
     if (light){
-        myColor = tinycolor.lighten(myColor, 45).toHexString()
+        myColor = tinycolor.lighten(myColor, 40).toHexString()
         console.log("light! here's what we got: ", myColor)
     }
     return myColor
@@ -297,7 +297,8 @@ Sparkline.prototype = {
                 fillColor: color("percent", true),
                 iaPrimaryUnit: "%",
                 iaSecondaryUnit: "%",
-                chartRangeMax: 100
+                chartRangeMax: 100,
+                barColor: color("percent")
             },
             default: {}
         }[unit]

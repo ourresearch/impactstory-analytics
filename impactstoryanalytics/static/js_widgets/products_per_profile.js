@@ -52,6 +52,7 @@ Products_per_profile.prototype = {
                 iaSecondaryValue: function(values) {return _.max(values)},
                 iaUnit: "percent",
                 chartRangeMax: 50
+
             }                
 
         var ss = new SparklineSet(data, baseOptions)
