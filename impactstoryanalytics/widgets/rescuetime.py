@@ -67,23 +67,26 @@ class Rescuetime(Widget):
     def list_activity_by_day(self, data):
 
         days = {}
+
+        # initialize first so we make sure we have zeros for every day
+        first_day = date.today()
+        for day in [first_day - timedelta(days=i) for i in range(8)]:
+            # crazy hack to fix rescuetime rickshaw axis
+            adj_data = day
+            datestring = day.isoformat() + "T00:00:00"
+
+            timestamp = int(time.mktime(adj_data.timetuple()))
+            days[datestring] = {
+                "total": 0,
+                "email": 0,
+                "code": 0,
+                "timestamp": timestamp
+            }
+
         for row in data:
             datestring = row[0]
             time_spent = float(row[1]) / 3600  # in hours
             category = row[3]
-
-            # add this day if we don't have it yet
-            if datestring not in days:
-                # crazy hack to fix rescuetime rickshaw axis
-                adj_data = iso8601.parse_date(datestring)
-
-                timestamp = int(time.mktime(adj_data.timetuple()))
-                days[datestring] = {
-                    "total": 0,
-                    "email": 0,
-                    "code": 0,
-                    "timestamp": timestamp
-                }
 
             # add to the time counts for this day
             days[datestring]["total"] += time_spent
