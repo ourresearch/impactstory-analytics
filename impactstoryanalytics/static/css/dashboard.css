@@ -90,6 +90,9 @@ div.dashboard.dashboard-engagement .widget-monthly_active_users {
 div.dashboard div.widgets-vertical {
   float: left;
 }
+div.dashboard div.clear-left {
+  clear: left;
+}
 div.dashboard div.widget {
   padding: 10px;
   margin: 0 20px 20px;
