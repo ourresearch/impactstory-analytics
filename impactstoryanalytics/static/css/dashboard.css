@@ -18,14 +18,13 @@ div#navbar {
   padding: 0 20px;
   left: 0;
   right: 0;
-  border-bottom: 1px solid #eee;
-  background: #fff;
+  background: #444;
 }
 div#navbar h1 {
   float: left;
   font-size: 15px;
   margin: 0;
-  padding: 10px 0 0;
+  padding: 7px 0 0;
   font-family: "Helvetica Neue";
   font-weight: lighter;
 }
@@ -35,11 +34,12 @@ div#navbar h1 img {
 }
 div#navbar h1 span {
   float: left;
-  margin-top: 3px;
+  margin-top: 5px;
   padding-left: 10px;
   text-transform: uppercase;
   color: #ff4e00;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
+  font-size: 13px;
 }
 div#navbar span.last-updated {
   color: #aaa;
@@ -60,7 +60,7 @@ div#navbar ul.nav li a {
   padding: 10px;
   font-size: 14px;
   display: block;
-  color: #555;
+  color: #bbb;
 }
 div#navbar ul.nav li a:hover {
   color: #ff4e00;
@@ -68,14 +68,14 @@ div#navbar ul.nav li a:hover {
 }
 div#navbar ul.nav li a.active {
   color: #ff4e00;
-  font-weight: bold;
+  background: url(../img/triangle-pointing-up.png) no-repeat bottom center;
 }
 div#navbar ul.nav li a.active:hover {
   text-decoration: none;
   cursor: default;
 }
 div#content {
-  margin-top: 100px;
+  margin-top: 50px;
   padding: 0 20px;
 }
 div.dashboard div.widget {

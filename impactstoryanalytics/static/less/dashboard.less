@@ -28,13 +28,12 @@ div#navbar {
    padding: 0 20px;
    left: 0;
    right: 0;
-   border-bottom: 1px solid #eee;
-   background:  #fff;
+   background:  #444;
    h1 {
       float:left;
       font-size: 15px;
       margin: 0;
-      padding: 10px 0 0;
+      padding: 7px 0 0;
       img {
          height:  23px;
          float:left;
@@ -43,11 +42,12 @@ div#navbar {
       font-weight: lighter;
       span {
          float:left;
-         margin-top: 3px;
+         margin-top: 5px;
          padding-left: 10px;
          text-transform: uppercase;
          color: @linkColor;
-         letter-spacing: 1px;
+         letter-spacing: 2px;
+         font-size: 13px;
       }
    }
    span.last-updated {
@@ -71,14 +71,14 @@ div#navbar {
             padding: 10px;
             font-size: 14px;
             display: block;
-            color: #555;
+            color: #bbb;
             &:hover{
                color: @linkColor;
                text-decoration: none;
             }
             &.active {
                color: @linkColor;
-               font-weight: bold;
+               background: url(../img/triangle-pointing-up.png) no-repeat bottom center;
                &:hover {
                   text-decoration: none;
                   cursor: default;
@@ -90,7 +90,7 @@ div#navbar {
 }
 
 div#content {
-   margin-top: 100px;
+   margin-top: 50px;
    padding: 0 20px;
 }
 
