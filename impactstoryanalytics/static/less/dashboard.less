@@ -223,6 +223,62 @@ div.dashboard {
             span.sep {
                display:none;
             }
+            span.primary {
+               span.value{
+                  font-weight: bolder;
+                  font-size: @baseFontSize * 1.1;
+                  vertical-align: 1px;
+               }
+               span.unit {
+                  margin-left: -5px;
+                  font-weight: lighter;
+                  font-size:  @baseFontSize * .7;
+               }
+            }
+            span.secondary {
+               font-size: @baseFontSize * .5;
+               font-weight: normal;
+               span.value{
+                  font-weight: lighter;
+                  font-size: @baseFontSize * .7;
+               }
+               span.unit {
+                  margin-left: -3px;
+               }
+               span.label {
+                  color:  #aaa;
+               }
+            }
+            a.sparkline-label{
+               text-align: right;
+               display: inline-block;
+               font-size: @baseFontSize * .75;
+               padding-top:0;
+               color:  @linkColor;
+               &.label-width-1 {
+                  width: 85px;
+               }
+               &.label-width-2 {
+                  width: 150px;
+               }
+               &.label-width-3 {
+                  width: 215px;
+               }
+               &[href='#'] {
+                  cursor: default;
+                  text-decoration: none;
+                  color: @scalarColor;
+                  &:hover{
+                     text-decoration: underline;
+                  }
+               }
+
+            }
+            span.sparkline {
+               canvas {
+                  margin-top: 2px;
+               }
+            }
             &.show-sparkline-false {
                span.sparkline {
                   display: none;
@@ -271,6 +327,11 @@ div.dashboard {
                a.sparkline-label {
                   font-weight: bold;
                }
+               span.secondary {
+                  span.value {
+                     font-weight: bold;
+                  }
+               }
             }
             &.type-bar {
                canvas {
@@ -295,65 +356,15 @@ div.dashboard {
                   span.value {
                      color:  @percentColor;
                   }
+                  span.unit {
+                     color:  @percentColor;
+                  }
                   span.label {
                      color:  #aaa;
                   }
                }
             }
-            a.sparkline-label{
-               text-align: right;
-               display: inline-block;
-               font-size: @baseFontSize * .75;
-               padding-top:0;
-               color:  @linkColor;
-               &.label-width-1 {
-                  width: 85px;
-               }
-               &.label-width-2 {
-                  width: 150px;
-               }
-               &.label-width-3 {
-                  width: 215px;
-               }
-               &[href='#'] {
-                  cursor: default;
-                  text-decoration: none;
-                  color: @scalarColor;
-                  &:hover{
-                     text-decoration: underline;
-                  }
-               }
 
-            }
-            span.sparkline {
-               canvas {
-               }
-            }
-            span.primary {
-               span.value{
-                  font-weight: bolder;
-                  font-size: @baseFontSize;
-               }
-               span.unit {
-                  margin-left: -5px;
-                  font-weight: lighter;
-                  font-size:  @baseFontSize * .7;
-               }
-            }
-            span.secondary {
-               font-size: @baseFontSize * .5;
-               font-weight: normal;
-               span.value{
-                  font-weight: lighter;
-                  font-size: @baseFontSize * .7;
-               }
-               span.unit {
-                  margin-left: -3px;
-               }
-               span.label {
-                  color:  #aaa;
-               }
-            }
          }
       }
    }

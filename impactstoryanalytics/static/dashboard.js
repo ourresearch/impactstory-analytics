@@ -1,13 +1,15 @@
 // page globals
-function color(color, light){
+function color(color, value){
     var colors = {
         'scalar': "#3498db",
         'percent': "#2ecc71"
     }
     var myColor = colors[color]
-    if (light){
+    if (value == "light"){
         myColor = tinycolor.lighten(myColor, 40).toHexString()
-        console.log("light! here's what we got: ", myColor)
+    }
+    else if (value == "medium") {
+        myColor = tinycolor.lighten(myColor, 20).toHexString()
     }
     return myColor
 }
@@ -245,7 +247,7 @@ var Sparkline = function(userSuppliedOptions){
         type: "line",
         lineWidth: 2,
         lineColor: color('scalar'),
-        fillColor: color('scalar', true),
+        fillColor: color('scalar', "light"),
         width: "100px",
         iaHighlight: false,
         iaBorderTop: false,
@@ -294,7 +296,7 @@ Sparkline.prototype = {
         return {
             percent: {
                 lineColor: color("percent"),
-                fillColor: color("percent", true),
+                fillColor: color("percent", "light"),
                 iaPrimaryUnit: "%",
                 iaSecondaryUnit: "%",
                 chartRangeMax: 100,
@@ -382,6 +384,11 @@ Sparkline.prototype = {
                 }
             })
             console.log("replaced zeroes with nulls: ", options.iaYvalues)
+        }
+
+        if (options.iaHighlight) {
+            options.fillColor = color(options.iaUnit, "medium") // dark color
+
         }
 
         return options
