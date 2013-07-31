@@ -4,7 +4,7 @@
 
 @percentColorLight: lighten(@percentColor, 50%);
 @scalarColorLight: lighten(@percentColor, 50%);
-@neutralColor: #777777;
+@neutralColor: #555;
 
 body {
    padding: 0;
@@ -90,16 +90,30 @@ div#navbar {
 }
 
 div#content {
-   margin-top: 50px;
+   margin-top: 80px;
    padding: 0 20px;
 }
 
 
 div.dashboard {
+   div.widgets-vertical{
+      float: left;
+   }
    div.widget {
       padding:  10px;
-      margin: 10px;
+      margin: 0 20px 20px;
       float:left;
+
+      // positioning for individual widgets, to fit on page better.
+      &.widget-monthly_active_users {
+         margin-bottom: 50px;
+      }
+
+      &.widget-exceptions {
+         clear:both;
+      }
+
+      // types of widgets
       &.widget-iframe {
          div.container{ // default for all iframe widgets
             width: 742px;
@@ -137,18 +151,19 @@ div.dashboard {
          }
       }
       h2 {
-         padding: 0 0 3px 10px;
+         padding: 0;
          margin-bottom: 15px;
          border-bottom: 2px solid @neutralColor;
          font-size: 16px;
          position: relative;
          color:  @neutralColor;
+         width:  100%;
          span {
             font-size: 66%;
             font-weight: normal;
             color: #666;
             position: absolute;
-            padding: 0 10px 3px 0;
+            padding: 0;
             right: 0;
             bottom: 0;
          }

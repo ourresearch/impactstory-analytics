@@ -3,19 +3,22 @@
 {% block dashboard_content %}
    <div class="dashboard dashboard-api">
 
-      <div class="widget widget-showstopper_papertrail_alerts sparkline-set">
-         <h2>Showstopping errors<span>THIS 30 days</span></h2>
-         <div class="container"></div>
-      </div>
-
-      <div class="widget widget-exceptions sparkline-set">
-         <h2>Exceptions<span>THIS 30 days</span></h2>
-         <div class="container"></div>
-      </div>
 
       <div class="widget widget-profile-load-times sparkline-set">
          <h2>Profile loads<span>last 30 days</span></h2>
          <div class="container"></div>
+      </div>
+
+      <div class="widgets-vertical">
+         <div class="widget widget-showstopper_papertrail_alerts sparkline-set">
+            <h2>Showstopping errors<span>THIS 30 days</span></h2>
+            <div class="container"></div>
+         </div>
+
+         <div class="widget widget-exceptions sparkline-set">
+            <h2>Exceptions<span>THIS 30 days</span></h2>
+            <div class="container"></div>
+         </div>
       </div>
 
       <div class="widget widget-newrelic widget-iframe">
