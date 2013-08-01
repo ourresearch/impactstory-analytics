@@ -24,6 +24,7 @@ from impactstoryanalytics.widgets import monthly_active_users
 from impactstoryanalytics.widgets import showstopper_papertrail_alerts
 from impactstoryanalytics.widgets import profiles_per_genre
 from impactstoryanalytics.widgets import profile_load_times
+from impactstoryanalytics.widgets import profile_load_fail_fraction
 from impactstoryanalytics.widgets import products_per_profile
 from impactstoryanalytics.widgets import provider_errors
 from impactstoryanalytics.widgets import provider_requests
@@ -61,7 +62,8 @@ dashboards = OrderedDict([
     ("health", [
         "showstopper_papertrail_alerts",
         "exceptions",
-        "profile_load_times"
+        "profile_load_times",
+        "profile_load_fail_fraction"
     ]),
     ("productivity", [
         "gmail",
