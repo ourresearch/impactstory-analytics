@@ -15,7 +15,7 @@ def run_uservoice():
 
     analytics.identify(user_id="uservoice")
 
-    ticket_dict = Uservoice.get_ticket_stats("Unassigned")
+    ticket_dict = Uservoice.get_ticket_stats()
     print ticket_dict
     analytics.track(user_id="uservoice", event='UserVoice ticket stats', properties=ticket_dict)
 
