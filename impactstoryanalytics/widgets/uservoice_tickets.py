@@ -26,6 +26,10 @@ class Uservoice_tickets(Widget):
 
         keenio = Keenio(queries)
         raw_data = keenio.get_raw_data()
+
+        # bug in keenio that it ignores this_30_days, so get it this way
+        raw_data = raw_data[-30:]
+
         return raw_data
 
         

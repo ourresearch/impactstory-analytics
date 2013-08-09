@@ -277,7 +277,7 @@ class Uservoice():
         median_open_days.sort()
         median_days = median_open_days[int(len(median_open_days)/2)]
 
-        ticket_dict["median_open_days"] = median_days
+        ticket_dict["median_open_days"] = round(median_days, 1)
 
         logger.info("Found uservoice tickets: {all} total, {user} where a user answered last".format(
             all=ticket_dict["total_count"], 
