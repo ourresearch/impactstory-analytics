@@ -12,37 +12,23 @@ import json
 import arrow
 
 from impactstoryanalytics.widgets.widget import Widget
-from impactstoryanalytics.widgets.widget_api_helpers import Keenio
-
+from impactstoryanalytics.widgets.widget_api_helpers import Uservoice
 
 
 logger = logging.getLogger("impactstoryanalytics.widgets.uservoice_suggestions")
 
 class Uservoice_suggestions(Widget):
     def get_data(self):
-        target_properies = [
-                    "started", 
-                    "under_review", 
-                    "planned", 
-                    "inbox"
-                ]
-        queries = {}
-        for target_property in target_properies:
-            queries[target_property] = {
-                    "project": "context",
-                    "analysis": "minimum",
-                    "params": {"target_property": target_property}
-                }
 
-        shared_params = {
-                    "event_collection" : "UserVoice suggestions",
-                    "timeframe": "this_30_days",
-                    "interval": "daily"
-                }
+        pans = Widget.get_time_pan_list(30)
 
-        keenio = Keenio(queries, shared_params)
-        raw_data = keenio.get_raw_data()
-        return raw_data
+        suggestion_dict = Uservoice.get_closed_suggestion_count()
+
+        for closed_suggestion in suggestion_dict:
+            start_iso = arrow.get(str(closed_suggestion["closed_at"]), 'YYYY-MM-DDTHH:mm:ss')
+            pans.add_to_pan(start_iso, "suggestions_closed", 1)
+
+        return pans.replace_NAs_with_zeroes().as_list()
 
 
         

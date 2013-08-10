@@ -298,7 +298,7 @@ class Uservoice():
 
     @classmethod
     def get_suggestion_counts(cls):
-        logger.info("Getting uservoice suggestion count")
+        logger.info("Getting uservoice open suggestion count")
 
         owner = cls.get_uservoice_owner()
         suggestions_active = owner.get("/api/v1/suggestions?filter=active&per_page=1000")["suggestions"]
@@ -316,6 +316,20 @@ class Uservoice():
             total=len(suggestions)))
 
         return(suggestion_dict)
+
+    @classmethod
+    def get_closed_suggestion_count(cls):
+        logger.info("Getting uservoice closed suggestion count")
+
+        owner = cls.get_uservoice_owner()
+
+        closed_suggestions = owner.get("/api/v1/suggestions?filter=closed&per_page=1000")["suggestions"]
+
+        logger.info("Found uservoice suggestions: {total} total".format(
+            total=len(closed_suggestions)))
+
+        return(closed_suggestions)
+
 
     @classmethod
     def get_suggestion_details(cls):
