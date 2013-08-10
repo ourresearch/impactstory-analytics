@@ -6,6 +6,7 @@ import iso8601
 import os
 import logging
 
+
 from impactstoryanalytics.widgets.widget import Widget
 
 
@@ -41,7 +42,15 @@ class Rescuetime(Widget):
         url = "https://www.rescuetime.com/anapi/data"
 
 
-        data = requests.get(url, params=params).json()["rows"]
+        try:
+            r = requests.get(url, params=params)
+            data = r.json()["rows"]
+        except ValueError:
+            logger.debug(u"ValueError in get_raw_data with user {user} on request {url}".format(
+                user=user, 
+                url=r.url))
+            data = []
+
         return data
 
     def is_code_category(self, category):
