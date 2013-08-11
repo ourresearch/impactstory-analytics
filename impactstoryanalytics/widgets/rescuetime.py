@@ -73,8 +73,8 @@ class Rescuetime(Widget):
         days = {}
 
         # initialize first so we make sure we have zeros for every day
-        first_day = datetime.utcnow()
-        for day in [first_day - timedelta(days=i) for i in range(8)]:
+        first_day = datetime.utcnow() + timedelta(days=1)
+        for day in [first_day - timedelta(days=i) for i in range(9)]:
             # crazy hack to fix rescuetime rickshaw axis
             adj_data = day
             datestring = day.isoformat()[0:10] + "T00:00:00"
