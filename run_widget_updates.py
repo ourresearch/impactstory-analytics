@@ -32,10 +32,10 @@ def run_widget_updates(dashboards_to_update=None):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='update widget data')
 
-    parser.add_argument('--today', help="just update the today dashboard instead of all of them", action="store_true")
+    parser.add_argument('--today', help="just update the today and realtime dashboards instead of all of them", action="store_true")
     args = parser.parse_args()
     if args.today:
-        run_widget_updates(["today"])
+        run_widget_updates(["today", "realtime"])
     else:
         run_widget_updates()
 
