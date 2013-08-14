@@ -264,14 +264,17 @@ class Uservoice():
             "median_open_time"
             ]
 
-        ticket_dict = defaultdict(int)
+        ticket_dict = dict((field, 0) for field in interesting_fields)
         median_open_days = []
         for agent in api_response["entries"]:
             for field in interesting_fields:
                 if field == "median_open_time":
                     median_open_days += [open_time/(60.0*60*24) for open_time in agent["open_times"]]
                 else:
-                    ticket_dict[field] += agent[field]
+                    try:
+                        ticket_dict[field] += agent[field]
+                    except KeyError:
+                        ticket_dict[field] += 0
 
 
         median_open_days.sort()
