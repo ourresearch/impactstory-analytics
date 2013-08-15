@@ -4,6 +4,9 @@ function color(color, value){
         'scalar': "#3498db",
         'percent': "#2ecc71"
     }
+    if (color == 'default') {
+        color = 'scalar'
+    }
     var myColor = colors[color]
     if (value == "light"){
         myColor = tinycolor.lighten(myColor, 40).toHexString()
