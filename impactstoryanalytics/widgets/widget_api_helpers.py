@@ -122,16 +122,18 @@ class Keenio():
             return response
 
         if ("this" in timeframe):
-            end = -1
+            end_index = None
+            end_index_int = 0
         else:
-            end = -2
+            end_index = -1
+            end_index_int = -1
 
         if ("30_days" in timeframe):
-            start = -30 - end
+            start_index = -30 - end_index_int
         elif ("7_days" in timeframe):
-            start = -7 - end
+            start_index = -7 - end_index_int
 
-        response = response[start:end] 
+        response = response[start_index:end_index] 
         return response       
 
     def get_raw_data(self, return_raw_response=False):
