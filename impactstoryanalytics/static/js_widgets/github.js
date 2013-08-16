@@ -6,6 +6,9 @@ Github.prototype = {
             type: "bar",
             iaShareYAxis: true,
             iaLabelWidth: "2",
+            iaPrimaryValueLabel:'',
+            iaSecondaryValue: function(yValues) {return Math.round(_.last(_.without(yValues, null)))},
+            iaSecondaryValueLabel: "today",            
             tooltipFormatter: function(sparkline, options, fields) {
                 var number_days_ago = 30 - fields[0]["offset"]
                 return fields[0]["value"] + ' issues, ' + number_days_ago + ' days ago'

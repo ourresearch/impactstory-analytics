@@ -269,10 +269,7 @@ Sparkline.prototype = {
         type = type || "line"
         var defaultOptions = {
             bar:{
-                iaPrimaryValue: function(values){
-                    console.log("reducing values, got these: ", values)
-                    return _.reduce(values, function(memo, num) { return memo + num})
-                },
+                iaPrimaryValue: function(values) {return _.sum(values)},
                 iaSecondaryValue: function(values) {return _.max(values)},
                 tooltipFormatter: function(sparkline, options, fields) {
                     console.log(fields)
