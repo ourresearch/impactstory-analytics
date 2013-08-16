@@ -29,10 +29,22 @@ class Api_key_item_creates(Widget):
         raw_data = keenio.get_raw_data()
 
         ungrouped = Keenio.ungroup(raw_data, "request", "api_key")
-        for mydict in ungrouped:
+
+        all_api_keys = []
+        for one_day_dict in ungrouped:
+            all_api_keys += one_day_dict.keys()
+        all_api_keys_set = set(all_api_keys)
+
+        for one_day_dict in ungrouped:
+            for api_key in all_api_keys_set:
+                try:
+                    if not one_day_dict[api_key]:
+                        one_day_dict[api_key] = 0
+                except KeyError:
+                    pass
             try:
-                mydict["EMPTY_STRING"] = mydict[""]
-                del mydict[""]
+                one_day_dict["EMPTY_STRING"] = one_day_dict[""]
+                del one_day_dict[""]
             except KeyError:
                 pass
 
