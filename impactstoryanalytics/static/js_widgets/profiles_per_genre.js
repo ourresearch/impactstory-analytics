@@ -4,10 +4,6 @@ function Profiles_per_genre() {
 Profiles_per_genre.prototype = {
     create:function(data){
         var baseOptions = {
-            tooltipFormatter: function(sparkline, options, fields){
-                var dateStr = moment(fields.x*1000).format("ddd h:mm a")
-                return "<span>" + fields.y + '</span>' + ', ' + dateStr
-            },
             iaUnit: "percent"
         }
         var sparklineOptions = [

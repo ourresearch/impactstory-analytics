@@ -114,6 +114,25 @@ class Keenio():
 
         return pans.replace_NAs_with_zeroes().as_list()
 
+    def limit_to_timeframe(self, response, query_name):
+        try:
+            timeframe = self.queries[query_name]["params"]["timeframe"]
+        except KeyError:
+            #no timeframe so no change
+            return response
+
+        if ("this" in timeframe):
+            end = -1
+        else:
+            end = -2
+
+        if ("30_days" in timeframe):
+            start = -30 - end
+        elif ("7_days" in timeframe):
+            start = -7 - end
+
+        response = response[start:end] 
+        return response       
 
     def get_raw_data(self, return_raw_response=False):
         response = []
@@ -130,6 +149,8 @@ class Keenio():
             if self.queries[query_name]["analysis"] == "extraction":
                 response = self.timebin_extraction_data(raw_data)
 
+                #keenio extraction doesn't respect timeframe so do it ourselves
+                response = self.limit_to_timeframe(response, query_name)
             else:
                 for row_from_keen in raw_data:
                     new_row = self.create_row(row_from_keen, query_name)
