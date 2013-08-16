@@ -37,7 +37,7 @@ class Rescuetime(Widget):
             "resolution_time": "day",
             "restrict_kind": "category",
             "restrict_begin": datetime.utcnow() - timedelta(days=7),
-            "restrict_end": datetime.utcnow() + timedelta(days=1)
+            "restrict_end": datetime.utcnow()
         }
         url = "https://www.rescuetime.com/anapi/data"
 
@@ -73,8 +73,8 @@ class Rescuetime(Widget):
         days = {}
 
         # initialize first so we make sure we have zeros for every day
-        first_day = datetime.utcnow() + timedelta(days=1)
-        for day in [first_day - timedelta(days=i) for i in range(9)]:
+        first_day = datetime.utcnow()
+        for day in [first_day - timedelta(days=i) for i in range(8)]:
             # crazy hack to fix rescuetime rickshaw axis
             adj_data = day
             datestring = day.isoformat()[0:10] + "T00:00:00"
