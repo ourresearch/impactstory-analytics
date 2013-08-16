@@ -11,11 +11,17 @@ Embedded_widget_use.prototype = {
                 iaClassName:"pageviews"
             },
             {
-                iaClassName:"conversion-rate",
+                iaClassName: "conversion-rate",
                 iaDisplayName: "conversion",
                 iaYvalues: SparklineSet.conversionRate(data, "clickthroughs", "pageviews"),
+                iaPrimaryValue: function(yValues) {return _.last(_.without(yValues, null))},
+                iaSecondaryValue: function(yValues) {return _.max(yValues)},                
                 iaUnit: "percent",
-                chartRangeMax: false
+                chartRangeMax: false,
+                tooltipFormatter:function(sparkline, options, fields){
+                    var dateStr = moment(fields.x*1000).format("MMM D")
+                    return "<span>" + fields.y + '</span>%' + ', ' + dateStr
+                }                
             },
             {
                 iaClassName:"clickthroughs"

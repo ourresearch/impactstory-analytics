@@ -140,7 +140,10 @@ SparklineSet.conversionRate = function(rows, numeratorKey, denominatorKey){
             return null
         }
         else {
-            return Math.round(100 * row[numeratorKey] / row[denominatorKey])
+            // multiply and divide by ten to get one decimal
+            fraction = row[numeratorKey] / row[denominatorKey]
+            percent_to_one_decimal = Math.round(10 * 100 * fraction) / 10
+            return percent_to_one_decimal
         }
     })
 }
