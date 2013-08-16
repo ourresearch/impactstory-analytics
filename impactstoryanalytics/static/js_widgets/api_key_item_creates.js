@@ -6,8 +6,6 @@ Api_key_item_creates.prototype = {
         console.log("Api_key_item_creates data" , data)
         var that = this
 
-
-
         var baseOptions = {
             iaLabelWidth: "2"
         }
@@ -29,7 +27,7 @@ Api_key_item_creates.prototype = {
         })
 
         ss
-            .sortBy("max")
+            .sortBy("last")
             .addTotalSparkline({iaSize: "small"})
             .first(10)
             .render($(".widget_api_key_item_creates"))

@@ -1,7 +1,7 @@
 import logging
 import json
 
-from impactstoryanalytics.widgets.widget import Widget
+from impactstoryanalytics.widgets.widget import Widget, by_hour
 from impactstoryanalytics.widgets.widget_api_helpers import Keenio
 import impactstoryanalytics.widgets.widget_api_helpers as helpers
 
@@ -48,6 +48,6 @@ class Api_key_item_creates(Widget):
             except KeyError:
                 pass
 
-        return ungrouped
-
+        data_by_hour = by_hour(ungrouped)
+        return data_by_hour
 

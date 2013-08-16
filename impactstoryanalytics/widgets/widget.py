@@ -1,5 +1,6 @@
 from collections import defaultdict
 from collections import Counter
+import iso8601
 import requests
 import logging
 import arrow
@@ -18,6 +19,17 @@ def get_raw_dataclip_data(query_url):
 def get_raw_keenio_data(query_url):
     raw_data = requests.get(query_url).json()["result"]
     return raw_data
+
+def by_hour(list_of_day_dicts):
+    for day_dict in list_of_day_dicts:
+        start_iso = iso8601.parse_date(day_dict["start_iso"])
+        end_iso = iso8601.parse_date(day_dict["end_iso"])
+        hours = (end_iso - start_iso).total_seconds() / (60 * 60.0)
+        for metric_name in day_dict:
+            if day_dict[metric_name]:
+                if metric_name not in ["start_iso", "end_iso"]:
+                    day_dict[metric_name] = day_dict[metric_name] / hours
+    return list_of_day_dicts
 
 
 class TimePansList:

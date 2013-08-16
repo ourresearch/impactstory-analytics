@@ -19,7 +19,7 @@ Provider_requests.prototype = {
             ss.addSparkline(new Sparkline(options))
         })
 
-        ss.sortBy("max").render($(".widget-provider-requests"))
+        ss.sortBy("last").render($(".widget-provider-requests"))
     }
 }
 

@@ -1,7 +1,7 @@
 import logging
 import json
 
-from impactstoryanalytics.widgets.widget import Widget
+from impactstoryanalytics.widgets.widget import Widget, by_hour
 from impactstoryanalytics.widgets.widget_api_helpers import Keenio
 import impactstoryanalytics.widgets.widget_api_helpers as helpers
 
@@ -30,6 +30,9 @@ class Provider_requests(Widget):
         raw_data = keenio.get_raw_data()
 
         ungrouped = Keenio.ungroup(raw_data, "requests", "provider")
-        return ungrouped
+        
+        data_by_hour = by_hour(ungrouped)
+        return data_by_hour
+
 
 

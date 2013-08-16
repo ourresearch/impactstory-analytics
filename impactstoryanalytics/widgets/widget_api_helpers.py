@@ -151,13 +151,19 @@ class Keenio():
 
                 #keenio extraction doesn't respect timeframe so do it ourselves
                 response = self.limit_to_timeframe(response, query_name)
+
             else:
                 for row_from_keen in raw_data:
                     new_row = self.create_row(row_from_keen, query_name)
                     self.timebins[new_row["start_iso"]].update(new_row)
 
+
         if not response:
             response = self.timebins_as_list()
+
+        if "this" in self.queries[self.queries.keys()[0]]["params"]["timeframe"]:
+            response[-1]["end_iso"] = datetime.utcnow().isoformat()
+
         return response
 
     def get_raw_raw_data_dict(self):

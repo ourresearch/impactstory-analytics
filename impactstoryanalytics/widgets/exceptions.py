@@ -3,7 +3,7 @@ import requests
 import iso8601
 import logging
 
-from impactstoryanalytics.widgets.widget import Widget
+from impactstoryanalytics.widgets.widget import Widget, by_hour
 from impactstoryanalytics.widgets.widget_api_helpers import Keenio
 
 
@@ -47,7 +47,9 @@ class Exceptions(Widget):
 
         keenio = Keenio(queries, shared_params)
         raw_data = keenio.get_raw_data()
-        return raw_data
+
+        data_by_hour = by_hour(raw_data)
+        return data_by_hour
 
 
 

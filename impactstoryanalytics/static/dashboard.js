@@ -203,6 +203,10 @@ SparklineSet.prototype = {
             this.sparklines = _.sortBy(that.sparklines, function(sparkline){
                 return _.max(sparkline.options.iaYvalues)
             }).reverse()
+        } else if (sortBy=="last") {
+            this.sparklines = _.sortBy(that.sparklines, function(sparkline){
+                return _.last(_.without(sparkline.options.iaYvalues, null))
+            }).reverse()
         }
 
         return this
@@ -286,8 +290,8 @@ Sparkline.prototype = {
                 iaSecondaryValue: function(yValues) {return Math.round(_.max(yValues))},
                 type:"line",
                 tooltipFormatter:function(sparkline, options, fields){
-                    var dateStr = moment(fields.x*1000).format("MMM D")
-                    return "<span>" + Math.round(fields.y) + '</span>' + ', ' + dateStr
+                    var dateStr = moment(fields.x*1000).format("ddd MMM Do")
+                    return "<span>" + Math.round(fields.y*10)/10 + '</span>' + ', ' + dateStr
                 }
             }
         }
