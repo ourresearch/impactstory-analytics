@@ -5,6 +5,7 @@ Rescuetime.prototype = {
     init: function(){
     }
     ,create: function(data){
+        console.log(data)
         var that = this
         var div$ = $("div.widget-rescuetime")
         div$.find(".graphic, .y_axis").empty()
@@ -38,6 +39,9 @@ Rescuetime.prototype = {
 
         }
         var graph = new Rickshaw.Graph(graphOptions)
+        var hoverDetail = new Rickshaw.Graph.HoverDetail( {
+                                                              graph: graph
+                                                          } );
 
         var yAxis = new Rickshaw.Graph.Axis.Y(
             {
