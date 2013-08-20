@@ -18,7 +18,9 @@ class Signup_growth(Widget):
         data = defaultdict(list)
 
         dataclip_data = get_raw_dataclip_data(self.total_accounts_query_url)
-        dataclip_data_weekly = dataclip_data["values"][0::7]
+
+        # start at 1 so we don't include today
+        dataclip_data_weekly = dataclip_data["values"][1::7]
         datapoints = []
         for datapoint in dataclip_data_weekly:
             (date, IGNORE, total_accounts_string) = datapoint 

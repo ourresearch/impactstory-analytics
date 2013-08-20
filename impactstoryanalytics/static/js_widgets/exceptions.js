@@ -4,10 +4,6 @@ function Exceptions() {
 Exceptions.prototype = {
     create:function(data){
         var baseOptions = {
-            tooltipFormatter:function(sparkline, options, fields){
-                var dateStr = moment(fields.x*1000).format("ddd MMM Do")
-                return "<span>" + fields.y + '</span>' + ', ' + dateStr
-            }
         }
         var sparklineOptions = [
             {

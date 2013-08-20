@@ -1,10 +1,11 @@
 import time
 from datetime import timedelta
-from datetime import date
+from datetime import datetime
 import requests
 import iso8601
 import os
 import logging
+
 
 from impactstoryanalytics.widgets.widget import Widget
 
@@ -35,13 +36,21 @@ class Rescuetime(Widget):
             "perspective": "interval",
             "resolution_time": "day",
             "restrict_kind": "category",
-            "restrict_begin": date.today() - timedelta(days=7),
-            "restrict_end": date.today() + timedelta(days=1)
+            "restrict_begin": datetime.utcnow() - timedelta(days=7),
+            "restrict_end": datetime.utcnow()
         }
         url = "https://www.rescuetime.com/anapi/data"
 
 
-        data = requests.get(url, params=params).json()["rows"]
+        try:
+            r = requests.get(url, params=params)
+            data = r.json()["rows"]
+        except ValueError:
+            logger.debug(u"ValueError in get_raw_data with user {user} on request {url}".format(
+                user=user, 
+                url=r.url))
+            data = []
+
         return data
 
     def is_code_category(self, category):
@@ -64,11 +73,11 @@ class Rescuetime(Widget):
         days = {}
 
         # initialize first so we make sure we have zeros for every day
-        first_day = date.today()
+        first_day = datetime.utcnow()
         for day in [first_day - timedelta(days=i) for i in range(8)]:
             # crazy hack to fix rescuetime rickshaw axis
             adj_data = day
-            datestring = day.isoformat() + "T00:00:00"
+            datestring = day.isoformat()[0:10] + "T00:00:00"
 
             timestamp = int(time.mktime(adj_data.timetuple()))
             days[datestring] = {
@@ -77,6 +86,8 @@ class Rescuetime(Widget):
                 "code": 0,
                 "timestamp": timestamp
             }
+
+        print days.keys()
 
         for row in data:
             datestring = row[0]

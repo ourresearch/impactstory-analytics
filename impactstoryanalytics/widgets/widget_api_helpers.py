@@ -91,7 +91,7 @@ class Keenio():
         for query in self.queries:
             #set in priority order, highest priority last
             self.queries[query]["params"] = dict(default_params.items() + shared_params.items() + queries[query]["params"].items())
-            print self.queries[query]["params"]
+            #print self.queries[query]["params"]
 
         for query in self.queries:
             self.queries[query]["url"] = url_roots[self.queries[query]["project"]]
@@ -114,13 +114,34 @@ class Keenio():
 
         return pans.replace_NAs_with_zeroes().as_list()
 
+    def limit_to_timeframe(self, response, query_name):
+        try:
+            timeframe = self.queries[query_name]["params"]["timeframe"]
+        except KeyError:
+            #no timeframe so no change
+            return response
+
+        if ("this" in timeframe):
+            end_index = None
+            end_index_int = 0
+        else:
+            end_index = -1
+            end_index_int = -1
+
+        if ("30_days" in timeframe):
+            start_index = -30 - end_index_int
+        elif ("7_days" in timeframe):
+            start_index = -7 - end_index_int
+
+        response = response[start_index:end_index] 
+        return response       
 
     def get_raw_data(self, return_raw_response=False):
         response = []
         for query_name in self.queries:
             print "sending a query to keenio: " + query_name
             r = requests.get(self.queries[query_name]["url"])
-            print r.text
+            #print r.text
 
             raw_data = r.json()["result"]
             if return_raw_response:
@@ -130,13 +151,21 @@ class Keenio():
             if self.queries[query_name]["analysis"] == "extraction":
                 response = self.timebin_extraction_data(raw_data)
 
+                #keenio extraction doesn't respect timeframe so do it ourselves
+                response = self.limit_to_timeframe(response, query_name)
+
             else:
                 for row_from_keen in raw_data:
                     new_row = self.create_row(row_from_keen, query_name)
                     self.timebins[new_row["start_iso"]].update(new_row)
 
+
         if not response:
             response = self.timebins_as_list()
+
+        if "this" in self.queries[self.queries.keys()[0]]["params"]["timeframe"]:
+            response[-1]["end_iso"] = datetime.utcnow().isoformat()
+
         return response
 
     def get_raw_raw_data_dict(self):
@@ -250,12 +279,12 @@ class Uservoice():
         return owner
 
     @classmethod
-    def get_ticket_stats(cls, my_agent_name="Unassigned"):
+    def get_ticket_stats(cls):
         logger.info("Getting uservoice ticket stats")
 
         owner = cls.get_uservoice_owner()
 
-        api_response = owner.get("/api/v1/reports/queue_backlog.json")
+        api_response = owner.get("/api/v1/reports/agent_backlog.json")
 
         interesting_fields = [
             "without_response_count", 
@@ -264,14 +293,25 @@ class Uservoice():
             "median_open_time"
             ]
 
-        ticket_dict = {}
+        ticket_dict = dict((field, 0) for field in interesting_fields)
+        median_open_days = []
         for agent in api_response["entries"]:
-            if agent["name"] == my_agent_name:
-                for field in interesting_fields:
-                    if field == "median_open_time":
-                        ticket_dict["median_open_days"] = round(agent[field]/(60.0*60*24), 1)
-                    else:
-                        ticket_dict[field] = agent[field]
+            for field in interesting_fields:
+                if field == "median_open_time":
+                    median_open_days += [open_time/(60.0*60*24) for open_time in agent["open_times"]]
+                else:
+                    try:
+                        ticket_dict[field] += agent[field]
+                    except KeyError:
+                        ticket_dict[field] += 0
+
+
+        median_open_days.sort()
+        try:
+            median_days = median_open_days[int(len(median_open_days)/2)]
+            ticket_dict["median_open_days"] = round(median_days, 1)
+        except IndexError:
+            ticket_dict["median_open_days"] = 0
 
         logger.info("Found uservoice tickets: {all} total, {user} where a user answered last".format(
             all=ticket_dict["total_count"], 
@@ -292,7 +332,7 @@ class Uservoice():
 
     @classmethod
     def get_suggestion_counts(cls):
-        logger.info("Getting uservoice suggestion count")
+        logger.info("Getting uservoice open suggestion count")
 
         owner = cls.get_uservoice_owner()
         suggestions_active = owner.get("/api/v1/suggestions?filter=active&per_page=1000")["suggestions"]
@@ -310,6 +350,20 @@ class Uservoice():
             total=len(suggestions)))
 
         return(suggestion_dict)
+
+    @classmethod
+    def get_closed_suggestion_count(cls):
+        logger.info("Getting uservoice closed suggestion count")
+
+        owner = cls.get_uservoice_owner()
+
+        closed_suggestions = owner.get("/api/v1/suggestions?filter=closed&per_page=1000")["suggestions"]
+
+        logger.info("Found uservoice suggestions: {total} total".format(
+            total=len(closed_suggestions)))
+
+        return(closed_suggestions)
+
 
     @classmethod
     def get_suggestion_details(cls):

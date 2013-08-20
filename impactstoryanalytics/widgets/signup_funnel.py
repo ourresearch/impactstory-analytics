@@ -20,7 +20,9 @@ class Signup_funnel(Widget):
     def convert_to_timepan_format(self, mixpanel_data):
         days_dict = mixpanel_data["omtm"]
         days_list = []
-        for iso_day in sorted(days_dict.keys()):
+
+        days_after_today = sorted(days_dict.keys())[:-1]
+        for iso_day in days_after_today:
             day = days_dict[iso_day]
             day["start_iso"] = arrow.get(str(iso_day), 'YYYY-MM-DD').isoformat(" ")
             days_list.append(day)

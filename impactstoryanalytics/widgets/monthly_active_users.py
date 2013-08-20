@@ -24,7 +24,8 @@ class Monthly_active_users(Widget):
 
         total_accounts = get_raw_dataclip_data(self.total_accounts_query_url)
 
-        datapoints = total_accounts["values"][0:number_of_bins]
+        # start at 1 so that we don't include today
+        datapoints = total_accounts["values"][1:number_of_bins+1]
         # javascript currently expects data with most recent data last
         datapoints.reverse()
 

@@ -1,4 +1,4 @@
-from impactstoryanalytics.widgets.widget import Widget
+from impactstoryanalytics.widgets.widget import Widget, by_hour
 from impactstoryanalytics.widgets.widget_api_helpers import Keenio
 
 class Embedded_widget_use(Widget):
@@ -23,4 +23,6 @@ class Embedded_widget_use(Widget):
         }
         keenio = Keenio(queries)
         raw = keenio.get_raw_data()
-        return raw
+
+        data_by_hour = by_hour(raw)
+        return data_by_hour

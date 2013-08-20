@@ -15,15 +15,11 @@ def run_uservoice():
 
     analytics.identify(user_id="uservoice")
 
-    ticket_dict = Uservoice.get_ticket_stats("Unassigned")
+    ticket_dict = Uservoice.get_ticket_stats()
     print ticket_dict
     analytics.track(user_id="uservoice", event='UserVoice ticket stats', properties=ticket_dict)
 
-    suggestion_dict = Uservoice.get_suggestion_counts()
-    print suggestion_dict
-    analytics.track(user_id="uservoice", event='UserVoice suggestions', properties=suggestion_dict)
-
-    return(ticket_dict, suggestion_dict)
+    return(ticket_dict)
 
 run_uservoice()
 

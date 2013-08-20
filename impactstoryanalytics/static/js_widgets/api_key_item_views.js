@@ -27,7 +27,7 @@ Api_key_item_views.prototype = {
         })
 
         ss
-            .sortBy("max")
+            .sortBy("last")
             .addTotalSparkline({iaSize: "small"})
             .first(10)
             .render($(".widget_api_key_item_views"))

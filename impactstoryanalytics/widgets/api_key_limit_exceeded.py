@@ -21,7 +21,7 @@ class Api_key_limit_exceeded(Widget):
             }
 
         shared_params = {
-                    "timeframe": "last_30_days",
+                    "timeframe": "this_30_days",
                     "target_property": "id",
                     "interval": "daily"
                 }

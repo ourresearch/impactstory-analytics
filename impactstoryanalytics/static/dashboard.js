@@ -4,6 +4,9 @@ function color(color, value){
         'scalar': "#3498db",
         'percent': "#2ecc71"
     }
+    if (color == 'default') {
+        color = 'scalar'
+    }
     var myColor = colors[color]
     if (value == "light"){
         myColor = tinycolor.lighten(myColor, 40).toHexString()
@@ -137,7 +140,10 @@ SparklineSet.conversionRate = function(rows, numeratorKey, denominatorKey){
             return null
         }
         else {
-            return Math.round(100 * row[numeratorKey] / row[denominatorKey])
+            // multiply and divide by ten to get one decimal
+            fraction = row[numeratorKey] / row[denominatorKey]
+            percent_to_one_decimal = Math.round(10 * 100 * fraction) / 10
+            return percent_to_one_decimal
         }
     })
 }
@@ -196,6 +202,10 @@ SparklineSet.prototype = {
         if (sortBy=="max"){
             this.sparklines = _.sortBy(that.sparklines, function(sparkline){
                 return _.max(sparkline.options.iaYvalues)
+            }).reverse()
+        } else if (sortBy=="last") {
+            this.sparklines = _.sortBy(that.sparklines, function(sparkline){
+                return _.last(_.without(sparkline.options.iaYvalues, null))
             }).reverse()
         }
 
@@ -266,10 +276,7 @@ Sparkline.prototype = {
         type = type || "line"
         var defaultOptions = {
             bar:{
-                iaPrimaryValue: function(values){
-                    console.log("reducing values, got these: ", values)
-                    return _.reduce(values, function(memo, num) { return memo + num})
-                },
+                iaPrimaryValue: function(values) {return _.sum(values)},
                 iaSecondaryValue: function(values) {return _.max(values)},
                 tooltipFormatter: function(sparkline, options, fields) {
                     console.log(fields)
@@ -283,8 +290,8 @@ Sparkline.prototype = {
                 iaSecondaryValue: function(yValues) {return Math.round(_.max(yValues))},
                 type:"line",
                 tooltipFormatter:function(sparkline, options, fields){
-                    var dateStr = moment(fields.x*1000).format("MMM D")
-                    return "<span>" + Math.round(fields.y) + '</span>' + ', ' + dateStr
+                    var dateStr = moment(fields.x*1000).format("ddd MMM Do")
+                    return "<span>" + Math.round(fields.y*10)/10 + '</span>' + ', ' + dateStr
                 }
             }
         }

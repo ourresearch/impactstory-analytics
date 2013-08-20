@@ -1,18 +1,20 @@
-function Api_key_limit_exceeded() {
+function Profile_load_fail_fraction() {
 }
-Api_key_limit_exceeded.prototype = {
+
+Profile_load_fail_fraction.prototype = {
     create:function(data){
         var baseOptions = {
             tooltipFormatter:function(sparkline, options, fields){
-                moment().zone(0)
                 var dateStr = moment(fields.x*1000).format("ddd MMM Do")
                 return "<span>" + fields.y + '</span>' + ', ' + dateStr
             }
         }
         var sparklineOptions = [
             {
-                iaClassName: "api_key_limit_exceeded",
-                iaDisplayName: "Calls with key over limit"
+                iaClassName: "profile_load_fail_fraction",
+                iaDisplayName: "sample profile",
+                iaYvalues: SparklineSet.conversionRate(data, "failed_loads", "total_loads"),
+                iaUnit: "percent"
             }
         ]
         var ss = new SparklineSet(data, baseOptions)
@@ -20,7 +22,6 @@ Api_key_limit_exceeded.prototype = {
             var sparkline = new Sparkline(options)
             ss.addSparkline(sparkline)
         })
-        ss.render($(".widget-api_key_limit_exceeded"))
+        ss.render($(".widget-profile_load_fail_fraction"))
     }
 }
-
