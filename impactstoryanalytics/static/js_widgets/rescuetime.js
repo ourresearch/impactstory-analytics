@@ -17,6 +17,7 @@ Rescuetime.prototype = {
             element: div$.find(".graphic")[0],
             renderer: "stack",
             width: 200,
+            max:16,
             height: 75,
             series: [
                 {
