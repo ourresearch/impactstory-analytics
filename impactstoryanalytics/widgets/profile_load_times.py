@@ -1,7 +1,5 @@
 from impactstoryanalytics.widgets.widget import Widget
 from impactstoryanalytics.widgets.widget_api_helpers import Keenio
-from collections import defaultdict
-import numpy
 
 class Profile_load_times(Widget):
 
