@@ -11,10 +11,6 @@ Daily_new_users.prototype = {
         }
         var sparklineOptions = [
             {
-                iaClassName: "new_accounts",
-                iaDisplayName: "new accts"
-            },
-            {
                 iaClassName: "total_accounts",
                 iaDisplayName: "total accts"
             }

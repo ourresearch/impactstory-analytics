@@ -51,7 +51,7 @@ class Monthly_active_users(Widget):
 
 
     def get_data(self):
-        number_of_bins = 7  # eventually make this bins for 30 days
+        number_of_bins = 30  # eventually make this bins for 30 days
         data = self.get_raw_data(number_of_bins)
 
         response = [

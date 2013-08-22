@@ -6,16 +6,15 @@ Monthly_active_users.prototype = {
     }
     ,create:function(data){
         var baseOptions = {
-            iaLabelWidth: "2"
+            iaLabelWidth: "2",
+            chartRangeMax: false,
+            chartRangeMin: false
+
         }
         var sparklineOptions = [
             {
-                iaClassName: "accounts"
-            },
-            {
                 iaClassName:"percent_MAU",
-                iaUnit: "percent",
-                chartRangeMax: false
+                iaUnit: "percent"
             },
             {
                 iaClassName:"monthly_actives"

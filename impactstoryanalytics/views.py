@@ -71,9 +71,8 @@ dashboards = OrderedDict([
         "uservoice_tickets",
         "uservoice_suggestions",
         "uservoice_suggestions_upvoted",
-        "github",
-        "exceptions"
-    ]),      
+        "github"
+    ]),
     ("profiles", [
         "products_per_profile",
         "profiles_per_genre",
