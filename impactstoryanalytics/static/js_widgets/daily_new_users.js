@@ -11,8 +11,8 @@ Daily_new_users.prototype = {
         }
         var sparklineOptions = [
             {
-                iaClassName: "total_accounts",
-                iaDisplayName: "total accts"
+                iaClassName: "new_accounts",
+                iaDisplayName: "new accts"
             }
         ]
         var ss = new SparklineSet(data, baseOptions)
