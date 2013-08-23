@@ -188,9 +188,11 @@ div.dashboard div.widget div.container div.sparkline-with-numbers span.sep {
   display: none;
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers span.primary span.value {
+  display: inline-block;
+  text-align: right;
+  min-width: 30px;
   font-weight: bolder;
   font-size: 19.8px;
-  vertical-align: 1px;
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers span.primary span.unit {
   margin-left: -5px;

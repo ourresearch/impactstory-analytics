@@ -198,16 +198,33 @@ SparklineSet.prototype = {
     }
     ,sortBy: function(sortBy){
         sortBy = sortBy || "max"
-        that = this
+        var that = this
+        console.log("sparklines: ", that.sparklines)
+        var sparklinesByHighlight = function(hasHighlight) {
+            return _.filter(
+                that.sparklines,
+                function(x) {
+                    return x.options.iaHighlight == hasHighlight
+                }
+            )
+        }
+        var sparklinesWithoutHighlights = sparklinesByHighlight(false)
+        var sparklinesWithHighlights = sparklinesByHighlight(true)
+
+        console.log("sparklines with highlights: ", sparklinesWithHighlights)
+        var sorted
         if (sortBy=="max"){
-            this.sparklines = _.sortBy(that.sparklines, function(sparkline){
+            sorted = _.sortBy(sparklinesWithoutHighlights, function(sparkline){
                 return _.max(sparkline.options.iaYvalues)
             }).reverse()
-        } else if (sortBy=="last") {
-            this.sparklines = _.sortBy(that.sparklines, function(sparkline){
+        }
+        else if (sortBy=="last") {
+            sorted = _.sortBy(sparklinesWithoutHighlights, function(sparkline){
                 return _.last(_.without(sparkline.options.iaYvalues, null))
             }).reverse()
         }
+        var sortedPlusHighlights = sorted.concat(sparklinesWithHighlights)
+        this.sparklines = sortedPlusHighlights
 
         return this
     }

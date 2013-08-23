@@ -4,7 +4,8 @@ function Profiles_per_genre() {
 Profiles_per_genre.prototype = {
     create:function(data){
         var baseOptions = {
-            iaUnit: "percent"
+            iaUnit: "percent",
+            iaShowSparkline: false
         }
         var sparklineOptions = [
             { iaClassName: "article",
@@ -25,15 +26,20 @@ Profiles_per_genre.prototype = {
               iaYvalues: SparklineSet.conversionRate(data, "slideshare", "total") },
             { iaClassName: "url",
               iaYvalues: SparklineSet.conversionRate(data, "url", "total") },
-            { iaClassName: "total", 
-              iaUnit: "" }
+            {
+                iaClassName: "total",
+                iaHighlight: true,
+                iaSecondaryValue: function(){return ""},
+                iaSecondaryValueLabel: "",
+                iaUnit: ""
+            }
         ]
         var ss = new SparklineSet(data, baseOptions)
         _.each(sparklineOptions, function(options){
             var sparkline = new Sparkline(options)
             ss.addSparkline(sparkline)
         })
-        ss.render($(".widget-profiles_per_genre"))
+        ss.sortBy("max").render($(".widget-profiles_per_genre"))
     }
 }
 
