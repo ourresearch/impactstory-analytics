@@ -263,7 +263,7 @@ div.dashboard div.widget div.container div.sparkline-with-numbers.size-small.hig
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers.size-small a.sparkline-label {
   font-size: 13.5px;
-  text-decoration: underline;
+  text-decoration: none;
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers.size-small a.sparkline-label.label-width-1 {
   width: 85px;
