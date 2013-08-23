@@ -192,7 +192,7 @@ div.dashboard div.widget div.container div.sparkline-with-numbers span.primary s
   text-align: right;
   min-width: 30px;
   font-weight: bolder;
-  font-size: 19.8px;
+  font-size: 21.599999999999998px;
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers span.primary span.unit {
   margin-left: -5px;
@@ -242,6 +242,15 @@ div.dashboard div.widget div.container div.sparkline-with-numbers span.sparkline
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers.show-sparkline-false span.sparkline {
   display: none;
+}
+div.dashboard div.widget div.container div.sparkline-with-numbers.size-large {
+  font-size: 30px;
+}
+div.dashboard div.widget div.container div.sparkline-with-numbers.size-large a.sparkline-label {
+  font-size: 22.5px;
+}
+div.dashboard div.widget div.container div.sparkline-with-numbers.size-large span.primary span.value {
+  font-size: 30px;
 }
 div.dashboard div.widget div.container div.sparkline-with-numbers.size-small {
   font-size: 15px;

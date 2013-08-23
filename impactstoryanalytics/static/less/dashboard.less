@@ -229,7 +229,7 @@ div.dashboard {
                   text-align: right;
                   min-width: 30px;
                   font-weight: bolder;
-                  font-size: @baseFontSize * 1.1;
+                  font-size: @baseFontSize * 1.2;
                }
                span.unit {
                   margin-left: -5px;
@@ -284,6 +284,18 @@ div.dashboard {
             &.show-sparkline-false {
                span.sparkline {
                   display: none;
+               }
+            }
+            &.size-large {
+               @baseFontSize: 30px;
+               font-size: @baseFontSize;
+               a.sparkline-label {
+                  font-size: @baseFontSize * .75;
+               }
+               span.primary {
+                  span.value {
+                     font-size: @baseFontSize;
+                  }
                }
             }
             &.size-small {

@@ -12,7 +12,10 @@ Daily_new_users.prototype = {
         var sparklineOptions = [
             {
                 iaClassName: "new_accounts",
-                iaDisplayName: "new accts"
+                iaDisplayName: "new accts",
+                iaSize: "large",
+                width: "150px",
+                iaLabelWidth: 2
             }
         ]
         var ss = new SparklineSet(data, baseOptions)
