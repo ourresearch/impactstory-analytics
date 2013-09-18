@@ -3,9 +3,16 @@
 {% block dashboard_content %}
    <div class="dashboard dashboard-today">
 
-		<div class="widget widget-signup_funnel sparkline-set">
-		  <h2>signup funnel<span>last 7 days</span></h2>
-		  <div class="container"></div>
+		<div class="widgets-vertical">
+		   <div class="widget widget-signup_growth sparkline-set">
+		      <h2>signup growth<span>weekly since Jan 2013</span></h2>
+		      <div class="container"></div>
+		   </div>
+
+			<div class="widget widget-signup_funnel sparkline-set">
+			  <h2>signup funnel<span>last 7 days</span></h2>
+			  <div class="container"></div>
+			</div>
 		</div>
 
 		<div class="widgets-vertical">
@@ -31,12 +38,7 @@
 		   </div>	   
 		</div>
 
-		<div class="widgets-vertical">
-		   <div class="widget widget-github-issues sparkline-set">
-		      <h2>github issues<span>this 30 days</span></h2>
-		      <div class="container"></div>
-		   </div>
-		   
+		<div class="widgets-vertical">		   
 		   <div class="widget widget-uservoice_tickets sparkline-set clear-left">
 		      <h2><a href="https://impactstory.uservoice.com/admin/reports/ticket_backlog">uservoice tickets</a>
 		      	<span>this 30 days</span>
