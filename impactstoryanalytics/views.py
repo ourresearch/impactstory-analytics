@@ -91,9 +91,9 @@ dashboards = OrderedDict([
         "gmail",        
         "rescuetime",
         "uservoice_tickets",
-        "github",
         "exceptions",
-        "signup_funnel"        
+        "signup_funnel",
+        "signup_growth"                
     ])
 ])
 
