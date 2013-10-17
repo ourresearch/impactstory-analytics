@@ -92,7 +92,7 @@ class Rescuetime(Widget):
         for row in data:
             datestring = row[0]
             time_spent = float(row[1]) / 3600  # in hours
-            category = row[3]
+            category = row[4]
 
             # add to the time counts for this day
             days[datestring]["total"] += time_spent
