@@ -5,7 +5,6 @@ Hourly_uniques.prototype = {
     create:function(data){
         var baseOptions = {
             tooltipFormatter:function(sparkline, options, fields){
-                moment().zone(0)
                 var dateStr = moment.utc(fields.x*1000).format("ddd h:mm a z")
                 return "<span>" + fields.y + '</span>' + ', ' + dateStr
             }

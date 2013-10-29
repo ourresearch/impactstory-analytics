@@ -58,7 +58,8 @@ dashboards = OrderedDict([
         "signup_growth",
         "signup_funnel",
         "monthly_active_users",
-        "daily_new_users"
+        "daily_new_users",
+        "hourly_new_users"                                        
     ]),    
     ("health", [
         "showstopper_papertrail_alerts",

@@ -19,7 +19,7 @@ Embedded_widget_use.prototype = {
                 iaUnit: "percent",
                 chartRangeMax: false,
                 tooltipFormatter:function(sparkline, options, fields){
-                    var dateStr = moment(fields.x*1000).format("MMM D")
+                    var dateStr = moment.utc(fields.x*1000).format("MMM D")
                     return "<span>" + fields.y + '</span>%' + ', ' + dateStr
                 }                
             },

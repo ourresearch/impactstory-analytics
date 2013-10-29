@@ -6,7 +6,7 @@ Uservoice_tickets.prototype = {
         var baseOptions = {
             iaLabelWidth: "1",
             tooltipFormatter:function(sparkline, options, fields){
-                var dateStr = moment(fields.x*1000).format("ddd MMM Do")
+                var dateStr = moment.utc(fields.x*1000).format("ddd MMM Do")
                 return "<span>" + Math.round(fields.y) + '</span>' + ', ' + dateStr
             }
         }
