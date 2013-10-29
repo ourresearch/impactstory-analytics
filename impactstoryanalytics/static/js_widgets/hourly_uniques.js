@@ -13,6 +13,7 @@ Hourly_uniques.prototype = {
         var sparklineOptions = [
             {
                 iaClassName:"hourly_uniques",
+                width: "150px",                
                 iaLabelWidth: "2"
             }
         ]

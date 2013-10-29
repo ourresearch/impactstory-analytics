@@ -3,17 +3,6 @@
 {% block dashboard_content %}
    <div class="dashboard dashboard-today">
 
-		<div class="widgets-vertical">
-		   <div class="widget widget-signup_growth sparkline-set">
-		      <h2>signup growth<span>weekly since Jan 2013</span></h2>
-		      <div class="container"></div>
-		   </div>
-
-			<div class="widget widget-signup_funnel sparkline-set clear-left">
-			  <h2>signup funnel<span>last 7 days</span></h2>
-			  <div class="container"></div>
-			</div>
-		</div>
 
 		<div class="widgets-vertical">
 		   <div class="widget widget-rescuetime Jason">
@@ -35,21 +24,46 @@
 		   <div class="widget widget-gmail sparkline-set clear-left">
 		      <h2>gmail inbox<span>this 48hrs</span></h2>
 		      <div class="container"></div>
-		   </div>	   
-		</div>
+		   </div>	
 
-		<div class="widgets-vertical">		   
-		   <div class="widget widget-uservoice_tickets sparkline-set">
+		   <div class="widget widget-uservoice_tickets sparkline-set clear-left">
 		      <h2><a href="https://impactstory.uservoice.com/admin/reports/ticket_backlog">uservoice tickets</a>
 		      	<span>this 30 days</span>
 		      </h2>
 		      <div class="container"></div>
+		   </div>		      
+		</div>
+
+		<div class="widgets-vertical">
+		   <div class="widget widget-signup_growth sparkline-set">
+		      <h2>signup growth<span>weekly since June 2013</span></h2>
+		      <div class="container"></div>
 		   </div>
 
-			<div class="widget widget-exceptions sparkline-set clear-left">
-			  <h2>exceptions<span>hourly average, this 30 days</span></h2>
+			<div class="widget widget-signup_funnel sparkline-set clear-left">
+			  <h2>signup funnel<span>last 30 days</span></h2>
 			  <div class="container"></div>
 			</div>
+		</div>
+
+
+		<div class="widgets-vertical">		   
+
+		   <div class="widget widget-daily_new_users sparkline-set">
+		      <h2>daily signups<span>last 30 days</span></h2>
+		      <div class="container"></div>
+		   </div>
+
+		   <div class="widget widget-hourly_new_users sparkline-set clear-left">
+		      <h2>hourly signups<span>last 72 hours</span></h2>
+		      <div class="container"></div>
+		   </div>
+
+		   <div class="widget widget-hourly_uniques sparkline-set clear-left">
+		      <h2>hourly uniques<span>last 72 hours</span></h2>
+		      <div class="container"></div>
+		   </div>
+		   
 		</div>
 
    </div>

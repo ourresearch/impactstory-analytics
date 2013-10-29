@@ -19,8 +19,10 @@ class Signup_growth(Widget):
 
         dataclip_data = get_raw_dataclip_data(self.total_accounts_query_url)
 
+        JUNE2013 = "2013-06-01 00:00:00"
+        dataclip_data = [datapoint for datapoint in dataclip_data["values"] if datapoint[0]>=JUNE2013]
         # start at 1 so we don't include today
-        dataclip_data_weekly = dataclip_data["values"][1::7]
+        dataclip_data_weekly = dataclip_data[1::7]
         datapoints = []
         for datapoint in dataclip_data_weekly:
             (date, IGNORE, total_accounts_string) = datapoint 

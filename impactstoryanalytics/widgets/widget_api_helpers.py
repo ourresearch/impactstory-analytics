@@ -242,7 +242,7 @@ class Mixpanel():
         funnel_params = {
             # The first date in yyyy-mm-dd format from which a user can begin the first step in the funnel. This date is inclusive.
             "to_date": datetime.utcnow().isoformat()[0:10]  # today
-            ,"from_date": (datetime.utcnow() - timedelta(days=7)).isoformat()[0:10]
+            ,"from_date": (datetime.utcnow() - timedelta(days=30)).isoformat()[0:10]
 
             # The number of days each user has to complete the funnel, starting from the time they 
             # triggered the first step in the funnel. May not be greater than 60 days. 

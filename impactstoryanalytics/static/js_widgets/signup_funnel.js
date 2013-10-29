@@ -17,6 +17,7 @@ Signup_funnel.prototype = {
             {
                 iaClassName:"1_conv",
                 iaUnit: "percent",
+                chartRangeMax: false,                
                 iaDisplayName: " "
 
             },
@@ -29,8 +30,8 @@ Signup_funnel.prototype = {
             {
                 iaClassName:"2_conv",
                 iaUnit: "percent",
+                chartRangeMax: false,                
                 iaDisplayName: " "
-
 
             },
             {
@@ -42,8 +43,8 @@ Signup_funnel.prototype = {
             {
                 iaClassName:"3_conv",
                 iaUnit: "percent",
+                chartRangeMax: false,                
                 iaDisplayName: " "
-
 
             },
             {

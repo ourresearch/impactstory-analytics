@@ -20,7 +20,7 @@ class Hourly_uniques(Widget):
                 "params": {
                     "event_collection": "Loaded a page (custom)",
                     "target_property": "ga_cookie",
-                    "timeframe": "this_24_hours",
+                    "timeframe": "this_72_hours",
                     "interval": "hourly"
                 }
             }

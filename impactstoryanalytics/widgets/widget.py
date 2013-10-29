@@ -146,8 +146,12 @@ class Widget:
             num_bins = (arrow.utcnow() - input).days + 1
 
 
-        end = arrow.utcnow().ceil("day")  # end of today
-        start = end.floor("day").replace(days=-num_bins)
+        end = arrow.utcnow().ceil(interval)  # end of today
+        if interval=="hour":
+            start = end.floor(interval).replace(hours=-num_bins)
+        else:  #interval=day
+            start = end.floor(interval).replace(days=-num_bins)
+
         pans = TimePansList()
         for r in arrow.Arrow.span_range(interval, start, end):
             new_pan = TimePan(r[0], r[1])

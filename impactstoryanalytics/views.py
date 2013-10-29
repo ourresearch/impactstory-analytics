@@ -16,6 +16,7 @@ from impactstoryanalytics.widgets import embedded_widget_use
 from impactstoryanalytics.widgets import gmail
 from impactstoryanalytics.widgets import github
 from impactstoryanalytics.widgets import hourly_uniques
+from impactstoryanalytics.widgets import hourly_new_users
 from impactstoryanalytics.widgets import itemsbycreateddate
 from impactstoryanalytics.widgets import importers_used
 from impactstoryanalytics.widgets import exceptions
@@ -91,9 +92,11 @@ dashboards = OrderedDict([
         "gmail",        
         "rescuetime",
         "uservoice_tickets",
-        "exceptions",
         "signup_funnel",
-        "signup_growth"                
+        "signup_growth",
+        "hourly_uniques",
+        "daily_new_users",                                
+        "hourly_new_users"                                
     ])
 ])
 
