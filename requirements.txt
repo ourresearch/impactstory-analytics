@@ -9,7 +9,7 @@ PyYAML==3.10
 SQLAlchemy==0.8.2
 Werkzeug==0.9.1
 analytics-python==0.4.2
-arrow==0.3.4
+arrow==0.4.2
 gunicorn==17.5
 iso8601==0.1.4
 itsdangerous==0.22

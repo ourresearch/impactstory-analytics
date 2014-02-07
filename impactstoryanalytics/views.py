@@ -34,6 +34,7 @@ from impactstoryanalytics.widgets import signup_funnel
 from impactstoryanalytics.widgets import uservoice_tickets
 from impactstoryanalytics.widgets import uservoice_suggestions
 from impactstoryanalytics.widgets import uservoice_suggestions_upvoted
+from impactstoryanalytics.widgets import signup_growth_target
 
 from impactstoryanalytics.widgets.widget import Widget
 import cache
@@ -153,7 +154,7 @@ def widget_instance_from_name(widget_name):
 def widget_data_raw(widget_name, get_from_cache=True):
     widget = widget_instance_from_name(widget_name)
 
-    # get_from_cache = False
+    get_from_cache = False
 
     # get it from the cache if it is there
     cache_key = "widget_{widget_name}".format(
