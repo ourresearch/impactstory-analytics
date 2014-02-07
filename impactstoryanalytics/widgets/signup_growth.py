@@ -12,7 +12,7 @@ logger = logging.getLogger("impactstoryanalytics.widgets.signup_growth")
 
 
 class Signup_growth(Widget):
-    total_accounts_query_url = "https://dataclips.heroku.com/brczfyjvdlovipuuukgjselrnilk.json"
+    total_accounts_query_url = "https://dataclips.heroku.com/feblvvoknanzuiumyiawutmqdwbo.json"
 
     def get_weekly_growth_data(self):
         data = defaultdict(list)
