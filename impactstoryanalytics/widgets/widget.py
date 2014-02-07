@@ -11,7 +11,7 @@ logger = logging.getLogger("impactstoryanalytics.widget")
 
 ## Utility functions
 def get_raw_dataclip_data(query_url):
-    #example query_url: "https://dataclips.heroku.com/brczfyjvdlovipuuukgjselrnilk.json"
+    #example query_url: "https://dataclips.heroku.com/feblvvoknanzuiumyiawutmqdwbo.json"
     raw_data = requests.get(query_url).json()
     #print raw_data
     return raw_data
