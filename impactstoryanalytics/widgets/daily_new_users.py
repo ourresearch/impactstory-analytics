@@ -9,7 +9,7 @@ logger = logging.getLogger("impactstoryanalytics.widgets.daily_new_users")
 
 class Daily_new_users(Widget):
 
-    new_accounts_query_url = "https://dataclips.heroku.com/brczfyjvdlovipuuukgjselrnilk.json"
+    new_accounts_query_url = "https://dataclips.heroku.com/feblvvoknanzuiumyiawutmqdwbo.json"
 
     def get_raw_data(self, number_of_bins):
         data = defaultdict(list)
