@@ -11,7 +11,7 @@ logger = logging.getLogger("impactstoryanalytics.widget")
 
 ## Utility functions
 def get_raw_dataclip_data(query_url):
-    #example query_url: "https://dataclips.heroku.com/brczfyjvdlovipuuukgjselrnilk.json"
+    #example query_url: "https://dataclips.heroku.com/feblvvoknanzuiumyiawutmqdwbo.json"
     raw_data = requests.get(query_url).json()
     #print raw_data
     return raw_data
@@ -146,8 +146,12 @@ class Widget:
             num_bins = (arrow.utcnow() - input).days + 1
 
 
-        end = arrow.utcnow().ceil("day")  # end of today
-        start = end.floor("day").replace(days=-num_bins)
+        end = arrow.utcnow().ceil(interval)  # end of today
+        if interval=="hour":
+            start = end.floor(interval).replace(hours=-num_bins)
+        else:  #interval=day
+            start = end.floor(interval).replace(days=-num_bins)
+
         pans = TimePansList()
         for r in arrow.Arrow.span_range(interval, start, end):
             new_pan = TimePan(r[0], r[1])

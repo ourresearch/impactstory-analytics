@@ -5,7 +5,7 @@ Daily_new_users.prototype = {
     create:function(data){
         var baseOptions = {
             tooltipFormatter:function(sparkline, options, fields){
-                var dateStr = moment(fields.x*1000).format("ddd MMM Do")
+                var dateStr = moment.utc(fields.x*1000).format("ddd MMM Do")
                 return "<span>" + fields.y + '</span>' + ', ' + dateStr
             }
         }
@@ -13,9 +13,10 @@ Daily_new_users.prototype = {
             {
                 iaClassName: "new_accounts",
                 iaDisplayName: "new accts",
-                iaSize: "large",
+                //iaSize: "large",
                 width: "150px",
-                iaLabelWidth: 2
+                iaLabelWidth: 2,
+                iaPrimaryValue: function(values) {return _.sum(values)}                
             }
         ]
         var ss = new SparklineSet(data, baseOptions)

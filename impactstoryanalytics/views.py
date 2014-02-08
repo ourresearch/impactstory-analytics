@@ -16,6 +16,7 @@ from impactstoryanalytics.widgets import embedded_widget_use
 from impactstoryanalytics.widgets import gmail
 from impactstoryanalytics.widgets import github
 from impactstoryanalytics.widgets import hourly_uniques
+from impactstoryanalytics.widgets import hourly_new_users
 from impactstoryanalytics.widgets import itemsbycreateddate
 from impactstoryanalytics.widgets import importers_used
 from impactstoryanalytics.widgets import exceptions
@@ -47,24 +48,18 @@ logger = logging.getLogger("impactstoryanalytics.views")
 
 # define dashboards
 dashboards = OrderedDict([
-    ("api", [
-        "embedded_widget_use",
-        "api_key_item_creates",
-        "api_key_item_views",
-        "api_keys_minted",
-        "api_key_limit_exceeded"
-    ]),
     ("engagement", [
         "signup_growth",
-        "signup_funnel",
-        "monthly_active_users",
-        "daily_new_users"
+        #"signup_funnel",
+        #"monthly_active_users",
+        "daily_new_users",
+        "hourly_new_users"                                        
     ]),    
     ("health", [
         "showstopper_papertrail_alerts",
-        "exceptions",
-        "profile_load_times",
-        "profile_load_fail_fraction"
+        "exceptions"
+        #"profile_load_times",
+        #"profile_load_fail_fraction"
     ]),
     ("productivity", [
         "gmail",
@@ -80,21 +75,23 @@ dashboards = OrderedDict([
         "importers_used",
         "itemsByCreatedDate",
     ]),
-    ("provider_health", [
-        "provider_errors",
-        "provider_requests"
-    ]),
+    # ("provider_health", [
+    #     "provider_errors",
+    #     "provider_requests"
+    # ]),
     ("realtime", [
-        "latestProfile",
-        "hourly_uniques"
+        "latestProfile"
+        #"hourly_uniques"
     ]),
     ("today", [
         "gmail",        
         "rescuetime",
         "uservoice_tickets",
-        "exceptions",
-        "signup_funnel",
-        "signup_growth"                
+        #"signup_funnel",
+        "signup_growth",
+        #"hourly_uniques",
+        "daily_new_users",                                
+        "hourly_new_users"                                
     ])
 ])
 

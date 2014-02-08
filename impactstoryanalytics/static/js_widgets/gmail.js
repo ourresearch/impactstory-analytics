@@ -5,7 +5,7 @@ Gmail.prototype = {
     create:function(data){
         var baseOptions = {
             tooltipFormatter:function(sparkline, options, fields){
-                var dateStr = moment(fields.x*1000).format("ddd h:mm a")
+                var dateStr = moment.utc(fields.x*1000).format("ddd h:mm a")
                 return "<span>" + fields.y + '</span>' + ', ' + dateStr
             }
         }

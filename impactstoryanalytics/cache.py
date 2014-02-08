@@ -31,11 +31,18 @@ class Cache(object):
 
     def _get_memcached_client(self):
         try:
+            servers = [os.environ.get('MEMCACHIER_SERVERS')]
+            username=os.environ.get('MEMCACHIER_USERNAME')
+            password=os.environ.get('MEMCACHIER_PASSWORD')
+            if "localhost" in servers:
+                username = None
+                password = None
             mc = pylibmc.Client(
-                    servers=[os.environ.get('MEMCACHIER_SERVERS')],
-                    username=os.environ.get('MEMCACHIER_USERNAME'),
-                    password=os.environ.get('MEMCACHIER_PASSWORD'),
-                    binary=True)
+                servers=servers, 
+                username=username,
+                password=password,
+                binary=True)
+            return mc
         except AttributeError:
             logger.info("MEMCACHIER env variables aren't set, so no valid cache client")
             mc = None

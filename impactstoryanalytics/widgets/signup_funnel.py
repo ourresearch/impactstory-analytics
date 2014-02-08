@@ -34,7 +34,10 @@ class Signup_funnel(Widget):
 
 
 
-            day["signup_conv"] = 100 * day["3_count"] / day["0_count"]
+            try:
+                day["signup_conv"] = 100 * day["3_count"] / day["0_count"]
+            except ZeroDivisionError:
+                day["signup_conv"] = 0
             del day["steps"]
             del day["analysis"]
 

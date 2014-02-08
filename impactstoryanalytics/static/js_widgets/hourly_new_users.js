@@ -1,7 +1,7 @@
-function Hourly_uniques() {
+function Hourly_new_users() {
 }
 
-Hourly_uniques.prototype = {
+Hourly_new_users.prototype = {
     create:function(data){
         var baseOptions = {
             tooltipFormatter:function(sparkline, options, fields){
@@ -11,9 +11,11 @@ Hourly_uniques.prototype = {
         }
         var sparklineOptions = [
             {
-                iaClassName:"hourly_uniques",
-                width: "150px",                
-                iaLabelWidth: "2"
+                iaClassName: "new_accounts",
+                iaDisplayName: "new accts",
+                width: "150px",
+                iaLabelWidth: 2,
+                iaPrimaryValue: function(values) {return _.sum(values)}
             }
         ]
         var ss = new SparklineSet(data, baseOptions)
@@ -21,6 +23,6 @@ Hourly_uniques.prototype = {
             var sparkline = new Sparkline(options)
             ss.addSparkline(sparkline)
         })
-        ss.render($(".widget-hourly_uniques"))
+        ss.render($(".widget-hourly_new_users"))
     }
 }

@@ -5,7 +5,7 @@ Profile_load_fail_fraction.prototype = {
     create:function(data){
         var baseOptions = {
             tooltipFormatter:function(sparkline, options, fields){
-                var dateStr = moment(fields.x*1000).format("ddd MMM Do")
+                var dateStr = moment.utc(fields.x*1000).format("ddd MMM Do")
                 return "<span>" + fields.y + '</span>' + ', ' + dateStr
             }
         }

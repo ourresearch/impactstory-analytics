@@ -153,7 +153,7 @@ SparklineSet.prototype = {
         var calculatedOptions = _.clone(this.optionsFromUser, {})
 
         calculatedOptions.xvalues = _.map(_.pluck(this.rows, "start_iso"), function(iso){
-            return moment(iso).format("X")
+            return moment.utc(iso).format("X")
         })
 
         calculatedOptions.iaShareYAxisMax = this.findOverallMax()
@@ -307,7 +307,7 @@ Sparkline.prototype = {
                 iaSecondaryValue: function(yValues) {return Math.round(_.max(yValues))},
                 type:"line",
                 tooltipFormatter:function(sparkline, options, fields){
-                    var dateStr = moment(fields.x*1000).format("ddd MMM Do")
+                    var dateStr = moment.utc(fields.x*1000).format("ddd MMM Do")
                     return "<span>" + Math.round(fields.y*10)/10 + '</span>' + ', ' + dateStr
                 }
             }
