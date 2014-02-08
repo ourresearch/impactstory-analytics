@@ -40,7 +40,7 @@ class Signup_growth_target(Widget):
             target_count = target_line[date]
             rows.append([date, actual_count, target_count])
 
-        return rows
+        return {"fields": dataclip_data["fields"], "values": rows}
 
 
 

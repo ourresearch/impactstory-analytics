@@ -125,6 +125,15 @@ assets.register('css_all', Bundle(*base_css))
 memcache_client = cache.Cache()
 
 
+def to_csv(headers, rows):
+    header_row_string = ",".join(headers)
+    row_strings = []
+    for row in rows:
+        row = [v if v is not None else "" for v in row]
+
+        row_strings.append(",".join([str(v) for v in row]))
+
+    return header_row_string + "\n" + "\n".join(row_strings)
 
 
 # views
@@ -174,9 +183,22 @@ def widget_data_raw(widget_name, get_from_cache=True):
 
 @app.route("/widget_data/<widget_name>")
 def widget_data(widget_name, get_from_cache=True):
-    widget_response = widget_data_raw(widget_name)
-    resp = make_response(json.dumps(widget_response, indent=4), 200)
-    resp.mimetype = "application/json"
+
+    extension = widget_name[-4:]
+    if extension == ".csv":
+        widget_name = widget_name[0:-4]
+        widget_response = widget_data_raw(widget_name)
+        resp = make_response(to_csv(
+            widget_response["fields"],
+            widget_response["values"]
+        ))
+        resp.mimetype = "application/csv"
+
+    else:
+        widget_response = widget_data_raw(widget_name)
+        resp = make_response(json.dumps(widget_response, indent=4), 200)
+        resp.mimetype = "application/json"
+
     return resp
 
 
