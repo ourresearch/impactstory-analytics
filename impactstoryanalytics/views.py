@@ -169,7 +169,7 @@ def widget_data_raw(widget_name, get_from_cache=True):
 
     if not widget_response:
         widget_response = widget.get_data()
-        memcache_client.set_cache_entry(cache_key, 
+        memcache_client.set_cache_entry(cache_key,
                                         widget_response, 
                                         widget.max_cache_age)
     return widget_response
