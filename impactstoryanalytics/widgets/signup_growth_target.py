@@ -19,7 +19,7 @@ class Signup_growth_target(Widget):
         Widget.__init__(self)
         self.start_date = arrow.get("2014-02-03")
         self.daily_growth = .0073  # times 7 = 5.11% weekly
-        self.user_count = {
+        self.signups_total_endpoints = {
             "start": 4255,
             "finish": 10000  # 10k
         }
@@ -29,18 +29,30 @@ class Signup_growth_target(Widget):
         dataclip_data = get_raw_dataclip_data(self.data_url)
         datapoints = [[p[0][0:10], p[2]] for p in dataclip_data["values"]]
 
+        actual_line = {}
+        for row in dataclip_data["values"]:
+            day_str = row[0][0:10]
+            actual_line[day_str] = [int(v) for v in row[1:]]
 
-        actual_line = dict(datapoints)
+
         target_line = self.make_target_line()
-
 
         rows = []
         for date in sorted(target_line.keys()):
-            actual_count = actual_line.get(date, None)
-            target_count = target_line[date]
-            rows.append([date, actual_count, target_count])
+            actual_values = actual_line.get(date, ["", ""])
+            target_values = target_line[date]
 
-        return {"fields": dataclip_data["fields"], "values": rows}
+            rows.append([date] + actual_values + target_values)
+
+        fields = [
+            "date",
+            "actual_signups",
+            "actual_signups_total",
+            "target_signups",
+            "target_signups_total"
+        ]
+
+        return {"fields": fields, "values": rows}
 
 
 
@@ -48,19 +60,23 @@ class Signup_growth_target(Widget):
         target_line = {}
         datapoint = {
             "date": self.start_date,
-            "count": self.user_count["start"]
+            "signups": 0,
+            "signups_total": self.signups_total_endpoints["start"]
         }
 
-        while datapoint["count"] < self.user_count["finish"]:
+        while datapoint["signups_total"] < self.signups_total_endpoints["finish"]:
 
             # update the target line
             date_str = datapoint["date"].format('YYYY-MM-DD')
-            print "date string", date_str
-            target_line[date_str] = datapoint["count"]
+            target_line[date_str] = [
+                datapoint["signups"],
+                datapoint["signups_total"]
+            ]
 
             # increment values for next iteration
             datapoint["date"] = datapoint["date"].replace(days=+1)
-            datapoint["count"] *= (1 + self.daily_growth)
+            datapoint["signups"] = self.daily_growth * datapoint["signups_total"]
+            datapoint["signups_total"] *= (1 + self.daily_growth)
 
 
 
