@@ -129,7 +129,7 @@ def to_csv(headers, rows):
     header_row_string = ",".join(headers)
     row_strings = []
     for row in rows:
-        row = [v if v is not None else "" for v in row]
+        row = [v if v is not None else '""' for v in row]
 
         row_strings.append(",".join([str(v) for v in row]))
 
