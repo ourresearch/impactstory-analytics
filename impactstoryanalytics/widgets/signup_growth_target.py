@@ -60,7 +60,7 @@ class Signup_growth_target(Widget):
         target_line = {}
         datapoint = {
             "date": self.start_date,
-            "signups": 0,
+            "signups": "",
             "signups_total": self.signups_total_endpoints["start"]
         }
 
