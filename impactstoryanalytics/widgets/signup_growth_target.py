@@ -13,7 +13,8 @@ logger = logging.getLogger("impactstoryanalytics.widgets.signup_growth_target")
 
 
 class Signup_growth_target(Widget):
-    data_url = "https://dataclips.heroku.com/feblvvoknanzuiumyiawutmqdwbo.json"
+    signups_with_products_url = "https://dataclips.heroku.com/feblvvoknanzuiumyiawutmqdwbo.json"
+    raw_signups_data_url = "https://dataclips.heroku.com/qaclkwteaqnrltwxojgzytkgwczs.json"
 
     def __init__(self):
         Widget.__init__(self)
@@ -26,13 +27,21 @@ class Signup_growth_target(Widget):
 
     def get_data(self):
 
-        dataclip_data = get_raw_dataclip_data(self.data_url)
-        datapoints = [[p[0][0:10], p[2]] for p in dataclip_data["values"]]
+        signups_with_products_data = get_raw_dataclip_data(self.signups_with_products_url)
+        raw_signups_dataclip_data = get_raw_dataclip_data(self.raw_signups_data_url)
 
         actual_line = {}
-        for row in dataclip_data["values"]:
+
+        # make the raw signups line
+        for row in raw_signups_dataclip_data["values"]:
             day_str = row[0][0:10]
-            actual_line[day_str] = [int(v) for v in row[1:]]
+            actual_line[day_str] = [int(row[1])]
+
+
+        # make the signups-with-products line
+        for row in signups_with_products_data["values"]:
+            day_str = row[0][0:10]
+            actual_line[day_str].append(int(row[1]))
 
 
         target_line = self.make_target_line()
@@ -46,13 +55,18 @@ class Signup_growth_target(Widget):
 
         fields = [
             "date",
-            "actual_signups",
-            "actual_signups_total",
-            "target_signups",
-            "target_signups_total"
+            "signups_raw",
+            "signups_with_products",
+            "target_signups_with_products",
+            "target_signups_with_products_total"
         ]
 
         return {"fields": fields, "values": rows}
+
+    def get_signup_line(self):
+        pass
+
+
 
 
 
