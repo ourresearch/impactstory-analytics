@@ -19,7 +19,13 @@ class Celery(Widget):
     def get_data(self):
         response = []
         for queue_name in ["core_main", "celery"]:
-            response.append({"queue_name":queue_name, "queue_length":my_celery_redis.llen(queue_name)})
+            queue_length = my_celery_redis.llen(queue_name)
+            if queue_length > 100:
+                logger.warning(u"HIGH celery queue length: {queue_name} is length {queue_length}".format(
+                    queue_name=queue_name, queue_length=queue_length))
+
+            response.append({"queue_name":queue_name, "queue_length":queue_length})
+            
         logger.info(u"celery queue length: {response}".format(
             response=response))
         return response

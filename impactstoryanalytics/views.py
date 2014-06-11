@@ -98,6 +98,7 @@ dashboards = OrderedDict([
         "signup_growth",
         #"hourly_uniques",
         "daily_new_users",                                
+        "celery",
         # "hourly_new_users"                                
     ])
 ])
