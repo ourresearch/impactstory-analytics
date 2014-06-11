@@ -79,10 +79,10 @@ dashboards = OrderedDict([
     #     "provider_errors",
     #     "provider_requests"
     # ]),
-    # ("realtime", [
-    #     "latestProfile"
-    #     #"hourly_uniques"
-    # ]),
+    ("realtime", [
+        # "latestProfile"
+        #"hourly_uniques"
+    ]),
     ("today", [
         "gmail",        
         "rescuetime",
