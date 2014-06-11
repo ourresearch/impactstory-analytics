@@ -160,7 +160,7 @@ def widget_instance_from_name(widget_name):
 def widget_data_raw(widget_name, get_from_cache=True):
     widget = widget_instance_from_name(widget_name)
 
-    get_from_cache = False
+    # get_from_cache = False
 
     # get it from the cache if it is there
     cache_key = "widget_{widget_name}".format(
