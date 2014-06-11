@@ -167,14 +167,16 @@ def widget_instance_from_name(widget_name):
 def widget_data_raw(widget_name, get_from_cache=True):
     widget = widget_instance_from_name(widget_name)
 
-    # get_from_cache = False
+    ### TEMPORARY OVERRIDE
+    if widget_name=="celery":
+        get_from_cache = False
 
-    # get it from the cache if it is there
     cache_key = "widget_{widget_name}".format(
         widget_name=widget_name)
-
     widget_response = None
+
     if get_from_cache:
+        # get it from the cache if it is there
         widget_response = memcache_client.get_cache_entry(cache_key)
         if widget_response:
             logger.info("CACHE HIT for {cache_key}".format(
@@ -194,7 +196,7 @@ def widget_data(widget_name, get_from_cache=True):
     extension = widget_name[-4:]
     if extension == ".csv":
         widget_name = widget_name[0:-4]
-        widget_response = widget_data_raw(widget_name)
+        widget_response = widget_data_raw(widget_name, get_from_cache)
         resp = make_response(to_csv(
             widget_response["fields"],
             widget_response["values"]
@@ -202,7 +204,7 @@ def widget_data(widget_name, get_from_cache=True):
         resp.mimetype = "application/csv"
 
     else:
-        widget_response = widget_data_raw(widget_name)
+        widget_response = widget_data_raw(widget_name, get_from_cache)
         resp = make_response(json.dumps(widget_response, indent=4), 200)
         resp.mimetype = "application/json"
 
