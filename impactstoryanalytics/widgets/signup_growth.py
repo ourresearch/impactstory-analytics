@@ -39,7 +39,7 @@ class Signup_growth(Widget):
         merged_datapoints.reverse()
 
         for datapoint in merged_datapoints:
-            print datapoint
+            # print datapoint
 
             try:
                 percent_growth = (100.0 * datapoint["new_accounts_per_week"]) / (datapoint["accounts"] - datapoint["new_accounts_per_week"])
@@ -79,3 +79,4 @@ class Signup_growth(Widget):
                         }
                    ]
         return Converter.from_x_y_format(response)
+        
