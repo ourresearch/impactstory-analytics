@@ -34,7 +34,7 @@ class Uservoice_suggestions_upvoted(Widget):
             suggestion["start_iso"] = suggestion["created_at"]
             del suggestion["created_at"]
 
-        print json.dumps(response, indent=4)
+        # print json.dumps(response, indent=4)
 
         return response
 

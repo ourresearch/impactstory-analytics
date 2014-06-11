@@ -11,6 +11,7 @@ from impactstoryanalytics.widgets import api_key_item_creates
 from impactstoryanalytics.widgets import api_key_item_views
 from impactstoryanalytics.widgets import api_keys_minted
 from impactstoryanalytics.widgets import api_key_limit_exceeded
+from impactstoryanalytics.widgets import celery
 from impactstoryanalytics.widgets import daily_new_users
 from impactstoryanalytics.widgets import embedded_widget_use
 from impactstoryanalytics.widgets import gmail
@@ -57,10 +58,16 @@ dashboards = OrderedDict([
     ]),    
     ("health", [
         "showstopper_papertrail_alerts",
-        "exceptions"
+        "exceptions",
+        "celery"
         #"profile_load_times",
         #"profile_load_fail_fraction"
     ]),
+    ("celery", [
+        "celery"
+        #"profile_load_times",
+        #"profile_load_fail_fraction"
+    ]),    
     ("productivity", [
         "gmail",
         "rescuetime",

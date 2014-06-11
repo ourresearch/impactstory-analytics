@@ -14,14 +14,14 @@ class Exceptions(Widget):
 
     def get_data(self):
         queries = {
-            "javascript": {
-                "project": "context",
-                "analysis": "count",
-                "params": {
-                    "event_collection": "Caused a JavaScript error",
-                    "target_property": "message"
-                }
-            },
+            # "javascript": {
+            #     "project": "context",
+            #     "analysis": "count",
+            #     "params": {
+            #         "event_collection": "Caused a JavaScript error",
+            #         "target_property": "message"
+            #     }
+            # },
             "python": {
                 "project": "context",
                 "analysis": "count",
@@ -29,15 +29,15 @@ class Exceptions(Widget):
                     "event_collection": "Threw an Exception",
                     "target_property": "message"
                 }
-            },
-            "daily_pageviews": {
-                "project": "production",
-                "analysis": "count",
-                "params": {
-                    "event_collection": "Loaded a page (custom)",
-                    "target_property": "url"
-                }
             }
+            # ,"daily_pageviews": {
+            #     "project": "production",
+            #     "analysis": "count",
+            #     "params": {
+            #         "event_collection": "Loaded a page (custom)",
+            #         "target_property": "url"
+            #     }
+            # }
         }
 
         shared_params = {
