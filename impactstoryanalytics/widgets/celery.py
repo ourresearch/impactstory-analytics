@@ -21,7 +21,7 @@ class Celery(Widget):
 
         #[(q, len(r_tasks.lrange(q, -10000, 10000))) for q in r_tasks.keys("core_*")]
 
-        for queue_name_base in ["core_*", "celery"]:
+        for queue_name_base in ["core_*", "celery*"]:
             queue_length_total = 0
             for queue_name in my_celery_redis.keys(queue_name_base):
                 queue_length = my_celery_redis.llen(queue_name)
