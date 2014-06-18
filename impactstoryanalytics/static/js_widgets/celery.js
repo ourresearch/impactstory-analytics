@@ -18,7 +18,9 @@ Celery.prototype = {
                 iaDisplayName: queue["queue_name"],
                 iaHref: "http://impactstory-flower.herokuapp.com/tasks?limit=100",
                 iaYvalues: [queue["queue_length"]],               
-                iaSecondaryValue: function(yValues) {return ""},               
+                iaPrimaryValueDisplay: [queue["queue_length"]],
+                iaSecondaryValue: function(yValues) {return ""},  
+                iaSecondaryValueDisplay: function(yValues) {return ""},
                 iaSecondaryValueLabel: ""               
                 }
             var sparkline = new Sparkline(options)
