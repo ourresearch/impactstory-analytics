@@ -45,7 +45,19 @@ from flask import request, abort, make_response, g, redirect, url_for
 from flask import render_template
 from flask.ext.assets import Environment, Bundle
 
+import rq_dashboard
+import redis
 logger = logging.getLogger("impactstoryanalytics.views")
+
+
+rq_dashboard.RQDashboard(app, url_prefix="/admin/rq")
+
+REDIS_RQ_NUMBER = 3
+app.config["REDIS_DB"] = REDIS_RQ_NUMBER
+def custom_setup_rq_connection():
+    current_app.redis_conn = redis.from_url(os.getenv("REDIS_URL"), db=REDIS_RQ_NUMBER)
+rq_dashboard.dashboard.setup_rq_connection = custom_setup_rq_connection
+
 
 # define dashboards
 dashboards = OrderedDict([
@@ -272,7 +284,7 @@ def webhook(source):
 def dashboard(dashboard_name):
     try:
         widget_names = g.dashboards[dashboard_name]
-    except AttributeError:
+    except (AttributeError, KeyError):
         redirect(url_for(dashboard, dashboard_name="main"))
 
     return render_template(

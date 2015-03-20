@@ -19,7 +19,6 @@ app = Flask(__name__)
 # http://flask.pocoo.org/mailinglist/archive/2011/2/27/re-automatic-removal-of-trailing-slashes/#043b1a0b6e841ab8e7d38bd7374cbb58
 app.url_map.strict_slashes = False
 
-
 # setup segment.io
 analytics.init(os.getenv("SEGMENTIO_KEY"), log_level=logging.DEBUG, flush_at=1)
 analytics.identify(user_id='Heather', traits={
